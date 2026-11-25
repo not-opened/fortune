@@ -1,0 +1,1708 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+  <meta name="description" content="notopened 사주·꿈풀이·MBTI 궁합 — 설치·가입 없이 30초 만에 확인하는 모바일 운세·꿈해몽·MBTI 16유형 궁합">
+  <title>notopened 사주 · 꿈풀이 · MBTI 궁합 (내부 시연본 v0.3)</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card: #1e293b;
+      --sub: #0b1222;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --border: #334155;
+      --accent: #38bdf8;
+      --accent-soft: rgba(56, 189, 248, 0.14);
+      --gold: #facc15;
+      --ok: #22c55e;
+      --warn: #f59e0b;
+      --rose: #fb7185;
+      --violet: #a78bfa;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans KR", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      padding: 14px 12px 42px;
+      line-height: 1.5;
+    }
+    .container { max-width: 480px; margin: 0 auto; }
+    .header { text-align: center; margin-bottom: 12px; }
+    .badge {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--accent);
+      background: var(--accent-soft);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      padding: 4px 10px;
+      border-radius: 999px;
+      margin-bottom: 6px;
+    }
+    .header h1 { font-size: 1.32rem; font-weight: 800; margin-bottom: 4px; }
+    .header p { font-size: 0.8rem; color: var(--muted); }
+    .ad-slot { display: none !important; }
+
+    /* Friend Invite Landing Banner (?tab=mbti&from=...) */
+    .invite-banner {
+      display: none;
+      background: linear-gradient(135deg, rgba(251, 113, 133, 0.18), rgba(56, 189, 248, 0.14));
+      border: 1px solid rgba(251, 113, 133, 0.55);
+      border-radius: 14px;
+      padding: 13px 14px;
+      margin-bottom: 12px;
+    }
+    .invite-banner.show { display: block; }
+    .invite-banner h2 { font-size: 0.96rem; font-weight: 800; color: #ffe4e6; margin-bottom: 4px; }
+    .invite-banner p { font-size: 0.78rem; color: #e2e8f0; }
+
+    .nav-tabs {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+      margin-bottom: 12px;
+    }
+    .nav-tab {
+      background: var(--card);
+      color: var(--muted);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 6px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      min-height: 44px;
+    }
+    .nav-tab.active {
+      background: var(--accent-soft);
+      color: var(--accent);
+      border-color: var(--accent);
+    }
+    .panel { display: none; }
+    .panel.active { display: block; }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 15px;
+      margin-bottom: 12px;
+    }
+    .card h2 { font-size: 1.02rem; font-weight: 800; margin-bottom: 8px; }
+    .card h3 { font-size: 0.92rem; font-weight: 800; margin-bottom: 6px; }
+    .sub-note { font-size: 0.76rem; color: var(--muted); margin-bottom: 10px; }
+    .row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
+    label { display: block; font-size: 0.76rem; color: var(--muted); margin-bottom: 4px; font-weight: 600; }
+    input[type="date"], input[type="text"], select {
+      width: 100%;
+      background: var(--sub);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 12px;
+      font-size: 0.88rem;
+      min-height: 44px;
+    }
+    .btn {
+      width: 100%;
+      padding: 11px 12px;
+      border-radius: 10px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      min-height: 46px;
+      border: 1px solid var(--border);
+    }
+    .btn-primary { background: var(--accent); color: #0f172a; border-color: var(--accent); }
+    .btn-secondary { background: var(--sub); color: var(--text); }
+    .btn-kakao { background: #fee500; color: #191600; border-color: #facc15; }
+    .btn-sm { padding: 7px 10px; min-height: 36px; font-size: 0.78rem; width: auto; }
+    .pill {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 999px;
+      margin-bottom: 8px;
+    }
+    .pill-example { background: rgba(250, 204, 21, 0.16); color: var(--gold); border: 1px solid rgba(250, 204, 21, 0.4); }
+    .pill-calc { background: rgba(34, 197, 94, 0.16); color: var(--ok); border: 1px solid rgba(34, 197, 94, 0.4); }
+    .pill-good { background: rgba(34, 197, 94, 0.16); color: var(--ok); }
+    .pill-warn { background: rgba(245, 158, 11, 0.16); color: var(--warn); }
+    .pill-reflect { background: rgba(56, 189, 248, 0.16); color: var(--accent); }
+    .pillars-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+      margin: 10px 0;
+    }
+    .pillar-box {
+      background: var(--sub);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 8px 4px;
+      text-align: center;
+    }
+    .pillar-box .lbl { font-size: 0.68rem; color: var(--muted); }
+    .pillar-box .val { font-size: 0.92rem; font-weight: 800; margin-top: 2px; }
+    .ohaeng-bar {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin: 8px 0 10px;
+    }
+    .oh-chip {
+      background: var(--sub);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 5px 8px;
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+    .chip-bar { display: flex; gap: 6px; flex-wrap: wrap; margin: 10px 0; }
+    .chip {
+      background: var(--sub);
+      color: var(--muted);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 6px 11px;
+      font-size: 0.76rem;
+      font-weight: 700;
+      cursor: pointer;
+      min-height: 34px;
+    }
+    .chip.active { background: var(--accent-soft); color: var(--accent); border-color: var(--accent); }
+    .dream-list { display: flex; flex-direction: column; gap: 8px; margin-top: 8px; }
+    .dream-item {
+      background: var(--sub);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 12px;
+      cursor: pointer;
+      text-align: left;
+      color: var(--text);
+      width: 100%;
+    }
+    .dream-item-head { display: flex; justify-content: space-between; align-items: center; font-weight: 700; font-size: 0.88rem; }
+    .dream-item-sub { font-size: 0.76rem; color: var(--muted); margin-top: 3px; }
+    .mbti-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+      margin: 8px 0 12px;
+    }
+    .mbti-btn {
+      background: var(--sub);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 9px 4px;
+      font-size: 0.8rem;
+      font-weight: 800;
+      cursor: pointer;
+      min-height: 40px;
+    }
+    .mbti-btn.active { background: var(--accent); color: #0f172a; border-color: var(--accent); }
+    .mbti-btn.friend-active { background: rgba(251, 113, 133, 0.22); color: var(--rose); border-color: var(--rose); }
+    .dict-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+      margin-top: 8px;
+    }
+    .dict-cell {
+      background: rgba(15, 23, 42, 0.75);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 8px;
+      font-size: 0.76rem;
+    }
+    .dict-cell strong { display: block; color: var(--accent); margin-bottom: 2px; font-size: 0.73rem; }
+    .top3-list { display: flex; flex-direction: column; gap: 6px; margin-top: 8px; }
+    .top3-item {
+      background: var(--sub);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 9px 11px;
+      text-align: left;
+      color: var(--text);
+      cursor: pointer;
+      width: 100%;
+    }
+    .top3-item:hover { border-color: var(--accent); }
+    .top3-head { display: flex; justify-content: space-between; align-items: center; font-size: 0.84rem; font-weight: 800; }
+    .top3-sub { font-size: 0.75rem; color: var(--muted); margin-top: 2px; }
+    .talk-box {
+      background: var(--sub);
+      border-left: 3px solid var(--gold);
+      border-radius: 8px;
+      padding: 10px 12px;
+      margin-top: 8px;
+      font-size: 0.84rem;
+    }
+    .quiz-q { margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+    .quiz-q p { font-size: 0.82rem; font-weight: 700; margin-bottom: 6px; }
+    .quiz-opts { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+    .quiz-opt {
+      background: var(--sub);
+      color: var(--muted);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 8px;
+      font-size: 0.74rem;
+      cursor: pointer;
+      min-height: 40px;
+    }
+    .quiz-opt.selected { background: var(--accent-soft); color: var(--accent); border-color: var(--accent); font-weight: 700; }
+
+    /* Context Bridge Cards (§92) */
+    .bridge-box {
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px dashed var(--border);
+    }
+    .bridge-title { font-size: 0.78rem; font-weight: 800; color: var(--violet); margin-bottom: 8px; }
+    .bridge-grid { display: flex; flex-direction: column; gap: 7px; }
+    .bridge-btn {
+      background: rgba(167, 139, 250, 0.1);
+      border: 1px solid rgba(167, 139, 250, 0.4);
+      color: var(--text);
+      border-radius: 10px;
+      padding: 10px 12px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-align: left;
+      cursor: pointer;
+      width: 100%;
+      min-height: 44px;
+    }
+
+    /* Web-to-App & Cross-Promo Bridge (§93) */
+    .app-bridge {
+      background: linear-gradient(135deg, rgba(30, 41, 59, 0.95), rgba(15, 23, 42, 0.95));
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      border-radius: 14px;
+      padding: 14px;
+      margin-top: 12px;
+    }
+    .app-bridge h3 { font-size: 0.9rem; color: var(--accent); margin-bottom: 4px; }
+    .app-bridge p { font-size: 0.76rem; color: var(--muted); margin-bottom: 10px; }
+    .promo-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .promo-chip {
+      background: var(--sub);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 9px 10px;
+      font-size: 0.75rem;
+      color: var(--text);
+      text-align: left;
+    }
+    .promo-chip strong { display: block; font-size: 0.8rem; margin-bottom: 2px; }
+    .promo-chip span { color: var(--muted); font-size: 0.72rem; }
+
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #0f172a;
+      color: #f8fafc;
+      border: 1px solid var(--accent);
+      padding: 10px 16px;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s;
+      z-index: 99;
+      max-width: 92vw;
+      text-align: center;
+    }
+    .toast.show { opacity: 1; }
+    .footer {
+      text-align: center;
+      font-size: 0.72rem;
+      color: var(--muted);
+      margin-top: 18px;
+      padding-top: 12px;
+      border-top: 1px solid var(--border);
+    }
+
+    /* ================= v0.3 2차 확장 (§ v0.3) ================= */
+    /* 4탭 네비게이션 (기존 3탭 덮어쓰기) */
+    .nav-tabs { grid-template-columns: repeat(4, 1fr); gap: 5px; }
+    .nav-tab { font-size: 0.74rem; padding: 9px 3px; letter-spacing: -0.01em; }
+
+    /* 2.5D 사주 카드 프레임 (WebP, CCO 하이디 11/25 납품 360x200) */
+    .saju-frame { position: relative; margin: 6px 0 12px; border-radius: 14px; overflow: hidden; background: #191937; }
+    .saju-frame-img { display: block; width: 100%; height: auto; border-radius: 14px; }
+    .saju-frame-inner { position: absolute; inset: 0; padding: 27% 9% 9%; display: flex; flex-direction: column; gap: 4px; }
+    .saju-frame-label { font-size: 0.64rem; font-weight: 800; color: var(--gold); letter-spacing: 0.02em; }
+    .saju-frame-headline { font-size: 0.78rem; font-weight: 800; color: var(--text); line-height: 1.34; word-break: keep-all; }
+    .saju-frame-weak { font-size: 0.68rem; color: #cbd5e1; }
+
+    /* 2.5D 꿈/MBTI 엠블럼 배지 (WebP 스프라이트 256x128 좌=꿈 초승달 / 우=MBTI 듀얼) */
+    .emblem-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+    .emblem { width: 44px; height: 44px; border-radius: 50%; overflow: hidden; display: inline-block; flex: 0 0 auto; }
+    .emblem img { width: 88px; height: 44px; display: block; }
+    .emblem-dream img { margin-left: 0; }
+    .emblem-mbti img { margin-left: -44px; }
+    .emblem-text { font-size: 0.72rem; font-weight: 700; color: var(--muted); line-height: 1.35; }
+
+    /* 올해 운세 6대 영역 아코디언 */
+    .ya-list { display: flex; flex-direction: column; gap: 8px; margin-top: 8px; }
+    details.year-area { background: var(--sub); border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; }
+    details.year-area[open] { border-color: rgba(56, 189, 248, 0.55); }
+    details.year-area summary { cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; gap: 8px; font-size: 0.87rem; font-weight: 800; }
+    details.year-area summary::-webkit-details-marker { display: none; }
+    details.year-area summary .ya-score { color: var(--gold); font-size: 0.79rem; white-space: nowrap; }
+    .ya-body { font-size: 0.82rem; margin-top: 8px; color: var(--text); line-height: 1.55; }
+    .ya-key { font-size: 0.74rem; margin-top: 6px; color: var(--accent); font-weight: 700; }
+
+    /* 12띠 · 12별자리 선택 칩 */
+    .mini-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 5px; margin: 8px 0 12px; }
+    .mini-btn { background: var(--sub); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 0.68rem; padding: 7px 1px; cursor: pointer; min-height: 36px; line-height: 1.2; }
+    .mini-btn.active { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); font-weight: 800; }
+    .today-card { background: var(--sub); border: 1px solid var(--border); border-radius: 10px; padding: 11px 12px; margin-bottom: 10px; }
+    .today-card h4 { font-size: 0.9rem; font-weight: 800; margin-bottom: 2px; }
+    .today-card .today-sub { font-size: 0.72rem; color: var(--muted); }
+    .today-line { font-size: 0.8rem; margin-top: 6px; line-height: 1.5; }
+    .today-line strong { color: var(--accent); }
+
+    /* 미래 배우자 카드 */
+    .spouse-stage { background: var(--sub); border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; margin-bottom: 8px; }
+    .spouse-stage h4 { font-size: 0.82rem; color: var(--violet); margin-bottom: 4px; }
+    .spouse-stage p { font-size: 0.81rem; line-height: 1.55; }
+    .disclaimer { font-size: 0.72rem; color: var(--warn); background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.35); border-radius: 8px; padding: 6px 10px; margin-bottom: 10px; line-height: 1.45; }
+
+    /* 궁합 3종 (MBTI + 사주 오행 + 12띠) */
+    .compat3-row { background: var(--sub); border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; margin-bottom: 8px; }
+    .compat3-head { display: flex; justify-content: space-between; align-items: center; font-size: 0.83rem; font-weight: 800; gap: 8px; }
+    .compat3-head .c3-score { color: var(--gold); white-space: nowrap; }
+    .compat3-desc { font-size: 0.78rem; color: var(--muted); margin-top: 4px; line-height: 1.5; }
+    .compat-total { background: rgba(56, 189, 248, 0.1); border: 1px solid rgba(56, 189, 248, 0.42); border-radius: 10px; padding: 11px 12px; margin-top: 6px; font-size: 0.81rem; line-height: 1.55; }
+    .compat-total strong { color: var(--accent); }
+  </style>
+</head>
+<body>
+  <main class="container">
+    <header class="header">
+      <div class="badge">notopened 신사업 3호 내부 시연본 v0.3</div>
+      <h1>사주 · 꿈풀이 · MBTI 궁합</h1>
+      <p>가입·서버 전송 없이 30초 만에 확인하는 모바일 웹 MVP · v0.3 4대 확장</p>
+    </header>
+
+    <aside class="ad-slot" aria-label="광고 영역"></aside>
+
+    <!-- 친구 공유 랜딩 최우선 카드 (?tab=mbti&from=ENFP) -->
+    <section class="invite-banner" id="inviteBanner" aria-live="polite">
+      <h2 id="inviteBannerTitle">💌 친구가 보낸 MBTI와 내 궁합 바로 보기</h2>
+      <p id="inviteBannerDesc">아래에서 내 MBTI를 한 번만 누르면 친구와의 오늘 궁합과 대화 한마디가 바로 열립니다.</p>
+    </section>
+
+    <nav class="nav-tabs" role="tablist" aria-label="서비스 메뉴">
+      <button type="button" class="nav-tab active" data-tab="saju" id="tabSaju">🔮 사주·운세</button>
+      <button type="button" class="nav-tab" data-tab="dream" id="tabDream">🌙 꿈풀이</button>
+      <button type="button" class="nav-tab" data-tab="mbti" id="tabMbti">💞 MBTI·궁합</button>
+      <button type="button" class="nav-tab" data-tab="today" id="tabToday">🗓️ 오늘·배우자</button>
+    </nav>
+
+    <!-- 1. 사주·오행·오늘의 운세 -->
+    <section class="panel active" id="panelSaju">
+      <div class="card">
+        <h2>오늘의 사주 · 오행 운세</h2>
+        <p class="sub-note">입력 정보는 서버로 전송되지 않으며 브라우저에만 임시 보관됩니다. (엔터테인먼트·참고용)</p>
+
+        <div style="margin-bottom:10px;">
+          <label for="birthDate">생년월일 (양력)</label>
+          <input type="date" id="birthDate" value="1995-05-15">
+        </div>
+        <div style="margin-bottom:12px;">
+          <label for="birthHour">태어난 시간 (시진)</label>
+          <select id="birthHour">
+            <option value="-1">시간 모름 (3주 6자)</option>
+            <option value="0">자시 (23:30~01:29)</option>
+            <option value="1">축시 (01:30~03:29)</option>
+            <option value="2">인시 (03:30~05:29)</option>
+            <option value="3">묘시 (05:30~07:29)</option>
+            <option value="4">진시 (07:30~09:29)</option>
+            <option value="5">사시 (09:30~11:29)</option>
+            <option value="6" selected>오시 (11:30~13:29)</option>
+            <option value="7">미시 (13:30~15:29)</option>
+            <option value="8">신시 (15:30~17:29)</option>
+            <option value="9">유시 (17:30~19:29)</option>
+            <option value="10">술시 (19:30~21:29)</option>
+            <option value="11">해시 (21:30~23:29)</option>
+          </select>
+        </div>
+
+        <div class="row">
+          <button type="button" class="btn btn-primary" id="calcSajuBtn" style="flex:1;">🧮 내 사주 로컬 계산하기</button>
+          <button type="button" class="btn btn-secondary" id="exampleSajuBtn" style="flex:1;">📌 검증 예시 보기 (1995-05-15)</button>
+        </div>
+      </div>
+
+      <div class="card" id="sajuResultCard">
+        <span class="pill pill-example" id="sajuModeBadge">📌 예시 데이터 (1995-05-15 午時 기준)</span>
+        <!-- 2.5D 오행 사주 카드 프레임 (CCO 하이디 11/25 08:38 납품 WebP 360x200 · Base64 임베드) -->
+        <figure class="saju-frame" id="sajuFrameBox">
+          <img id="imgSajuFrame" class="saju-frame-img" src="data:image/webp;base64,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" width="360" height="200" alt="2.5D 오행 사주 결과 카드 프레임" decoding="sync">
+          <figcaption class="saju-frame-inner">
+            <span class="saju-frame-label">2026 병오년 세운 · 사주 원국</span>
+            <span id="sajuHeadline" class="saju-frame-headline">을해(乙亥) · 신사(辛巳) · 정사(丁巳) · 병오(丙午)</span>
+            <span id="sajuFrameWeak" class="saju-frame-weak">부족한 기운: 土</span>
+          </figcaption>
+        </figure>
+        <div class="pillars-grid" id="pillarsGrid"></div>
+        <div class="ohaeng-bar" id="ohaengBar"></div>
+        <p id="sajuAdvice" style="font-size:0.86rem; margin-bottom:8px;"></p>
+        <p id="sajuLucky" style="font-size:0.78rem; color:var(--accent); font-weight:700; margin-bottom:10px;"></p>
+
+        <button type="button" class="btn btn-kakao" id="shareSajuBtn">💬 카톡으로 오행 보완 궁합 물어보기</button>
+
+        <!-- §92 결과 맥락 연동 다음 콘텐츠 브릿지 -->
+        <div class="bridge-box">
+          <div class="bridge-title">✨ 이어서 보면 딱 좋은 다음 콘텐츠</div>
+          <div class="bridge-grid">
+            <button type="button" class="bridge-btn" id="sajuToMbtiBridge" data-jump-tab="mbti">💞 부족한 기운을 채워줄 오늘의 MBTI 행동 팁·궁합 보기 →</button>
+            <button type="button" class="bridge-btn" id="sajuToDreamBridge" data-jump-tab="dream">🌙 어젯밤 꾼 꿈 키워드 바로 해몽하기 →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== v0.3 ① 올해 운세 6대 영역 (2026 병오년 세운 × 일간/오행) ===== -->
+      <div class="card" id="yearFortuneCard">
+        <h2>🗓️ 올해 운세 6대 영역 (2026 병오년)</h2>
+        <p class="sub-note">내 사주 일간·오행과 2026년 세운(丙午 · 火火)의 상생·상극을 대조한 로컬 계산 결과입니다. 항목을 누르면 해설이 펼쳐집니다. (엔터테인먼트·참고용)</p>
+        <p class="sub-note" id="yearFortuneSummary" style="color:var(--accent); font-weight:700;">계산 중…</p>
+        <div class="ya-list" id="yearFortuneList"></div>
+      </div>
+    </section>
+
+    <!-- 2. 꿈풀이 키워드 검색 -->
+    <section class="panel" id="panelDream">
+      <div class="card">
+        <h2>꿈풀이 키워드 검색 (30종)</h2>
+        <label for="dreamSearch">꿈에 나온 키워드 검색</label>
+        <input type="text" id="dreamSearch" placeholder="예: 돼지, 이빨, 날다, 돈, 뱀...">
+        <div class="chip-bar" id="dreamCats">
+          <button type="button" class="chip active" data-cat="all">전체</button>
+          <button type="button" class="chip" data-cat="동물">동물</button>
+          <button type="button" class="chip" data-cat="자연/재물">자연/재물</button>
+          <button type="button" class="chip" data-cat="인물">인물</button>
+          <button type="button" class="chip" data-cat="행동">행동</button>
+          <button type="button" class="chip" data-cat="사물/상황">사물/상황</button>
+        </div>
+        <div class="dream-list" id="dreamList"></div>
+      </div>
+
+      <div class="card" id="dreamDetailCard" style="display:none;">
+        <div class="emblem-row">
+          <span class="emblem emblem-dream"><img id="imgDreamEmblem" src="data:image/webp;base64,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" alt="2.5D 꿈해몽 황금 초승달 엠블럼" width="88" height="44"></span>
+          <span class="emblem-text">꿈해몽 인장 · 2.5D 엠블럼</span>
+        </div>
+        <span class="pill" id="dreamMoodBadge">길몽</span>
+        <h2 id="dreamDetailTitle"></h2>
+        <p id="dreamDetailSummary" style="font-size:0.84rem; font-weight:700; color:var(--accent); margin-bottom:6px;"></p>
+        <p id="dreamDetailBody" style="font-size:0.84rem; color:var(--text); margin-bottom:8px;"></p>
+        <p id="dreamDetailAction" style="font-size:0.78rem; color:var(--gold); font-weight:700; margin-bottom:10px;"></p>
+
+        <button type="button" class="btn btn-kakao" id="shareDreamBtn">💬 카톡으로 꿈풀이 친구에게 공유하기</button>
+
+        <div class="bridge-box">
+          <div class="bridge-title">✨ 이어서 보면 딱 좋은 다음 콘텐츠</div>
+          <div class="bridge-grid">
+            <button type="button" class="bridge-btn" id="dreamToSajuBridge" data-jump-tab="saju">🔮 이 꿈의 기운과 내 사주 오행 흐름 맞춰보기 →</button>
+            <button type="button" class="bridge-btn" id="dreamToMbtiBridge" data-jump-tab="mbti">💞 오늘 만날 친구와 MBTI 궁합·대화 한마디 보기 →</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. MBTI 16유형 · 16문항 측정 · 특징 사전 · TOP 3 추천 · 친구 궁합 -->
+    <section class="panel" id="panelMbti">
+      <div class="card">
+        <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; margin-bottom:6px;">
+          <h2 style="margin:0;">1) 내 MBTI 선택 · 특징 사전</h2>
+          <button type="button" class="btn btn-secondary btn-sm" id="toggleQuickQuizBtn">📝 16문항 1분 측정</button>
+        </div>
+
+        <div id="quickQuizBox" style="display:none; margin-top:10px; margin-bottom:12px; padding:10px; background:var(--sub); border-radius:10px; border:1px solid var(--border);">
+          <p class="sub-note">E/I · S/N · T/F · J/P 각 4문항(총 16문항)을 고르면 내 MBTI와 특징·TOP 3 궁합이 자동 연동됩니다.</p>
+          <div id="quickQuizList"></div>
+          <button type="button" class="btn btn-primary" id="applyQuickQuizBtn">✨ 16문항으로 내 MBTI 판정하기</button>
+        </div>
+
+        <div class="mbti-grid" id="myMbtiGrid"></div>
+
+        <!-- 16유형 상세 특징 사전 (§93) -->
+        <div id="myMbtiCard" style="background:var(--sub); padding:11px 12px; border-radius:10px; border:1px solid var(--border);">
+          <strong id="myMbtiTitle" style="color:var(--accent); font-size:0.92rem;"></strong>
+          <p id="myMbtiDesc" style="font-size:0.8rem; color:var(--muted); margin-top:3px;"></p>
+          <p id="myMbtiTip" style="font-size:0.82rem; margin-top:6px;"></p>
+          <div class="dict-grid" id="myMbtiDictGrid"></div>
+        </div>
+      </div>
+
+      <!-- 나랑 잘 맞는 MBTI TOP 3 + 맞춰가면 좋은 조합 2종 (§93) -->
+      <div class="card" id="mbtiTop3Card">
+        <h2 id="mbtiTop3Heading">🏆 나랑 잘 맞는 MBTI TOP 3</h2>
+        <p class="sub-note">추천 유형 카드를 누르면 아래 친구 궁합과 대화 한마디로 바로 연결됩니다.</p>
+        <div class="top3-list" id="mbtiTop3List"></div>
+        <h3 style="margin-top:12px; font-size:0.84rem; color:var(--warn);">🤝 서로 맞춰가면 좋은 조합 (2종)</h3>
+        <div class="top3-list" id="mbtiCareList"></div>
+      </div>
+
+      <div class="card">
+        <h2>2) 친구 MBTI 선택 → 궁합 · 대화 한마디</h2>
+        <p class="sub-note">상대 유형을 바꿔 누르면 궁합 등급과 건넬 대화 한마디가 즉시 바뀝니다.</p>
+        <div class="mbti-grid" id="friendMbtiGrid"></div>
+        <div id="compatResultBox" style="background:var(--sub); padding:12px; border-radius:10px; border:1px solid var(--border);">
+          <div class="emblem-row">
+            <span class="emblem emblem-mbti"><img id="imgMbtiEmblem" src="data:image/webp;base64,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" alt="2.5D MBTI 궁합 듀얼 크리스탈 엠블럼" width="88" height="44"></span>
+            <span class="emblem-text">MBTI × 궁합 듀얼 엠블럼</span>
+          </div>
+          <span class="pill pill-good" id="compatGradeBadge">환상의 시너지</span>
+          <h3 id="compatPairTitle" style="font-size:0.96rem; margin-bottom:4px;"></h3>
+          <p id="compatDesc" style="font-size:0.82rem; color:var(--muted);"></p>
+          <div class="talk-box">
+            <strong style="color:var(--gold); font-size:0.76rem; display:block; margin-bottom:2px;">💬 친구에게 건넬 한마디</strong>
+            <span id="compatTalk"></span>
+          </div>
+          <button type="button" class="btn btn-kakao" id="shareMbtiBtn" style="margin-top:10px;">💬 카톡으로 친구와 궁합 비교 링크 보내기</button>
+        </div>
+
+        <div class="bridge-box">
+          <div class="bridge-title">✨ 이어서 보면 딱 좋은 다음 콘텐츠</div>
+          <div class="bridge-grid">
+            <button type="button" class="bridge-btn" id="mbtiToSajuBridge" data-jump-tab="saju">🔮 내 사주 오행과 오늘의 행운 컬러 확인하기 →</button>
+            <button type="button" class="bridge-btn" id="mbtiToDreamBridge" data-jump-tab="dream">🌙 최근 꾼 꿈풀이 30종 바로 검색하기 →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== v0.3 ④ 궁합 3종 통합 (MBTI + 사주 오행 + 12띠) ===== -->
+      <div class="card" id="compat3Card">
+        <h2>🧭 궁합 3종 통합 (MBTI + 사주 오행 + 12띠)</h2>
+        <p class="sub-note">위에서 고른 내 MBTI·친구 MBTI에 상대 생년월일로 계산한 사주 오행·띠 궁합을 더합니다. 입력값은 서버로 전송되지 않고 브라우저에서만 계산됩니다.</p>
+        <div class="row" style="align-items:flex-end;">
+          <div style="flex:1; min-width:150px;">
+            <label for="partnerBirthDate">상대방 생년월일 (양력 · 선택)</label>
+            <input type="date" id="partnerBirthDate" value="1992-08-10">
+          </div>
+          <button type="button" class="btn btn-primary" id="calcCompat3Btn" style="flex:0 0 auto; width:auto; padding:11px 14px;">🧭 3종 궁합 계산</button>
+        </div>
+        <div id="compat3Result"></div>
+      </div>
+    </section>
+
+    <!-- ===== v0.3 ② 오늘의 12띠·12별자리 운세 & ③ 미래 배우자 카드 ===== -->
+    <section class="panel" id="panelToday">
+      <div class="card" id="todayCard">
+        <h2>🌞 오늘의 12띠 · 12별자리 운세</h2>
+        <p class="sub-note">생년월일을 넣으면 띠·별자리가 자동으로 맞춰지고, 오늘 날짜와 조합한 총운·행운 시간대·주의 포인트가 표시됩니다. 아래 칩으로 직접 골라도 됩니다. (엔터테인먼트·참고용)</p>
+        <div class="row" style="align-items:flex-end;">
+          <div style="flex:1; min-width:150px;">
+            <label for="todayBirthDate">생년월일 (양력)</label>
+            <input type="date" id="todayBirthDate" value="1995-05-15">
+          </div>
+          <button type="button" class="btn btn-primary" id="todayAutoBtn" style="flex:0 0 auto; width:auto; padding:11px 14px;">🔎 자동 매핑</button>
+        </div>
+        <p class="sub-note" id="zodiacAutoNote">내 띠와 별자리를 계산합니다.</p>
+        <label>12띠 직접 선택</label>
+        <div class="mini-grid" id="zodiacChips"></div>
+        <label>12별자리 직접 선택</label>
+        <div class="mini-grid" id="signChips"></div>
+        <div id="todayFortuneBox"></div>
+      </div>
+
+      <div class="card" id="spouseCard">
+        <h2>💍 미래 배우자 카드</h2>
+        <p class="disclaimer" id="spouseDisclaimerTop">재미·참고용 카드입니다. 실제 인연·결혼을 예측하지 않으며, 어떤 결정의 근거로도 사용하지 마세요.</p>
+        <p class="sub-note" id="spouseSourceNote">사주 일지(배우자궁) 오행 + 내 MBTI 보완 지표를 조합해 3단 카드로 보여 드립니다.</p>
+        <div class="emblem-row">
+          <span class="emblem emblem-dream"><img id="imgSpouseEmblem" src="data:image/webp;base64,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" alt="2.5D 꿈·MBTI 엠블럼 배지" width="88" height="44"></span>
+          <span class="emblem-text">2.5D 엠블럼 배지 (CCO 하이디 납품 256x128)</span>
+        </div>
+        <div id="spouseStages"></div>
+        <p class="disclaimer" id="spouseDisclaimerBottom">이 카드는 엔터테인먼트 콘텐츠이며 의학·법률·투자 자문을 대체하지 않습니다.</p>
+        <button type="button" class="btn btn-kakao" id="shareSpouseBtn">💬 카톡으로 배우자 카드 친구에게 보기</button>
+      </div>
+    </section>
+
+    <!-- 웹 → 앱 전환 브릿지 & 크로스프로모션 (§93) -->
+    <section class="app-bridge" id="webToAppBridge" aria-label="앱 및 패밀리 게임 안내">
+      <h3>📱 내 사주·MBTI 저장해두고 매일 새 결과 보기는 앱에서</h3>
+      <p>오프라인 로컬 저장 · 매일 아침 오늘의 운세 알림 지원 Android 앱 출시 예정</p>
+      <div class="promo-row">
+        <div class="promo-chip">
+          <strong>🧩 퀴즈 머신 (#002)</strong>
+          <span>물리 퍼즐 · 출시 예정</span>
+        </div>
+        <div class="promo-chip">
+          <strong>✨ 낫 플로우 (#003)</strong>
+          <span>양자 라인 퍼즐 · 출시 예정</span>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <p>notopened AI ENTERPRISE · 비공개 내부 시연본 v0.3 · 서버 개인정보 비수집 · 실광고 비노출</p>
+      <p>엔터테인먼트·참고용 결과이며 의학·법률·재무 자문을 대체하지 않습니다.</p>
+    </footer>
+  </main>
+
+  <div class="toast" id="toast" role="alert" aria-live="assertive"></div>
+
+  <script>
+    const IS_LIVE_ADS_APPROVED = false;
+    const BASE_SHARE_URL = (typeof window !== 'undefined' && window.location && window.location.protocol.startsWith('http'))
+      ? (window.location.origin + window.location.pathname)
+      : 'https://penta309.github.io/notopened-fortune-demo/';
+
+    let lastSharePayload = null; // E2E & dedup inspection
+
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      if (!t) return;
+      t.textContent = msg;
+      t.classList.add('show');
+      clearTimeout(window._mvp3Toast);
+      window._mvp3Toast = setTimeout(() => t.classList.remove('show'), 2200);
+    }
+
+    // URL 2회 중복 방지 공유 유틸 (navigator.share에는 URL 분리, 클립보드에는 URL 1회)
+    async function triggerKakaoStyleShare(title, nativeTextWithoutUrl, targetUrl) {
+      const clipboardText = `${nativeTextWithoutUrl} 👉 ${targetUrl}`;
+      lastSharePayload = { title, nativeTextWithoutUrl, targetUrl, clipboardText };
+      window._lastSharePayload = lastSharePayload;
+
+      if (navigator.share) {
+        try {
+          await navigator.share({ title, text: nativeTextWithoutUrl, url: targetUrl });
+          showToast('공유가 완료되었습니다!');
+          return;
+        } catch (err) {
+          if (err && err.name === 'AbortError') return;
+        }
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        try {
+          await navigator.clipboard.writeText(clipboardText);
+          showToast('카톡 공유 문구가 복사되었습니다!');
+          return;
+        } catch (e) { /* fallback */ }
+      }
+      const ta = document.createElement('textarea');
+      ta.value = clipboardText;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand('copy'); } catch (e) { /* ignore */ }
+      document.body.removeChild(ta);
+      showToast('카톡 공유 문구가 복사되었습니다!');
+    }
+
+    function switchTab(key) {
+      document.querySelectorAll('.nav-tab').forEach(t => t.classList.toggle('active', t.getAttribute('data-tab') === key));
+      document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+      const target = document.getElementById('panel' + key.charAt(0).toUpperCase() + key.slice(1));
+      if (target) target.classList.add('active');
+    }
+
+    // --- 1. SAJU DATA & LOCAL ENGINE ---
+    const STEMS = ['갑(甲)', '을(乙)', '병(丙)', '정(丁)', '무(戊)', '기(己)', '경(庚)', '신(辛)', '임(壬)', '계(癸)'];
+    const STEM_EL = ['木', '木', '火', '火', '土', '土', '金', '金', '水', '水'];
+    const BRANCHES = ['자(子)', '축(丑)', '인(寅)', '묘(卯)', '진(辰)', '사(巳)', '오(午)', '미(未)', '신(申)', '유(酉)', '술(戌)', '해(亥)'];
+    const BRANCH_EL = ['水', '土', '木', '木', '土', '火', '火', '土', '金', '金', '土', '水'];
+    const MONTH_FIRST_STEM = [2, 4, 6, 8, 0, 2, 4, 6, 8, 0];
+
+    const SAJU_EXAMPLE = {
+      isExample: true,
+      weakEl: '土',
+      badge: '📌 예시 데이터 (1995-05-15 양력 · 午時 · 2026-11-23 기준)',
+      pillars: [
+        { lbl: '년주', val: '을해(乙亥)', el: '木水' },
+        { lbl: '월주', val: '신사(辛巳)', el: '金火' },
+        { lbl: '일주', val: '정사(丁巳)', el: '火火' },
+        { lbl: '시주', val: '병오(丙午)', el: '火火' }
+      ],
+      counts: { '木': 1, '火': 4, '土': 0, '金': 1, '水': 1 },
+      advice: '火 강세 · 土 부족 흐름입니다. 추진력과 집중력이 높은 날이지만 속도 조절이 필요합니다. 차분한 메모와 10분 산책(土 보완)이 실수를 줄여 줍니다.',
+      lucky: '행운 컬러: 베이지 / 머스터드 · 행운 숫자: 5, 0'
+    };
+
+    const EL_ADVICE = {
+      '木': { color: '그린 / 민트', num: '3, 8', msg: '새로운 시작과 기획력이 빛나는 흐름입니다. 가벼운 스트레칭과 메모 정리가 실행력을 높여 줍니다.' },
+      '火': { color: '코랄 / 버건디', num: '2, 7', msg: '열정과 표현력이 살아나는 흐름입니다. 중요한 대화는 핵심 1줄부터 차분히 전하면 호응이 좋습니다.' },
+      '土': { color: '베이지 / 머스터드', num: '5, 0', msg: '균형과 신뢰를 다지기에 좋은 흐름입니다. 서두르기보다 체크리스트 점검과 10분 산책이 실수를 줄여 줍니다.' },
+      '金': { color: '실버 / 화이트', num: '4, 9', msg: '결단력과 정리 정돈이 돋보이는 흐름입니다. 미뤄둔 우선순위를 3가지로 좁히면 성과가 빨라집니다.' },
+      '水': { color: '네이비 / 스카이블루', num: '1, 6', msg: '유연한 사고와 통찰이 깊어지는 흐름입니다. 충분한 수분 섭취와 5분 휴식이 아이디어를 선명하게 합니다.' }
+    };
+
+    let currentSajuData = SAJU_EXAMPLE;
+
+    function computeLocalSaju(dateStr, hourIdx) {
+      const [y, m, d] = dateStr.split('-').map(Number);
+      if (!y || !m || !d) return SAJU_EXAMPLE;
+      const adjYear = (m < 2 || (m === 2 && d < 4)) ? y - 1 : y;
+      const yStem = ((adjYear - 4) % 10 + 10) % 10;
+      const yBranch = ((adjYear - 4) % 12 + 12) % 12;
+
+      const solarMonthIdx = d >= 5 ? ((m - 2 + 12) % 12) : ((m - 3 + 12) % 12);
+      const mBranch = (2 + solarMonthIdx) % 12;
+      const mStem = (MONTH_FIRST_STEM[yStem] + solarMonthIdx) % 10;
+
+      const baseUtc = Date.UTC(1900, 0, 1);
+      const targetUtc = Date.UTC(y, m - 1, d);
+      const deltaDays = Math.round((targetUtc - baseUtc) / 86400000);
+      const idx60 = ((10 + deltaDays) % 60 + 60) % 60;
+      const dStem = idx60 % 10;
+      const dBranch = idx60 % 12;
+
+      const pillars = [
+        { lbl: '년주', val: STEMS[yStem].slice(0,1) + BRANCHES[yBranch].slice(0,1) + '(' + STEMS[yStem].slice(2,3) + BRANCHES[yBranch].slice(2,3) + ')', el: STEM_EL[yStem] + BRANCH_EL[yBranch], s: yStem, b: yBranch },
+        { lbl: '월주', val: STEMS[mStem].slice(0,1) + BRANCHES[mBranch].slice(0,1) + '(' + STEMS[mStem].slice(2,3) + BRANCHES[mBranch].slice(2,3) + ')', el: STEM_EL[mStem] + BRANCH_EL[mBranch], s: mStem, b: mBranch },
+        { lbl: '일주', val: STEMS[dStem].slice(0,1) + BRANCHES[dBranch].slice(0,1) + '(' + STEMS[dStem].slice(2,3) + BRANCHES[dBranch].slice(2,3) + ')', el: STEM_EL[dStem] + BRANCH_EL[dBranch], s: dStem, b: dBranch }
+      ];
+
+      if (hourIdx >= 0) {
+        const hStem = ((dStem % 5) * 2 + hourIdx) % 10;
+        const hBranch = hourIdx % 12;
+        pillars.push({
+          lbl: '시주',
+          val: STEMS[hStem].slice(0,1) + BRANCHES[hBranch].slice(0,1) + '(' + STEMS[hStem].slice(2,3) + BRANCHES[hBranch].slice(2,3) + ')',
+          el: STEM_EL[hStem] + BRANCH_EL[hBranch],
+          s: hStem, b: hBranch
+        });
+      } else {
+        pillars.push({ lbl: '시주', val: '미상', el: '3주 6자', s: -1, b: -1 });
+      }
+
+      const counts = { '木': 0, '火': 0, '土': 0, '金': 0, '水': 0 };
+      pillars.forEach(p => {
+        if (p.s >= 0) counts[STEM_EL[p.s]]++;
+        if (p.b >= 0) counts[BRANCH_EL[p.b]]++;
+      });
+
+      const entries = Object.entries(counts);
+      entries.sort((a, b) => b[1] - a[1]);
+      const strong = entries[0][0];
+      const weak = entries[entries.length - 1][0];
+      const info = EL_ADVICE[weak];
+
+      return {
+        isExample: false,
+        weakEl: weak,
+        badge: `🧮 로컬 만세력 계산 (${dateStr}${hourIdx >= 0 ? ' · ' + BRANCHES[hourIdx] + '시' : ' · 시간 미상'})`,
+        pillars,
+        counts,
+        advice: `${strong} 기운이 강하고 ${weak} 기운이 부족한 사주입니다. ${info.msg}`,
+        lucky: `보완 추천 컬러: ${info.color} · 행운 숫자: ${info.num}`
+      };
+    }
+
+    function renderSaju(data) {
+      currentSajuData = data;
+      const badge = document.getElementById('sajuModeBadge');
+      badge.textContent = data.badge;
+      badge.className = `pill ${data.isExample ? 'pill-example' : 'pill-calc'}`;
+
+      document.getElementById('sajuHeadline').textContent = data.pillars.map(p => `${p.val}(${p.el})`).join(' · ');
+      const grid = document.getElementById('pillarsGrid');
+      grid.innerHTML = '';
+      data.pillars.forEach(p => {
+        const div = document.createElement('div');
+        div.className = 'pillar-box';
+        div.innerHTML = `<div class="lbl">${p.lbl}</div><div class="val">${p.val}</div><div class="lbl">${p.el}</div>`;
+        grid.appendChild(div);
+      });
+
+      const bar = document.getElementById('ohaengBar');
+      bar.innerHTML = '';
+      Object.entries(data.counts).forEach(([k, v]) => {
+        const chip = document.createElement('span');
+        chip.className = 'oh-chip';
+        chip.textContent = `${k} ${v}`;
+        bar.appendChild(chip);
+      });
+
+      document.getElementById('sajuAdvice').textContent = data.advice;
+      document.getElementById('sajuLucky').textContent = data.lucky;
+      document.getElementById('sajuToMbtiBridge').textContent = `💞 부족한 ${data.weakEl} 기운을 채워줄 오늘의 MBTI 행동 팁·궁합 보기 →`;
+    }
+
+    // --- 2. DREAM DATA (30 KEYWORDS) ---
+    const DREAMS = [
+      { id: 'd01', keyword: '돼지', aliases: ['새끼돼지', '황금돼지'], category: '동물', mood: '길몽', summary: '재물운과 뜻밖의 횡재를 상징하는 대표 길몽', detail: '꿈에서 돼지가 집으로 들어오거나 품에 안겼다면 예상치 못한 금전적 이익이나 반가운 소식이 찾아올 신호입니다. 작은 기회도 가볍게 넘기지 말고 챙겨 보세요.', action: '미뤄둔 정산·가계부 확인하기' },
+      { id: 'd02', keyword: '용', aliases: ['청룡', '승천'], category: '동물', mood: '길몽', summary: '큰 성취와 명예 상승을 뜻하는 태몽·성공몽', detail: '용이 하늘로 힘차게 오르는 꿈은 시험 합격, 승진, 프로젝트 성사 등 그동안 준비한 일이 크게 빛을 발할 징조입니다.', action: '핵심 목표 1가지를 오늘 바로 실행하기' },
+      { id: 'd03', keyword: '뱀', aliases: ['구렁이', '꽃뱀'], category: '동물', mood: '길몽', summary: '지혜와 재물, 변화의 기운을 뜻하는 꿈', detail: '큰 뱀이나 맑은 색의 뱀을 보는 것은 재물운과 인연운의 상승을 의미합니다. 물렸다면 오히려 귀인의 도움을 받을 가능성이 큽니다.', action: '신뢰할 수 있는 동료에게 안부 인사 전하기' },
+      { id: 'd04', keyword: '호랑이', aliases: ['백호', '어흥'], category: '동물', mood: '길몽', summary: '강한 추진력과 리더십을 발휘할 신호', detail: '위엄 있는 호랑이를 만나거나 함께 걸었다면 어려운 과제를 주도적으로 해결하고 주변의 인정을 받게 될 암시입니다.', action: '중요한 제안이나 발표 자신 있게 밀고 나가기' },
+      { id: 'd05', keyword: '개', aliases: ['강아지', '반려견'], category: '동물', mood: '길몽', summary: '충직한 친구·조력자와의 인연을 뜻하는 꿈', detail: '다정한 강아지가 반갑게 다가왔다면 새로운 인연이나 든든한 협력자가 곁에 생길 좋은 신호입니다.', action: '가까운 지인에게 먼저 연락해 보기' },
+      { id: 'd06', keyword: '고양이', aliases: ['길고양이', '야옹'], category: '동물', mood: '성찰', summary: '섬세한 직관과 인간관계 경계를 살필 때', detail: '고양이가 품에 안기면 다정한 인연을, 할퀴거나 도망가면 사소한 오해를 주의하라는 신호로 해석됩니다.', action: '상대의 말투보다 의도를 부드럽게 확인하기' },
+      { id: 'd07', keyword: '물', aliases: ['바다', '강물', '홍수'], category: '자연/재물', mood: '길몽', summary: '맑은 물은 재물·마음의 정화를 뜻합니다', detail: '맑고 잔잔한 물이 넘치거나 맑은 강을 건너는 꿈은 막혔던 일이 순조롭게 풀리고 금전 흐름이 트이는 길몽입니다.', action: '따뜻한 물 한 잔 마시며 하루 계획 정리하기' },
+      { id: 'd08', keyword: '불', aliases: ['화재', '불꽃'], category: '자연/재물', mood: '길몽', summary: '강렬한 열정과 사업·학업 번창의 상징', detail: '불길이 활활 타오르는 꿈은 에너지가 크게 상승해 하는 일이 빠르게 확장될 징조입니다. 다만 연기가 너무 자욱했다면 차분한 점검이 필요합니다.', action: '오늘 가장 중요한 일 1가지에 집중 투자하기' },
+      { id: 'd09', keyword: '산', aliases: ['등산', '정상'], category: '자연/재물', mood: '길몽', summary: '목표 달성과 성취를 향한 꾸준한 전진', detail: '높은 산 정상에 올라 탁 트인 풍경을 봤다면 오랜 노력의 결실이 가까워졌음을 뜻합니다.', action: '장기 목표의 중간 점검표 작성하기' },
+      { id: 'd10', keyword: '비', aliases: ['소나기', '장마'], category: '자연/재물', mood: '성찰', summary: '감정 해소와 새로운 시작을 알리는 단비', detail: '시원하게 내리는 비를 맞으며 상쾌했다면 근심이 씻겨 나가고 새 출발을 준비하게 될 신호입니다.', action: '묵은 할 일 목록 1개 지우기' },
+      { id: 'd11', keyword: '돈/황금', aliases: ['돈', '황금', '지폐', '동전'], category: '자연/재물', mood: '길몽', summary: '현실적인 보상과 가치 인정의 기대감', detail: '깨끗한 지폐나 황금을 줍는 꿈은 일의 보람과 실질적 보상이 따라올 긍정적 신호입니다.', action: '지출 내역 점검 후 작은 저축 실행하기' },
+      { id: 'd12', keyword: '똥', aliases: ['대변', '화장실'], category: '자연/재물', mood: '길몽', summary: '예로부터 재물과 횡재를 상징하는 대길몽', detail: '옷이나 몸에 묻거나 넘치는 꿈일수록 뜻밖의 수입·보너스·계약 성사 운이 강하게 들어온다는 전통 해석이 있습니다.', action: '긍정적인 마음으로 새로운 기회 열어두기' },
+      { id: 'd13', keyword: '조상', aliases: ['할머니', '할아버지'], category: '인물', mood: '성찰', summary: '가족의 안녕과 조언을 되새기는 꿈', detail: '조상님이 밝은 표정으로 웃거나 무언가를 건네셨다면 집안에 평안과 행운이 깃들 징조입니다.', action: '부모님이나 가족에게 짧은 안부 전화하기' },
+      { id: 'd14', keyword: '연인', aliases: ['애인', '남친', '여친'], category: '인물', mood: '성찰', summary: '감정 교류와 관계에 대한 내면의 바람', detail: '연인과 즐겁게 데이트했다면 애정이 깊어질 신호이며, 다투었다면 서운한 마음을 대화로 풀 시점입니다.', action: '고마운 마음 1문장으로 표현하기' },
+      { id: 'd15', keyword: '아기', aliases: ['신생아', '아이'], category: '인물', mood: '성찰', summary: '새로운 프로젝트나 순수한 시작의 상징', detail: '웃는 아기를 안았다면 기쁜 소식이나 새 출발을 뜻하며, 우는 아기를 달랬다면 책임감이 커지는 시기입니다.', action: '새로 구상 중인 아이디어 메모해 두기' },
+      { id: 'd16', keyword: '친구', aliases: ['동창', '지인'], category: '인물', mood: '성찰', summary: '협력과 소통이 필요한 인간관계 신호', detail: '오랜 친구가 꿈에 나왔다면 그 친구가 상징하는 시절의 열정이나 주변인의 조언이 필요한 때입니다.', action: '문득 떠오른 친구에게 톡 보내기' },
+      { id: 'd17', keyword: '유명인', aliases: ['연예인', '스타'], category: '인물', mood: '길몽', summary: '자기 표현 욕구와 주목받고 싶은 성취심', detail: '유명인과 악수하거나 함께 일하는 꿈은 자신의 재능이 주변에 인정받을 계기가 생길 수 있음을 뜻합니다.', action: '내 강점을 살릴 작은 결과물 공유하기' },
+      { id: 'd18', keyword: '낯선사람', aliases: ['모르는사람'], category: '인물', mood: '성찰', summary: '내 안의 아직 발견하지 못한 새로운 면모', detail: '낯선 이가 도움을 주었다면 뜻밖의 귀인을 만날 수 있고, 경계심이 들었다면 무리한 약속을 피하라는 신호입니다.', action: '오늘 하루 낯선 정보는 꼼꼼히 확인하기' },
+      { id: 'd19', keyword: '날다', aliases: ['하늘', '비행'], category: '행동', mood: '길몽', summary: '자유로움과 한계를 뛰어넘는 도약의 꿈', detail: '하늘을 가볍게 날아오르는 꿈은 억눌렸던 고민에서 벗어나 새로운 가능성을 펼치게 될 길몽입니다.', action: '고정관념을 깬 새로운 방식 시도하기' },
+      { id: 'd20', keyword: '떨어지다', aliases: ['추락', '절벽'], category: '행동', mood: '주의', summary: '불안감이나 과도한 긴장을 알리는 신호', detail: '높은 곳에서 떨어지는 꿈은 실제 실패보다 현재 느끼는 부담감·책임감이 반영된 경우가 많습니다. 충분한 휴식이 필요합니다.', action: '오늘 밤은 스마트폰을 멀리하고 일찍 잠들기' },
+      { id: 'd21', keyword: '쫓기다', aliases: ['도망', '추격'], category: '행동', mood: '주의', summary: '피하고 싶은 마감·고민이 마음을 누를 때', detail: '무언가에 쫓기는 꿈은 미뤄둔 일이나 심리적 압박을 반영합니다. 정면으로 마주하고 작게 쪼개면 불안이 줄어듭니다.', action: '가장 신경 쓰이는 일 15분만 착수하기' },
+      { id: 'd22', keyword: '시험/지각', aliases: ['시험', '지각', '수능'], category: '행동', mood: '주의', summary: '완벽주의와 평가에 대한 긴장감 반영', detail: '시험에 늦거나 문제가 안 풀리는 꿈은 준비를 잘하고 싶은 성실함의 이면입니다. 이미 충분히 해왔음을 믿으세요.', action: '오늘 할 일의 완료 기준을 80%로 낮추기' },
+      { id: 'd23', keyword: '울다', aliases: ['눈물', '오열'], category: '행동', mood: '성찰', summary: '속상함의 정화와 시원한 해결의 전환점', detail: '꿈에서 소리 내어 시원하게 울었다면 현실에서 쌓였던 스트레스가 해소되고 기쁜 일이 찾아올 반전 길몽입니다.', action: '마음 편한 취미로 기분 전환하기' },
+      { id: 'd24', keyword: '웃다', aliases: ['미소', '폭소'], category: '행동', mood: '길몽', summary: '즐거운 소통과 긍정적 에너지의 확산', detail: '유쾌하게 웃는 꿈은 대인관계가 원만해지고 기분 좋은 소식이 들려올 신호입니다.', action: '주변 사람에게 따뜻한 칭찬 한마디 건네기' },
+      { id: 'd25', keyword: '이빨', aliases: ['치아', '빠지다'], category: '사물/상황', mood: '주의', summary: '건강·가족·변화에 대한 주의를 당부하는 꿈', detail: '이빨이 빠지는 꿈은 컨디션 저하나 주변 환경 변화를 경계하라는 뜻으로, 무리하지 말고 건강과 가족을 살피는 것이 좋습니다.', action: '충분한 수면과 컨디션 체크하기' },
+      { id: 'd26', keyword: '집/이사', aliases: ['집', '이사', '새집'], category: '사물/상황', mood: '길몽', summary: '삶의 기반 변화와 새로운 환경 적응', detail: '넓고 밝은 새집으로 이사하는 꿈은 직장·학업·생활 여건이 한 단계 나아질 발전적 신호입니다.', action: '책상이나 방 한 구석 깔끔하게 정리하기' },
+      { id: 'd27', keyword: '차/운전', aliases: ['자동차', '운전'], category: '사물/상황', mood: '성찰', summary: '현재 내 삶의 주도권과 진행 방향 점검', detail: '막힘없이 부드럽게 운전했다면 계획대로 순항 중임을, 브레이크가 밀렸다면 속도 조절이 필요함을 뜻합니다.', action: '이번 주 일정 속도를 한 템포 조절하기' },
+      { id: 'd28', keyword: '길잃음', aliases: ['미로', '헤매다'], category: '사물/상황', mood: '주의', summary: '선택의 기로에서 방향 재설정이 필요할 때', detail: '길을 헤매는 꿈은 목표가 많아 우선순위가 흐려졌을 때 자주 나타납니다. 잠시 멈춰 지도를 다시 그리면 됩니다.', action: '오늘 꼭 해야 할 단 1가지 우선순위 정하기' },
+      { id: 'd29', keyword: '열쇠', aliases: ['자물쇠', '문'], category: '사물/상황', mood: '길몽', summary: '난제 해결의 실마리와 새로운 기회 획득', detail: '열쇠를 줍거나 잠긴 문을 여는 꿈은 막혔던 문제의 해답을 찾고 새로운 문이 열릴 길몽입니다.', action: '고민하던 문제의 다른 접근법 적어보기' },
+      { id: 'd30', keyword: '거울', aliases: ['거울', '얼굴'], category: '사물/상황', mood: '성찰', summary: '자기 성찰과 내면의 진심을 비춰보는 시간', detail: '맑은 거울에 내 모습이 선명히 비쳤다면 자신감과 명확한 자기 인식을 뜻합니다.', action: '오늘의 내 기분과 목표 1줄 기록하기' }
+    ];
+
+    let activeDreamCat = 'all';
+    let selectedDream = null;
+
+    function renderDreamList(autoOpenSingle = false) {
+      const q = (document.getElementById('dreamSearch').value || '').trim().toLowerCase();
+      const list = document.getElementById('dreamList');
+      list.innerHTML = '';
+      const matched = DREAMS.filter(d => {
+        const catOk = activeDreamCat === 'all' || d.category === activeDreamCat;
+        if (!catOk) return false;
+        if (!q) return true;
+        return d.keyword.toLowerCase().includes(q) || d.aliases.some(a => a.toLowerCase().includes(q)) || d.summary.toLowerCase().includes(q);
+      });
+
+      if (matched.length === 0) {
+        list.innerHTML = '<p class="sub-note">검색된 키워드가 없습니다. 다른 단어를 입력해 보세요.</p>';
+        return;
+      }
+
+      matched.forEach(d => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'dream-item';
+        btn.setAttribute('data-dream-id', d.id);
+        const pillCls = d.mood === '길몽' ? 'pill-good' : (d.mood === '주의' ? 'pill-warn' : 'pill-reflect');
+        btn.innerHTML = `<div class="dream-item-head"><span>${d.keyword} <small style="color:var(--muted);font-weight:500;">(${d.category})</small></span><span class="pill ${pillCls}" style="margin:0;">${d.mood}</span></div><div class="dream-item-sub">${d.summary}</div>`;
+        btn.onclick = () => showDreamDetail(d);
+        list.appendChild(btn);
+      });
+
+      if (autoOpenSingle && matched.length >= 1) {
+        showDreamDetail(matched[0]);
+      }
+    }
+
+    function showDreamDetail(d) {
+      selectedDream = d;
+      const card = document.getElementById('dreamDetailCard');
+      card.style.display = 'block';
+      const badge = document.getElementById('dreamMoodBadge');
+      badge.textContent = `${d.mood} · ${d.category}`;
+      badge.className = `pill ${d.mood === '길몽' ? 'pill-good' : (d.mood === '주의' ? 'pill-warn' : 'pill-reflect')}`;
+      document.getElementById('dreamDetailTitle').textContent = `${d.keyword} 꿈 풀이`;
+      document.getElementById('dreamDetailSummary').textContent = d.summary;
+      document.getElementById('dreamDetailBody').textContent = d.detail;
+      document.getElementById('dreamDetailAction').textContent = `💡 오늘의 추천 행동: ${d.action}`;
+    }
+
+    // --- 3. MBTI 16 TYPES DICTIONARY, 16-Q QUIZ, TOP 3 & COMPATIBILITY ---
+    const MBTI_TYPES = ['INTJ','INTP','ENTJ','ENTP','INFJ','INFP','ENFJ','ENFP','ISTJ','ISFJ','ESTJ','ESFJ','ISTP','ISFP','ESTP','ESFP'];
+    const MBTI_INFO = {
+      INTJ: { desc: '전략적 비전가 · 큰 그림을 설계하는 독립적 사고가', tip: '완벽한 설계보다 오늘 바로 실험할 작은 1단계를 실행해 보세요.', strength: '장기 전략 수립·냉철한 문제 해결', caution: '지나친 완벽주의로 협업 속도 지연', env: '자율성이 보장되는 목표 중심 환경', talkStyle: '결론과 근거를 먼저 말하는 간결한 대화' },
+      INTP: { desc: '논리적 사색가 · 원리를 탐구하는 아이디어 뱅크', tip: '머릿속 흥미로운 가설 1가지를 메모로 고정하면 실행력이 올라갑니다.', strength: '독창적 분석·객관적 통찰력', caution: '아이디어 탐색에 몰입해 마감 지연', env: '지적 호기심이 존중받는 유연한 환경', talkStyle: '개념·원리를 자유롭게 토론하는 대화' },
+      ENTJ: { desc: '대담한 통솔자 · 목표를 향해 팀을 이끄는 리더', tip: '속도를 내기 전 동료의 컨디션 한마디를 먼저 물어보면 시너지가 커집니다.', strength: '결단력·체계적 추진과 조직화', caution: '효율 중시로 감정적 디테일 간과', env: '명확한 성과 지표와 도전 과제', talkStyle: '목표와 실행 계획을 직관적으로 조율' },
+      ENTP: { desc: '뜨거운 변론가 · 유쾌한 발상으로 틀을 깨는 혁신가', tip: '떠오른 아이디어 3개 중 가장 반응이 좋을 1개만 오늘 끝내 보세요.', strength: '순발력·고정관념을 깨는 발상', caution: '새로운 흥미로 기존 마무리 소홀', env: '브레인스토밍이 활발한 개방적 환경', talkStyle: '재치 있는 반론과 아이디어 티키타카' },
+      INFJ: { desc: '통찰력 있는 조언자 · 진심과 의미를 중시하는 이상주의자', tip: '타인의 감정을 살피느라 지치지 않도록 나만의 조용한 15분을 챙기세요.', strength: '깊은 공감·본질을 꿰뚫는 통찰', caution: '혼자 속으로 고민을 쌓아 소진됨', env: '가치와 의미가 분명한 조용한 협업', talkStyle: '진솔하고 깊이 있는 1:1 대화' },
+      INFP: { desc: '따뜻한 중재자 · 진정성과 감성이 풍부한 창작자', tip: '기분 좋은 영감 1줄을 기록해 두면 하루의 중심이 단단해집니다.', strength: '섬세한 감수성·진심 어린 배려', caution: '비판에 민감해 실행을 망설임', env: '개성과 창의성을 응원하는 따뜻한 분위기', talkStyle: '감정과 이야기에 귀 기울이는 대화' },
+      ENFJ: { desc: '정의로운 선도자 · 사람들을 연결하고 북돋는 리더', tip: '남을 챙기는 만큼 오늘 나 자신을 위한 작은 보상도 꼭 허락하세요.', strength: '탁월한 공감 리더십·동기부여', caution: '모두를 만족시키려다 과부하', env: '함께 성장하는 커뮤니티·팀 프로젝트', talkStyle: '따뜻한 격려와 긍정적 피드백 중심' },
+      ENFP: { desc: '재기발랄한 활동가 · 긍정 에너지로 분위기를 밝히는 메이커', tip: '산뜻한 아이디어를 가까운 친구 1명에게 바로 공유하면 응원이 돌아옵니다.', strength: '열정·사람과 아이디어를 잇는 힘', caution: '루틴 반복에서 쉽게 지루함 느낌', env: '활기차고 새로운 시도가 열리는 공간', talkStyle: '리액션이 풍부하고 유쾌한 수다' },
+      ISTJ: { desc: '청렴결백한 현실주의자 · 약속과 기준을 지키는 신뢰의 아이콘', tip: '익숙한 루틴에 5분만 새로운 시도를 섞으면 의외의 즐거움을 얻습니다.', strength: '철저한 책임감·정확한 실무 처리', caution: '예고 없는 갑작스러운 변경에 스트레스', env: '규칙과 역할이 명확한 안정적 구조', talkStyle: '사실과 일정 기반의 차분한 소통' },
+      ISFJ: { desc: '용감한 수호자 · 세심한 배려로 주변을 돌보는 든든한 지원군', tip: '거절하기 어려운 부탁도 내 일정을 먼저 확인한 뒤 답해도 충분합니다.', strength: '세심한 관찰력·꾸준한 헌신', caution: '내 요구를 말하지 못하고 참음', env: '서로 존중하고 안정적인 협력 환경', talkStyle: '부드럽고 상대 기분을 살피는 대화' },
+      ESTJ: { desc: '엄격한 관리자 · 체계와 효율로 결과를 만들어내는 실행가', tip: '체크리스트 완료도 좋지만 과정 속 작은 수고에 스스로 박수를 보내세요.', strength: '명확한 기준·높은 실행 완결성', caution: '원칙 강조로 유연성 부족해 보임', env: '체계적 프로세스와 분명한 책임 체계', talkStyle: '핵심 요점과 일정을 분명히 정리' },
+      ESFJ: { desc: '사교적인 외교관 · 조화와 화합을 이끄는 따뜻한 분위기 메이커', tip: '모두를 맞추기보다 내가 진짜 하고 싶은 메뉴나 일정을 1번쯤 골라보세요.', strength: '높은 친화력·세심한 분위기 조율', caution: '타인의 시선에 지나치게 신경 씀', env: '소통이 활발하고 협업이 잦은 팀', talkStyle: '공감과 안부로 마음을 여는 대화' },
+      ISTP: { desc: '만능 재주꾼 · 위기에도 침착하게 해법을 찾는 실용주의자', tip: '혼자 해결하기보다 필요한 정보 1가지는 먼저 물어보면 시간이 절반으로 줄어듭니다.', strength: '위기 대처력·실용적 문제 해결', caution: '감정 표현이 적어 무심해 보일 수 있음', env: '직접 손으로 만들고 검증하는 현장', talkStyle: '군더더기 없는 핵심 위주 실용 대화' },
+      ISFP: { desc: '호기심 많은 예술가 · 현재의 감각과 자유를 즐기는 온화한 탐험가', tip: '오늘 눈에 들어온 예쁜 풍경이나 음악 1곡을 저장하며 기분을 채우세요.', strength: '미적 감각·부드러운 유연성', caution: '갈등 회피로 결정이 늦어짐', env: '압박이 적고 감각을 살리는 자유 환경', talkStyle: '편안하고 강요 없는 자연스러운 대화' },
+      ESTP: { desc: '모험을 즐기는 사업가 · 즉각적 행동력과 순발력의 소유자', tip: '빠른 결정 후 10초만 리스크를 다시 훑어보면 완벽한 승부수가 됩니다.', strength: '빠른 판단력·현장 돌파 에너지', caution: '장기 계획보다 즉흥 실행에 치우침', env: '속도감 있고 즉각 피드백이 오는 무대', talkStyle: '직설적이고 에너지 넘치는 유쾌한 대화' },
+      ESFP: { desc: '자유로운 영혼의 연예인 · 매 순간을 축제로 만드는 에너지원', tip: '신나는 약속 사이 10분 호흡 정리로 내일 컨디션까지 챙겨 보세요.', strength: '압도적 분위기 메이킹·낙천성', caution: '지루한 문서·마감 관리 부담', env: '사람들과 호흡하며 즐기는 활동적 공간', talkStyle: '표현력이 풍부하고 웃음이 끊이지 않는 대화' }
+    };
+
+    const COMPAT_GRADES = [
+      { grade: '환상의 시너지', score: 96, pill: 'pill-good', desc: '서로의 빈틈을 자연스럽게 메워주며 함께할수록 에너지가 배가되는 찰떡궁합입니다.' },
+      { grade: '든든한 보완', score: 88, pill: 'pill-good', desc: '보는 관점이 달라 오히려 배울 점이 많고, 함께 목표를 세우면 실행력이 극대화됩니다.' },
+      { grade: '편안한 동반', score: 80, pill: 'pill-reflect', desc: '무리하게 맞추지 않아도 리듬이 자연스럽게 이어지는 편안한 친구 조합입니다.' },
+      { grade: '흥미로운 자극', score: 72, pill: 'pill-reflect', desc: '생각지 못한 시각을 열어주는 조합으로, 가벼운 수다에서도 신선한 힌트를 얻습니다.' },
+      { grade: '배려가 필요한 조합', score: 62, pill: 'pill-warn', desc: '표현 방식과 우선순위가 조금 다르지만, 서로의 속도를 존중하면 깊은 신뢰가 쌓입니다.' }
+    ];
+
+    // §93: 16문항 (E/I·S/N·T/F·J/P 각 4문항)
+    const QUICK_QUIZ = [
+      { dim: 0, q: '1. 주말에 에너지를 채우는 방식은?', a: 'E: 사람들과 만나 수다 떨기', b: 'I: 집에서 혼자 푹 쉬기' },
+      { dim: 0, q: '2. 새로운 모임에 갔을 때 나는?', a: 'E: 먼저 말을 걸며 분위기 풀기', b: 'I: 가까운 몇 명과 깊게 대화하기' },
+      { dim: 0, q: '3. 고민이 생겼을 때 주로?', a: 'E: 말로 꺼내면서 생각 정리', b: 'I: 혼자 머릿속·메모로 정리' },
+      { dim: 0, q: '4. 연휴 일정이 비어 있으면?', a: 'E: 지인에게 먼저 번개 제안', b: 'I: 혼자만의 취미 시간 확보' },
+      { dim: 1, q: '5. 설명서를 볼 때 나는?', a: 'S: 순서와 구체적 예시부터 확인', b: 'N: 대략의 감과 전체 그림 먼저 파악' },
+      { dim: 1, q: '6. 대화할 때 더 끌리는 주제는?', a: 'S: 실제 경험·맛집·현실 꿀팁', b: 'N: 만약에~로 시작하는 상상·미래' },
+      { dim: 1, q: '7. 일을 시작할 때 나는?', a: 'S: 검증된 방식대로 차근차근', b: 'N: 새로운 아이디어부터 스케치' },
+      { dim: 1, q: '8. 영화를 보고 나면 주로?', a: 'S: 인상적인 장면·연기 디테일 얘기', b: 'N: 숨은 상징·열린 결말 해석' },
+      { dim: 2, q: '9. 친구가 고민을 털어놓으면?', a: 'T: 현실적인 해결책부터 같이 찾기', b: 'F: 얼마나 속상했을지 먼저 공감하기' },
+      { dim: 2, q: '10. 중요한 결정을 내릴 때 기준은?', a: 'T: 객관적 근거와 효율성', b: 'F: 관계와 모두의 마음' },
+      { dim: 2, q: '11. 피드백을 들을 때 나는?', a: 'T: 개선 포인트가 명확하면 OK', b: 'F: 말하는 사람의 배려와 톤이 중요' },
+      { dim: 2, q: '12. 팀 의견이 갈릴 때 나는?', a: 'T: 논리적으로 가장 타당한 안 선택', b: 'F: 모두가 납득할 절충안 탐색' },
+      { dim: 3, q: '13. 여행을 떠날 때 나는?', a: 'J: 시간·동선 미리 계획표 작성', b: 'P: 큰 틀만 잡고 현지 기분 따라 이동' },
+      { dim: 3, q: '14. 과업 마감이 다가올 때?', a: 'J: 미리 끝내두고 편하게 쉬기', b: 'P: 막판 집중력으로 한 번에 몰입' },
+      { dim: 3, q: '15. 약속이 갑자기 바뀌면?', a: 'J: 계획이 어긋나 살짝 당황', b: 'P: 오 오히려 좋아! 유연하게 전환' },
+      { dim: 3, q: '16. 할 일 목록을 관리할 때?', a: 'J: 체크리스트 순서대로 완결', b: 'P: 그때그때 에너지 맞는 일부터' }
+    ];
+
+    let myMbti = 'ENFP';
+    let friendMbti = 'INTJ';
+    let quizAnswers = new Array(QUICK_QUIZ.length).fill('A');
+
+    function computeCompatibility(t1, t2) {
+      let same = 0;
+      for (let i = 0; i < 4; i++) if (t1[i] === t2[i]) same++;
+      const oppEI = t1[0] !== t2[0];
+      const sameNS = t1[1] === t2[1];
+      const oppTF = t1[2] !== t2[2];
+      const oppJP = t1[3] !== t2[3];
+
+      let tierIdx = 2;
+      if (oppEI && sameNS && oppTF && oppJP) tierIdx = 0;
+      else if (sameNS && oppEI) tierIdx = 1;
+      else if (same >= 3) tierIdx = 2;
+      else if (same === 2) tierIdx = 3;
+      else tierIdx = 4;
+
+      const base = COMPAT_GRADES[tierIdx];
+      const talkPrefix = t2[0] === 'I' ? `${t2} 친구에게 부담 없이 1:1로:` : `${t2} 친구에게 에너지 있게:`;
+      const focusAxis = oppTF
+        ? (t2[2] === 'T' ? '"네가 정리한 기준이 진짜 깔끔해서 믿음이 가!"' : '"네가 챙겨준 덕분에 분위기가 진짜 따뜻해졌어!"')
+        : (t2[1] === 'N' ? '"방금 떠오른 아이디어인데 너랑 얘기하면 대박일 듯!"' : '"지난번에 추천해 준 그곳, 진짜 딱 좋더라!"');
+      return {
+        ...base,
+        tierIdx,
+        talk: `${talkPrefix} ${focusAxis} (${t1}×${t2} 맞춤 한마디)`
+      };
+    }
+
+    function renderMbtiRecommendations() {
+      document.getElementById('mbtiTop3Heading').textContent = `🏆 ${myMbti}와 잘 맞는 MBTI TOP 3`;
+      const scored = MBTI_TYPES.filter(t => t !== myMbti).map(t => ({
+        type: t,
+        ...computeCompatibility(myMbti, t)
+      }));
+      scored.sort((a, b) => b.score - a.score);
+
+      const top3 = scored.slice(0, 3);
+      const care2 = scored.slice(-2).reverse();
+
+      const top3El = document.getElementById('mbtiTop3List');
+      top3El.innerHTML = '';
+      top3.forEach((item, idx) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'top3-item';
+        btn.setAttribute('data-rec-mbti', item.type);
+        btn.innerHTML = `<div class="top3-head"><span>${idx + 1}위 · ${item.type} (${item.grade})</span><span style="color:var(--ok);">${item.score}점</span></div><div class="top3-sub">${MBTI_INFO[item.type].desc}</div>`;
+        btn.onclick = () => {
+          friendMbti = item.type;
+          saveLocalMbti();
+          renderMbtiSection();
+          document.getElementById('compatResultBox').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        };
+        top3El.appendChild(btn);
+      });
+
+      const careEl = document.getElementById('mbtiCareList');
+      careEl.innerHTML = '';
+      care2.forEach(item => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'top3-item';
+        btn.setAttribute('data-care-mbti', item.type);
+        btn.innerHTML = `<div class="top3-head"><span>${item.type} (${item.grade})</span><span style="color:var(--warn);">${item.score}점</span></div><div class="top3-sub">팁: ${MBTI_INFO[item.type].talkStyle}</div>`;
+        btn.onclick = () => {
+          friendMbti = item.type;
+          saveLocalMbti();
+          renderMbtiSection();
+        };
+        careEl.appendChild(btn);
+      });
+    }
+
+    function renderMbtiSection() {
+      const myGrid = document.getElementById('myMbtiGrid');
+      const frGrid = document.getElementById('friendMbtiGrid');
+      myGrid.innerHTML = '';
+      frGrid.innerHTML = '';
+
+      MBTI_TYPES.forEach(t => {
+        const b1 = document.createElement('button');
+        b1.type = 'button';
+        b1.className = `mbti-btn${t === myMbti ? ' active' : ''}`;
+        b1.textContent = t;
+        b1.setAttribute('data-my-mbti', t);
+        b1.onclick = () => { myMbti = t; saveLocalMbti(); renderMbtiSection(); };
+        myGrid.appendChild(b1);
+
+        const b2 = document.createElement('button');
+        b2.type = 'button';
+        b2.className = `mbti-btn${t === friendMbti ? ' friend-active' : ''}`;
+        b2.textContent = t;
+        b2.setAttribute('data-friend-mbti', t);
+        b2.onclick = () => { friendMbti = t; saveLocalMbti(); renderMbtiSection(); };
+        frGrid.appendChild(b2);
+      });
+
+      const info = MBTI_INFO[myMbti];
+      document.getElementById('myMbtiTitle').textContent = `${myMbti} — ${info.desc.split('·')[0].trim()}`;
+      document.getElementById('myMbtiDesc').textContent = info.desc;
+      document.getElementById('myMbtiTip').textContent = `✨ 오늘의 행동 팁: ${info.tip}`;
+
+      const dictGrid = document.getElementById('myMbtiDictGrid');
+      dictGrid.innerHTML = `
+        <div class="dict-cell"><strong>💪 핵심 강점</strong>${info.strength}</div>
+        <div class="dict-cell"><strong>⚠️ 주의 포인트</strong>${info.caution}</div>
+        <div class="dict-cell"><strong>🌿 잘 맞는 환경</strong>${info.env}</div>
+        <div class="dict-cell"><strong>💬 대화 스타일</strong>${info.talkStyle}</div>
+      `;
+
+      renderMbtiRecommendations();
+
+      const compat = computeCompatibility(myMbti, friendMbti);
+      const badge = document.getElementById('compatGradeBadge');
+      badge.textContent = `${compat.grade} (${compat.score}점)`;
+      badge.className = `pill ${compat.pill}`;
+      document.getElementById('compatPairTitle').textContent = `${myMbti} ❤️ ${friendMbti}`;
+      document.getElementById('compatDesc').textContent = compat.desc;
+      document.getElementById('compatTalk').textContent = compat.talk;
+    }
+
+    function renderQuickQuiz() {
+      const list = document.getElementById('quickQuizList');
+      list.innerHTML = '';
+      QUICK_QUIZ.forEach((item, idx) => {
+        const qDiv = document.createElement('div');
+        qDiv.className = 'quiz-q';
+        qDiv.innerHTML = `<p>${item.q}</p>`;
+        const opts = document.createElement('div');
+        opts.className = 'quiz-opts';
+        ['A', 'B'].forEach(choice => {
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = `quiz-opt${quizAnswers[idx] === choice ? ' selected' : ''}`;
+          btn.textContent = choice === 'A' ? item.a : item.b;
+          btn.onclick = () => { quizAnswers[idx] = choice; renderQuickQuiz(); };
+          opts.appendChild(btn);
+        });
+        qDiv.appendChild(opts);
+        list.appendChild(qDiv);
+      });
+    }
+
+    function applyQuickQuiz() {
+      const counts = [0, 0, 0, 0];
+      QUICK_QUIZ.forEach((item, idx) => {
+        if (quizAnswers[idx] === 'A') counts[item.dim]++;
+      });
+      const letters = [
+        counts[0] >= 2 ? 'E' : 'I',
+        counts[1] >= 2 ? 'S' : 'N',
+        counts[2] >= 2 ? 'T' : 'F',
+        counts[3] >= 2 ? 'J' : 'P'
+      ];
+      myMbti = letters.join('');
+      document.getElementById('quickQuizBox').style.display = 'none';
+      saveLocalMbti();
+      renderMbtiSection();
+      showToast(`내 MBTI가 ${myMbti}로 판정되었습니다!`);
+    }
+
+    function saveLocalMbti() {
+      try {
+        localStorage.setItem('notopened_mvp3_mbti', JSON.stringify({ myMbti, friendMbti }));
+      } catch (e) { /* ignore */ }
+    }
+
+    function applyUrlDeepLink() {
+      try {
+        const params = new URLSearchParams(window.location.search);
+        const tab = params.get('tab');
+        const fromMbti = (params.get('from') || '').toUpperCase();
+        const dreamQ = (params.get('q') || '').trim();
+
+        if (fromMbti && MBTI_INFO[fromMbti]) {
+          friendMbti = fromMbti;
+          const banner = document.getElementById('inviteBanner');
+          document.getElementById('inviteBannerTitle').textContent = `💌 친구가 보낸 ${fromMbti}와 내 MBTI 궁합 바로 보기`;
+          document.getElementById('inviteBannerDesc').textContent = `아래에서 내 MBTI를 한 번만 누르면 ${fromMbti} 친구와의 오늘 궁합과 대화 한마디가 즉시 열립니다.`;
+          banner.classList.add('show');
+          switchTab('mbti');
+          return;
+        }
+        if (tab === 'dream' || dreamQ) {
+          switchTab('dream');
+          if (dreamQ) {
+            document.getElementById('dreamSearch').value = dreamQ;
+            renderDreamList(true);
+          }
+          return;
+        }
+        if (tab === 'mbti' || tab === 'saju') {
+          switchTab(tab);
+        }
+      } catch (e) { /* ignore */ }
+    }
+
+    // --- INIT ---
+    document.addEventListener('DOMContentLoaded', () => {
+      try {
+        const saved = JSON.parse(localStorage.getItem('notopened_mvp3_mbti') || 'null');
+        if (saved && MBTI_INFO[saved.myMbti]) myMbti = saved.myMbti;
+        if (saved && MBTI_INFO[saved.friendMbti]) friendMbti = saved.friendMbti;
+      } catch (e) { /* ignore */ }
+
+      // Tabs & Context Bridge Buttons (§92)
+      document.querySelectorAll('.nav-tab').forEach(tab => {
+        tab.addEventListener('click', () => switchTab(tab.getAttribute('data-tab')));
+      });
+      document.querySelectorAll('[data-jump-tab]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          switchTab(btn.getAttribute('data-jump-tab'));
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+      });
+
+      // Saju
+      renderSaju(SAJU_EXAMPLE);
+      document.getElementById('exampleSajuBtn').addEventListener('click', () => renderSaju(SAJU_EXAMPLE));
+      document.getElementById('calcSajuBtn').addEventListener('click', () => {
+        const d = document.getElementById('birthDate').value;
+        const h = Number(document.getElementById('birthHour').value);
+        renderSaju(computeLocalSaju(d, h));
+      });
+      document.getElementById('shareSajuBtn').addEventListener('click', () => {
+        const weak = currentSajuData.weakEl || '土';
+        const url = `${BASE_SHARE_URL}?tab=saju`;
+        const text = `오늘 내 사주에 ${weak} 기운이 비어 있대. 너랑 만나면 서로 채워주는지 보기`;
+        triggerKakaoStyleShare('notopened 사주 오행 궁합', text, url);
+      });
+
+      // Dream
+      renderDreamList();
+      document.getElementById('dreamSearch').addEventListener('input', () => renderDreamList(false));
+      document.getElementById('dreamCats').addEventListener('click', (e) => {
+        const chip = e.target.closest('.chip');
+        if (!chip) return;
+        activeDreamCat = chip.getAttribute('data-cat');
+        document.querySelectorAll('#dreamCats .chip').forEach(c => c.classList.toggle('active', c === chip));
+        renderDreamList(false);
+      });
+      document.getElementById('shareDreamBtn').addEventListener('click', () => {
+        const kw = selectedDream ? selectedDream.keyword : '돼지';
+        const url = `${BASE_SHARE_URL}?tab=dream&q=${encodeURIComponent(kw)}`;
+        const text = `어젯밤 꾼 '${kw}' 꿈 해몽해봤는데 꽤 정확하네 ㅋㅋ 너도 최근에 꾼 꿈 바로 검색해봐`;
+        triggerKakaoStyleShare('notopened 꿈풀이 30종', text, url);
+      });
+
+      // MBTI & Deep-link
+      applyUrlDeepLink();
+      renderMbtiSection();
+      renderQuickQuiz();
+      document.getElementById('toggleQuickQuizBtn').addEventListener('click', () => {
+        const box = document.getElementById('quickQuizBox');
+        box.style.display = box.style.display === 'none' ? 'block' : 'none';
+      });
+      document.getElementById('applyQuickQuizBtn').addEventListener('click', applyQuickQuiz);
+      document.getElementById('shareMbtiBtn').addEventListener('click', () => {
+        const url = `${BASE_SHARE_URL}?tab=mbti&from=${encodeURIComponent(myMbti)}`;
+        const text = `나는 ${myMbti} 나왔는데, 너랑 나 오늘 궁합 어떨지 10초만 눌러봐`;
+        triggerKakaoStyleShare('notopened MBTI 궁합', text, url);
+      });
+    });
+
+    /* =====================================================================
+       v0.3 2차 확장 엔진 (BIZ-FORTUNE-20261120-01 § v0.3)
+       ① 올해 운세 6대 영역  ② 오늘의 12띠·12별자리
+       ③ 미래 배우자 카드    ④ 궁합 3종(MBTI+사주 오행+12띠)
+       전부 오프라인 로컬 계산 · 서버 전송/개인정보 수집 0건
+       ===================================================================== */
+    const V3_EL_GEN = { '木': '火', '火': '土', '土': '金', '金': '水', '水': '木' };
+    const V3_EL_CTRL = { '木': '土', '土': '水', '水': '火', '火': '金', '金': '木' };
+    const V3_EL_HINT = { '木': '새로운 시도와 가벼운 산책', '火': '적극적인 표현과 햇빛 충전', '土': '규칙적인 식사와 책상 정리', '金': '우선순위 3가지 정리와 결단', '水': '충분한 수분 섭취와 5분 휴식' };
+
+    const V3_REL_INFO = {
+      generated: { label: '세운이 나를 도와주는 해', base: 93 },
+      generate: { label: '내가 세운을 키우는 해', base: 87 },
+      same: { label: '같은 기운으로 힘이 실리는 해', base: 90 },
+      control: { label: '내가 세운을 다루는 해', base: 82 },
+      controlled: { label: '세운의 검증을 받는 해', base: 75 }
+    };
+
+    const V3_AREAS = [
+      { key: 'love', icon: '💗', name: '연애운', offset: 0 },
+      { key: 'money', icon: '🍀', name: '재물운', offset: -2 },
+      { key: 'health', icon: '💪', name: '건강운', offset: 1 },
+      { key: 'study', icon: '📚', name: '학업운', offset: 1 },
+      { key: 'family', icon: '🏡', name: '가족운', offset: 2 },
+      { key: 'work', icon: '💼', name: '사업·직장운', offset: -1 }
+    ];
+
+    const V3_AREA_TEXT = {
+      love: {
+        generated: { t: '세운의 火가 나를 따뜻하게 감싸 주는 해입니다. 혼자 애쓰지 않아도 상대가 먼저 다가오거나 소개·모임에서 좋은 인연이 자연스럽게 이어질 수 있습니다. 다만 편안함에 기대어 표현을 미루면 흐름이 늦어지니, 고마운 마음은 그날 안에 한마디로 전해 보세요.', k: '먼저 다가오는 인연 · 표현' },
+        generate: { t: '내가 세운의 火를 키우는 해라 감정 표현이 앞서는 한 해입니다. 마음이 커질수록 상대의 속도를 살피는 지혜가 필요합니다. 연인·썸 모두에서 확인보다 여유를 기억하면 관계가 한 단계 깊어지고, 새로운 만남은 취미 모임에서 열릴 가능성이 큽니다.', k: '표현 · 속도 조절' },
+        same: { t: '火 기운이 겹치는 해로 설렘의 온도가 높습니다. 감정이 빠르게 달아올라 시작은 좋지만 사소한 오해도 크게 번질 수 있습니다. 중요한 이야기는 밤늦게보다 낮에, 문자보다 통화로 정리하면 관계의 온도가 오래 유지됩니다.', k: '설렘 · 대화로 정리' },
+        control: { t: '내가 세운을 다루는 해로 연애에서 주도권이 나에게 있습니다. 원하는 관계의 모습을 분명히 그릴수록 만남의 질이 올라가지만, 상대를 고르는 기준이 지나치게 세밀하면 기회를 놓칠 수 있습니다. 두세 가지만 핵심 기준으로 남겨 보세요.', k: '주도권 · 핵심 기준' },
+        controlled: { t: '세운의 火가 나를 검증하는 해로, 관계에서 감정 소모를 줄이는 것이 관건입니다. 상대의 반응을 해석하며 밤을 새우기보다 내가 편안한 사람과 시간을 늘리면 자연히 정리됩니다. 오래된 인연과의 재회나 안부 연락이 좋은 신호가 될 수 있습니다.', k: '감정 소모 줄이기 · 재회' }
+      },
+      money: {
+        generated: { t: '세운이 나를 도와주는 해로, 미뤄 둔 일이 결실을 맺으며 생활의 여유가 조금씩 늘어나는 흐름입니다. 들어오는 것보다 새는 곳을 먼저 살피면 만족도가 커집니다. 이번 주에는 고정 지출 항목을 한 번 점검하고, 작은 목표 하나를 정해 꾸준히 채워 보세요.', k: '결실 · 새는 곳 점검' },
+        generate: { t: '내가 세운을 키우는 해라 쓰는 속도가 빨라지기 쉬운 한 해입니다. 기분 좋은 소비는 에너지가 되지만 충동이 반복되면 흐름이 흐트러집니다. 결제 전 하루만 생각하는 규칙을 두고, 대신 재능을 나누는 활동에서 예상 밖의 기회를 발견하게 됩니다.', k: '충동 조절 · 재능 나눔' },
+        same: { t: '火 기운이 겹쳐 활동량이 늘고 그만큼 지출도 함께 움직이는 해입니다. 벌이는 힘과 쓰는 힘이 비슷해 균형을 잡는 감각이 중요합니다. 통장·앱 알림을 켜 두고 주 1회 10분 정산 시간을 가지면 흐름이 안정되고 마음도 가벼워집니다.', k: '균형 · 주 1회 정산' },
+        control: { t: '내가 세운을 다루는 해로, 계획을 세워 움직일수록 성과가 따라오는 흐름입니다. 다만 혼자 판단하기보다 신뢰하는 사람에게 한 번 검토받으면 실수를 크게 줄일 수 있습니다. 오래 미뤄 둔 정산과 서류 정리를 이번 달 안에 끝내 보세요.', k: '계획 실행 · 검토' },
+        controlled: { t: '세운의 火가 나를 압박하는 해로, 예상 밖의 지출이나 일정 변경이 생기기 쉽습니다. 당황하지 말고 고정비와 변동비를 나눠 보면 실제 부담이 생각보다 작다는 것을 알게 됩니다. 큰 결정은 서두르지 말고 일주일 뒤 다시 확인해 보세요.', k: '변동 대비 · 한 주 뒤 재확인' }
+      },
+      health: {
+        generated: { t: '세운이 나를 도와주는 해로 체력의 바닥이 단단해지는 흐름입니다. 무리한 계획도 생각보다 잘 버티지만, 잘 버틴다는 이유로 수면을 줄이면 다음 달에 피로가 몰려옵니다. 취침 시간을 30분만 앞당기고 물 한 잔을 습관처럼 챙겨 보세요.', k: '체력 상승 · 수면 30분' },
+        generate: { t: '내가 세운을 키우는 해라 에너지를 밝은 쪽으로 쏟는 일이 많아집니다. 활동량이 늘어난 만큼 회복 시간을 의식적으로 확보해야 컨디션이 무너지지 않습니다. 하루 10분 스트레칭과 자기 전 화면 멀리하기, 이 두 가지만 지켜도 다음 날이 달라집니다.', k: '회복 시간 · 스트레칭' },
+        same: { t: '火 기운이 겹치는 해로 몸의 열이 오르기 쉽습니다. 두근거림·얼굴 열감·잠들기 어려움이 나타나면 과로 신호로 받아들이세요. 매운 음식과 늦은 카페인을 잠시 줄이고, 저녁 산책으로 열을 식히면 수면의 질이 눈에 띄게 좋아집니다.', k: '열 내리기 · 저녁 산책' },
+        control: { t: '내가 세운을 다루는 해로 컨디션을 스스로 조절하는 힘이 생깁니다. 운동을 새로 시작하기 좋은 시기이며, 특히 하체와 코어를 다지는 루틴이 오래갑니다. 다만 시작할 때 욕심을 내면 부상으로 이어지니 3주는 가볍게 유지하는 것이 좋습니다.', k: '운동 시작 · 3주 가볍게' },
+        controlled: { t: '세운의 火가 나를 검증하는 해라 피로가 쌓이기 쉬운 시기입니다. 몸이 보내는 작은 신호(어깨 뻐근함, 눈의 건조함)를 무시하면 일정 전체가 흔들립니다. 20분마다 자리에서 일어나기, 주 2회 가벼운 걷기를 달력에 먼저 적어 두세요.', k: '작은 신호 · 걷기 2회' }
+      },
+      study: {
+        generated: { t: '세운이 나를 도와주는 해로 배움에 필요한 집중력과 이해력이 안정적으로 올라옵니다. 새로운 자격증이나 온라인 강의를 시작하기에 좋은 타이밍이며, 스승·멘토를 만나면 진도가 두 배로 빨라집니다. 배운 것을 그날 한 줄로 정리하는 습관을 들여 보세요.', k: '배움 시작 · 멘토' },
+        generate: { t: '내가 세운을 키우는 해라 호기심이 앞서 여러 가지를 동시에 벌이기 쉽습니다. 시작의 에너지는 크지만 마무리가 흐려질 수 있으니, 이번 분기에 끝낼 목표를 딱 두 개로 좁히세요. 남에게 설명하는 방식으로 공부하면 이해가 오래 남습니다.', k: '두 개로 좁히기 · 설명' },
+        same: { t: '火 기운이 겹치는 해로 단기 집중력과 암기 속도가 좋아집니다. 반면 흥미가 식으면 급격히 손을 놓는 경향도 함께 옵니다. 공부 시간을 짧게 나누고 매번 작은 보상을 붙이면 꾸준함이 만들어지고, 시험 직전 집중력도 효율적으로 쓰입니다.', k: '짧은 집중 · 작은 보상' },
+        control: { t: '내가 세운을 다루는 해로 계획을 세워 밀고 나갈수록 성과가 커집니다. 다만 완벽하게 준비하려다 시작을 미루지 않도록, 오늘 25분만 손대는 규칙을 추천합니다. 오래 미뤄 둔 과제나 보고서 정리를 지금 시작하면 다음 달이 편안해집니다.', k: '25분 착수 · 미뤄둔 정리' },
+        controlled: { t: '세운의 火가 나를 검증하는 해라 평가와 결과 앞에서 긴장이 커지기 쉽습니다. 긴장은 준비 부족이 아니라 기대가 크다는 신호입니다. 시험·발표 전에는 새로운 자료를 더하지 말고 이미 아는 것을 반복하며, 잠을 줄이지 않는 것이 가장 좋은 전략입니다.', k: '긴장 다스리기 · 반복' }
+      },
+      family: {
+        generated: { t: '세운이 나를 도와주는 해로 가족 사이의 온기가 자연스럽게 흐릅니다. 오래 연락하지 못한 사람에게 먼저 안부를 전하면 반가운 소식이나 도움으로 돌아옵니다. 집 안의 작은 변화(화분, 조명, 정리)가 대화의 물꼬를 트는 역할을 하기도 합니다.', k: '먼저 안부 · 집 안 변화' },
+        generate: { t: '내가 세운을 키우는 해라 내가 가족을 챙기는 일이 늘어납니다. 돌봄에 에너지를 쓰는 만큼 나를 돌보는 시간도 함께 확보해야 오래 갑니다. 감사한 마음을 말로 표현하면 상대도 편안해지고, 집안의 결정을 함께 의논하는 자리가 생깁니다.', k: '돌봄 · 나도 돌보기' },
+        same: { t: '火 기운이 겹치는 해로 가족 사이에서 감정의 온도가 높아집니다. 애정이 큰 만큼 잔소리로 들리기 쉬우니, 조언은 한 번 참았다가 부드럽게 꺼내 보세요. 함께 식사하는 시간을 주 1회 정해 두면 사소한 서운함이 쌓이지 않습니다.', k: '부드러운 조언 · 주 1회 식사' },
+        control: { t: '내가 세운을 다루는 해로 집안의 문제를 정리하고 방향을 잡는 역할을 맡게 됩니다. 책임이 무겁게 느껴지면 역할을 나누고 기준을 종이에 남겨 보세요. 오래 미뤄 둔 가족 행사나 연락을 이번 달에 정리하면 마음의 짐이 가벼워집니다.', k: '역할 나누기 · 미뤄둔 행사' },
+        controlled: { t: '세운의 火가 나를 검증하는 해로 가족 간 기대가 엇갈릴 수 있습니다. 서운함을 쌓아 두면 작은 일로 크게 다투기 쉬우니, 나는 이렇게 느꼈어라는 1인칭 표현으로 먼저 말해 보세요. 함께하는 짧은 산책이나 차 한 잔이 오해를 풀어 줍니다.', k: '1인칭 표현 · 산책' }
+      },
+      work: {
+        generated: { t: '세운이 나를 도와주는 해로 상사의 신임과 동료의 협력이 따라오는 흐름입니다. 맡은 일을 끝까지 마무리하는 태도가 다음 기회의 발판이 되니, 눈에 보이는 결과물 하나를 확실히 남기세요. 새로운 제안은 준비가 반쯤 됐을 때 꺼내는 편이 반응이 좋습니다.', k: '신임 · 결과물 하나' },
+        generate: { t: '내가 세운을 키우는 해라 일의 양과 속도가 함께 올라갑니다. 실행력이 강점이지만 혼자 다 하려 하면 병목이 생기니, 위임할 일과 직접 할 일을 구분하는 것이 핵심입니다. 진행 상황을 짧게 공유하는 습관이 신뢰를 만들고 다음 단계로 이어집니다.', k: '위임 · 짧은 공유' },
+        same: { t: '火 기운이 겹치는 해로 추진력과 존재감이 커지는 한 해입니다. 눈에 띄는 성과를 낼 수 있지만 동시에 마찰도 생기기 쉬우니, 성과를 나누고 공을 돌리는 표현이 관계를 지켜 줍니다. 중요한 협상은 감정이 올라온 날을 피해 한 템포 쉬어 가세요.', k: '공 돌리기 · 한 템포' },
+        control: { t: '내가 세운을 다루는 해로 기획과 구조를 세우는 힘이 발휘됩니다. 복잡한 업무를 정리하고 기준을 만드는 일에서 두각을 나타내며, 문서로 남겨 둔 자료가 나중에 큰 자산이 됩니다. 다만 통제하려는 마음이 강해지면 협업이 굳으니 여지를 남겨 두세요.', k: '기획 · 기준 문서화' },
+        controlled: { t: '세운의 火가 나를 검증하는 해라 평가와 압박이 커지기 쉽습니다. 지적을 인격으로 받아들이지 말고 사실만 남겨 개선 목록으로 바꾸면 좋은 재료가 됩니다. 이직·이동을 고민한다면 지금 당장보다 준비 기간을 두고 시장을 살피는 편이 안전합니다.', k: '개선 목록 · 준비 기간' }
+      }
+    };
+
+    function v3Clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+    function v3DayMasterEl(saju) {
+      const dayPillar = saju && saju.pillars ? saju.pillars[2] : null;
+      if (dayPillar && typeof dayPillar.s === 'number' && dayPillar.s >= 0) return STEM_EL[dayPillar.s];
+      if (dayPillar && dayPillar.el) return dayPillar.el.charAt(0);
+      return '土';
+    }
+    function v3Relation(el) {
+      if (el === '火') return 'same';
+      if (V3_EL_GEN[el] === '火') return 'generate';
+      if (V3_EL_GEN['火'] === el) return 'generated';
+      if (V3_EL_CTRL[el] === '火') return 'control';
+      return 'controlled';
+    }
+
+    function v3RenderYearFortune(saju) {
+      const list = document.getElementById('yearFortuneList');
+      const summary = document.getElementById('yearFortuneSummary');
+      if (!list || !saju) return;
+      const myEl = v3DayMasterEl(saju);
+      const rel = v3Relation(myEl);
+      const info = V3_REL_INFO[rel];
+      const weak = saju.weakEl || '土';
+      const weakAdj = weak === '火' ? 3 : (weak === '金' ? -2 : 0);
+      list.innerHTML = '';
+      let total = 0;
+      V3_AREAS.forEach((area, idx) => {
+        const score = v3Clamp(info.base + area.offset + weakAdj, 70, 96);
+        total += score;
+        const block = V3_AREA_TEXT[area.key][rel];
+        const det = document.createElement('details');
+        det.className = 'year-area';
+        det.setAttribute('data-area', area.key);
+        det.open = idx === 0;
+        det.innerHTML = `<summary><span>${area.icon} ${idx + 1}. ${area.name}</span><span class="ya-score">${score}점</span></summary>` +
+          `<p class="ya-body">${block.t} 부족한 ${weak} 기운은 ${V3_EL_HINT[weak]}으로 채워 보세요.</p>` +
+          `<p class="ya-key">핵심 키워드: ${block.k}</p>`;
+        list.appendChild(det);
+      });
+      if (summary) {
+        summary.textContent = `내 일간 ${myEl} × 2026 세운 火 — ${info.label} · 6대 영역 평균 ${Math.round(total / V3_AREAS.length)}점 · 부족한 ${weak} 기운 보완 추천: ${V3_EL_HINT[weak]}`;
+      }
+      return { myEl, rel, avg: Math.round(total / V3_AREAS.length) };
+    }
+
+    /* ---------- ② 오늘의 12띠 · 12별자리 ---------- */
+    const V3_ZODIAC = [
+      { animal: '쥐', emoji: '🐭', trait: '재빠른 판단과 정보 수집' },
+      { animal: '소', emoji: '🐮', trait: '묵묵한 성실과 신뢰' },
+      { animal: '호랑이', emoji: '🐯', trait: '과감한 추진과 카리스마' },
+      { animal: '토끼', emoji: '🐰', trait: '섬세한 배려와 평화 감각' },
+      { animal: '용', emoji: '🐲', trait: '큰 그림과 스케일' },
+      { animal: '뱀', emoji: '🐍', trait: '깊은 통찰과 지혜' },
+      { animal: '말', emoji: '🐴', trait: '활동력과 자유로운 추진' },
+      { animal: '양', emoji: '🐑', trait: '온화한 공감과 예술적 감성' },
+      { animal: '원숭이', emoji: '🐵', trait: '재치와 순발력' },
+      { animal: '닭', emoji: '🐔', trait: '꼼꼼한 정리와 기준' },
+      { animal: '개', emoji: '🐶', trait: '의리와 충직한 협력' },
+      { animal: '돼지', emoji: '🐷', trait: '넉넉한 복과 포용력' }
+    ];
+    const V3_SIGNS = [
+      { name: '염소', emoji: '♑', from: [12, 22], to: [1, 19], trait: '현실적인 책임감' },
+      { name: '물병', emoji: '♒', from: [1, 20], to: [2, 18], trait: '독창적 발상' },
+      { name: '물고기', emoji: '♓', from: [2, 19], to: [3, 20], trait: '섬세한 공감' },
+      { name: '양', emoji: '♈', from: [3, 21], to: [4, 19], trait: '빠른 실행력' },
+      { name: '황소', emoji: '♉', from: [4, 20], to: [5, 20], trait: '꾸준한 안정감' },
+      { name: '쌍둥이', emoji: '♊', from: [5, 21], to: [6, 21], trait: '호기심과 소통' },
+      { name: '게', emoji: '♋', from: [6, 22], to: [7, 22], trait: '따뜻한 보호 본능' },
+      { name: '사자', emoji: '♌', from: [7, 23], to: [8, 22], trait: '당당한 표현력' },
+      { name: '처녀', emoji: '♍', from: [8, 23], to: [9, 22], trait: '정교한 분석' },
+      { name: '천칭', emoji: '♎', from: [9, 23], to: [10, 22], trait: '균형과 조율' },
+      { name: '전갈', emoji: '♏', from: [10, 23], to: [11, 22], trait: '집요한 몰입' },
+      { name: '사수', emoji: '♐', from: [11, 23], to: [12, 21], trait: '낙관과 탐험' }
+    ];
+    const V3_TODAY_TOTAL = [
+      '작은 정리가 큰 흐름을 바꾸는 날입니다. 미뤄 둔 일 하나만 끝내도 하루의 무게가 달라집니다.',
+      '말이 잘 통하는 날입니다. 먼저 건넨 인사 한마디가 예상 밖의 도움으로 돌아옵니다.',
+      '속도보다 방향이 중요한 날입니다. 10분만 계획을 점검하면 같은 노력으로 두 배의 결과를 얻습니다.',
+      '기분의 기복이 있지만 회복도 빠른 날입니다. 오후에 환기나 산책으로 머리를 비우면 흐름이 풀립니다.',
+      '집중력이 좋은 날입니다. 중요한 판단과 서류 작업을 오전에 배치하면 실수가 줄어듭니다.',
+      '사람을 통해 운이 들어오는 날입니다. 오래 연락하지 못한 지인에게 안부를 전해 보세요.'
+    ];
+    const V3_TODAY_TIME = ['09:00~11:00', '11:00~13:00', '13:00~15:00', '14:00~16:00', '16:00~18:00', '19:00~21:00'];
+    const V3_TODAY_CAUTION = [
+      '즉흥적인 결제와 충동적인 약속은 한 번 더 확인하세요.',
+      '말의 속도가 빨라지기 쉬우니 핵심부터 차분히 전하세요.',
+      '수면 부족이 판단을 흐릴 수 있으니 늦은 카페인은 피하세요.',
+      '서두른 이동은 실수를 부르니 10분 여유를 두고 움직이세요.',
+      '감정이 올라온 대화는 잠시 멈추고 내일 이어가세요.',
+      '남의 부탁을 다 받아내려 하지 말고 하나는 정중히 미루세요.'
+    ];
+
+    let v3ZodiacIdx = 11;
+    let v3SignIdx = 4;
+
+    function v3SignIndex(m, d) {
+      for (let i = 0; i < V3_SIGNS.length; i++) {
+        const s = V3_SIGNS[i];
+        const fm = s.from[0], fd = s.from[1], tm = s.to[0], td = s.to[1];
+        if (fm <= tm) {
+          if ((m === fm && d >= fd) || (m === tm && d <= td) || (m > fm && m < tm)) return i;
+        } else if ((m === fm && d >= fd) || (m === tm && d <= td)) {
+          return i;
+        }
+      }
+      return 0;
+    }
+    function v3MapBirth(str) {
+      const parts = String(str || '').split('-').map(Number);
+      const y = parts[0], m = parts[1], d = parts[2];
+      if (!y || !m || !d) return null;
+      const adjY = (m < 2 || (m === 2 && d < 4)) ? y - 1 : y;
+      return { zi: ((adjY - 4) % 12 + 12) % 12, si: v3SignIndex(m, d), adjY };
+    }
+    function v3Seed(str) {
+      let h = 2166136261;
+      for (let i = 0; i < str.length; i++) { h ^= str.charCodeAt(i); h = Math.imul(h, 16777619); }
+      return Math.abs(h);
+    }
+    function v3TodayKey() {
+      const n = new Date();
+      const p = x => String(x).padStart(2, '0');
+      return `${n.getFullYear()}-${p(n.getMonth() + 1)}-${p(n.getDate())}`;
+    }
+    function v3RenderZodiacChips() {
+      const wrap = document.getElementById('zodiacChips');
+      if (!wrap) return;
+      wrap.innerHTML = '';
+      V3_ZODIAC.forEach((z, i) => {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'mini-btn' + (i === v3ZodiacIdx ? ' active' : '');
+        b.setAttribute('data-zodiac-i', String(i));
+        b.textContent = `${z.emoji} ${z.animal}`;
+        b.onclick = () => { v3ZodiacIdx = i; v3RenderZodiacChips(); v3RenderToday(); };
+        wrap.appendChild(b);
+      });
+    }
+    function v3RenderSignChips() {
+      const wrap = document.getElementById('signChips');
+      if (!wrap) return;
+      wrap.innerHTML = '';
+      V3_SIGNS.forEach((s, i) => {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'mini-btn' + (i === v3SignIdx ? ' active' : '');
+        b.setAttribute('data-sign-i', String(i));
+        b.textContent = `${s.emoji} ${s.name}`;
+        b.onclick = () => { v3SignIdx = i; v3RenderSignChips(); v3RenderToday(); };
+        wrap.appendChild(b);
+      });
+    }
+    function v3RenderToday() {
+      const box = document.getElementById('todayFortuneBox');
+      if (!box) return;
+      const key = v3TodayKey();
+      const z = V3_ZODIAC[v3ZodiacIdx];
+      const s = V3_SIGNS[v3SignIdx];
+      const defs = [
+        { id: 'todayZodiacCard', label: `${z.animal}띠`, emoji: z.emoji, trait: z.trait, seed: key + '|zodiac|' + v3ZodiacIdx },
+        { id: 'todaySignCard', label: `${s.name}자리`, emoji: s.emoji, trait: s.trait, seed: key + '|sign|' + v3SignIdx }
+      ];
+      box.innerHTML = '';
+      defs.forEach(o => {
+        const seed = v3Seed(o.seed);
+        const card = document.createElement('div');
+        card.className = 'today-card';
+        card.id = o.id;
+        card.innerHTML = `<h4>${o.emoji} ${o.label} 오늘의 운세</h4>` +
+          `<p class="today-sub">${key} 기준 · 기본 기질: ${o.trait}</p>` +
+          `<p class="today-line"><strong>총운</strong> ${V3_TODAY_TOTAL[seed % V3_TODAY_TOTAL.length]}</p>` +
+          `<p class="today-line"><strong>행운 시간대</strong> ${V3_TODAY_TIME[(seed >> 3) % V3_TODAY_TIME.length]}</p>` +
+          `<p class="today-line"><strong>주의 포인트</strong> ${V3_TODAY_CAUTION[(seed >> 6) % V3_TODAY_CAUTION.length]}</p>`;
+        box.appendChild(card);
+      });
+    }
+    function v3ApplyTodayBirth() {
+      const input = document.getElementById('todayBirthDate');
+      const note = document.getElementById('zodiacAutoNote');
+      const m = v3MapBirth(input ? input.value : '');
+      if (!m) { if (note) note.textContent = '생년월일을 확인해 주세요.'; return null; }
+      v3ZodiacIdx = m.zi;
+      v3SignIdx = m.si;
+      if (note) {
+        note.textContent = `자동 매핑: ${V3_ZODIAC[m.zi].animal}띠 · ${V3_SIGNS[m.si].name}자리 (${input.value} 기준)`;
+      }
+      v3RenderZodiacChips();
+      v3RenderSignChips();
+      v3RenderToday();
+      return m;
+    }
+
+    /* ---------- ③ 미래 배우자 카드 ---------- */
+    const V3_SPOUSE_EL = {
+      '木': {
+        feat: '배우자궁이 木이라 곧고 성장 지향적인 사람이 인연으로 그려집니다. 새로운 것을 함께 시작하는 걸 즐기고 자기 기준이 뚜렷해, 한 번 마음을 열면 오래 곁을 지킵니다.',
+        first: '첫 만남은 도서관·전시·산책처럼 조용한 공간이 잘 어울립니다. 대화의 속도는 느리지만 질문이 깊어 인상이 오래 남는 스타일입니다.',
+        sync: '함께 계획을 세우고 하나씩 이뤄 갈 때 시너지가 큽니다. 서로의 성장을 응원하는 말 한마디가 관계를 길게 유지시켜 줍니다.'
+      },
+      '火': {
+        feat: '배우자궁이 火라 밝고 표현이 분명한 사람이 인연으로 그려집니다. 감정을 숨기지 않아 관계가 투명하고, 주변을 즐겁게 만드는 에너지를 가졌습니다.',
+        first: '첫 만남은 모임·공연·맛집처럼 활기가 있는 자리가 어울립니다. 리액션이 좋아 대화가 자연스럽게 이어지고 웃음이 많은 인상으로 기억됩니다.',
+        sync: '함께 있으면 추진력이 두 배가 됩니다. 다만 감정이 앞설 때 한 박자 쉬어 주는 배려가 관계의 든든한 안전장치가 됩니다.'
+      },
+      '土': {
+        feat: '배우자궁이 土라 든든하고 현실감 있는 사람이 인연으로 그려집니다. 약속을 지키고 생활의 기반을 다지는 데 능해 함께 있으면 마음이 놓입니다.',
+        first: '첫 만남은 조용한 카페나 산책로처럼 편안한 장소가 잘 맞습니다. 화려한 말보다 챙겨 주는 행동으로 신뢰를 쌓는 스타일입니다.',
+        sync: '생활 리듬을 함께 정리할 때 시너지가 큽니다. 서로의 루틴을 존중하고 작은 수고를 말로 알아주면 관계가 단단해집니다.'
+      },
+      '金': {
+        feat: '배우자궁이 金이라 결단력 있고 정돈된 사람이 인연으로 그려집니다. 기준이 분명하고 맺고 끊음이 깔끔해 관계가 군더더기 없이 정리됩니다.',
+        first: '첫 만남은 정돈된 공간이나 업무적인 자리에서 자연스럽게 이어질 수 있습니다. 말투가 단정하고 약속 시간을 지키는 태도가 좋은 인상을 남깁니다.',
+        sync: '역할을 나눠 효율적으로 움직일 때 시너지가 큽니다. 지적보다 고마움을 먼저 표현하면 서로의 기준이 부딪히지 않습니다.'
+      },
+      '水': {
+        feat: '배우자궁이 水라 부드럽고 통찰이 깊은 사람이 인연으로 그려집니다. 감정을 읽는 힘이 좋아 말하지 않아도 분위기를 알아채고 흐름에 맞춰 유연하게 움직입니다.',
+        first: '첫 만남은 비 오는 날의 실내나 조용한 음악이 있는 곳이 어울립니다. 대화의 여백을 편하게 느끼고 깊은 이야기에 천천히 마음을 여는 스타일입니다.',
+        sync: '서로의 감정을 정리해 줄 때 시너지가 큽니다. 결정을 재촉하지 않고 기다려 주는 태도가 관계를 오래 끌고 갑니다.'
+      }
+    };
+    const V3_SPOUSE_MBTI = {
+      ET: { feat: '내가 밖으로 에너지를 쓰는 편이라, 조용히 들어주고 핵심을 정리해 주는 사람이 편안합니다.', first: '대화에서 결론을 먼저 말해 주는 태도가 신뢰를 만듭니다.', sync: '할 일을 나눠 맡길 때 서로의 방식이 잘 맞물립니다.' },
+      EF: { feat: '내가 사람에게서 힘을 얻는 편이라, 감정을 함께 나누는 사람이 잘 맞습니다.', first: '리액션과 표정이 풍부한 사람에게 마음이 먼저 열립니다.', sync: '함께 웃고 함께 위로할 때 관계의 온도가 오래 유지됩니다.' },
+      IT: { feat: '내가 혼자의 시간이 필요한 편이라, 말없이 곁을 지켜 주는 사람이 편안합니다.', first: '과하게 캐묻지 않고 여백을 존중하는 태도가 인상적입니다.', sync: '각자의 공간을 인정할 때 오히려 더 가까워집니다.' },
+      IF: { feat: '내가 속으로 오래 생각하는 편이라, 재촉하지 않는 사람이 잘 맞습니다.', first: '분위기를 먼저 살피고 말을 건네는 섬세함이 마음을 엽니다.', sync: '감정을 말로 확인해 주는 습관이 오해를 줄여 줍니다.' }
+    };
+    function v3RenderSpouse(saju, type) {
+      const wrap = document.getElementById('spouseStages');
+      const srcNote = document.getElementById('spouseSourceNote');
+      if (!wrap || !saju) return;
+      const dayPillar = saju.pillars[2] || { val: '-', el: '土' };
+      const el = dayPillar.el ? dayPillar.el.charAt(0) : '土';
+      const combo = (type[0] || 'E') + (type[2] || 'T');
+      const elPart = V3_SPOUSE_EL[el] || V3_SPOUSE_EL['土'];
+      const mb = V3_SPOUSE_MBTI[combo] || V3_SPOUSE_MBTI['ET'];
+      const stages = [
+        { icon: '①', name: '성격 특징', text: `${elPart.feat} ${mb.feat}` },
+        { icon: '②', name: '첫인상 · 만남 분위기', text: `${elPart.first} ${mb.first}` },
+        { icon: '③', name: '함께할 때 시너지 포인트', text: `${elPart.sync} ${mb.sync}` }
+      ];
+      wrap.innerHTML = '';
+      stages.forEach(s => {
+        const d = document.createElement('div');
+        d.className = 'spouse-stage';
+        d.setAttribute('data-spouse-stage', s.name);
+        d.innerHTML = `<h4>${s.icon} ${s.name}</h4><p>${s.text}</p>`;
+        wrap.appendChild(d);
+      });
+      if (srcNote) {
+        srcNote.textContent = `사주 일지 ${dayPillar.val} · 배우자궁 오행 ${el} · 내 MBTI ${type} 보완 지표(${combo}) 기준으로 계산했습니다.`;
+      }
+    }
+
+    /* ---------- ④ 궁합 3종 (MBTI + 사주 오행 + 12띠) ---------- */
+    const V3_TRIADS = [[8, 0, 4], [11, 3, 7], [2, 6, 10], [5, 9, 1]];
+    const V3_YUKHAP = [[0, 1], [2, 11], [3, 10], [4, 9], [5, 8], [6, 7]];
+    const V3_CHUNG = [[0, 6], [1, 7], [2, 8], [3, 9], [4, 10], [5, 11]];
+
+    function v3PairIn(pairs, a, b) {
+      return pairs.some(p => (p[0] === a && p[1] === b) || (p[0] === b && p[1] === a));
+    }
+    function v3ZodiacCompat(a, b) {
+      const triad = V3_TRIADS.some(g => g.indexOf(a) >= 0 && g.indexOf(b) >= 0);
+      if (a === b) return { score: 78, label: '같은 띠', desc: '같은 띠끼리는 생각의 결이 비슷해 편하지만, 부족한 부분도 닮아 있어 새로운 자극은 적은 편입니다.' };
+      if (triad) return { score: 92, label: '삼합', desc: '삼합에 해당해 방향이 같습니다. 함께할수록 힘이 커지고 목표를 세우면 실행이 빨라지는 조합입니다.' };
+      if (v3PairIn(V3_YUKHAP, a, b)) return { score: 88, label: '육합', desc: '육합으로 서로의 빈 곳을 채워 주는 인연입니다. 말이 통하고 함께 있으면 마음이 편안해집니다.' };
+      if (v3PairIn(V3_CHUNG, a, b)) return { score: 58, label: '상충', desc: '상충에 해당해 속도와 방식이 다릅니다. 조율이 필요하지만 서로의 차이를 인정하면 배울 점이 많은 조합입니다.' };
+      return { score: 74, label: '무난', desc: '특별한 마찰 없이 담백하게 이어지는 조합입니다. 함께하는 시간이 늘수록 신뢰가 쌓입니다.' };
+    }
+    function v3OhaengCompat(my, partner) {
+      const myWeak = my.weakEl || '土';
+      const pWeak = partner.weakEl || '土';
+      const notes = [];
+      let score = 76;
+      const pFills = (partner.counts[myWeak] || 0) >= 2;
+      const iFill = (my.counts[pWeak] || 0) >= 2;
+      if (iFill) { score += 9; notes.push(`내 사주에 ${pWeak} 기운이 있어 상대의 부족함을 채워 줄 수 있습니다`); }
+      if (pFills) { score += 9; notes.push(`상대 사주에 ${myWeak} 기운이 있어 내 빈 곳을 채워 줍니다`); }
+      if (myWeak === pWeak) { score -= 8; notes.push(`두 사람 모두 ${myWeak} 기운이 부족해 같은 부분을 함께 채워야 합니다`); }
+      if (!notes.length) notes.push('서로 다른 오행으로 균형을 이루는 담백한 조합입니다');
+      score = v3Clamp(score, 55, 95);
+      const label = score >= 88 ? '상호 보완형' : (score >= 80 ? '균형형' : (score >= 68 ? '조율형' : '같은 빈 곳을 채우는 형'));
+      return { score, label, desc: `${notes.join(' · ')}.` };
+    }
+    function v3RenderCompat3(saju, partnerDate, myType, friendType) {
+      const box = document.getElementById('compat3Result');
+      if (!box || !saju) return;
+      const mbti = computeCompatibility(myType, friendType);
+      const rows = [{ name: '💞 MBTI 궁합', sub: `${myType} × ${friendType}`, score: mbti.score, label: mbti.grade, desc: mbti.desc }];
+      let sajuRow = null, zodiacRow = null;
+      const myBirth = (document.getElementById('birthDate') || {}).value || '1995-05-15';
+      const myMap = v3MapBirth(myBirth);
+      if (partnerDate) {
+        const partner = computeLocalSaju(partnerDate, -1);
+        sajuRow = v3OhaengCompat(saju, partner);
+        rows.push({ name: '🔮 사주 오행 궁합', sub: `내 부족 ${saju.weakEl} ↔ 상대 부족 ${partner.weakEl}`, score: sajuRow.score, label: sajuRow.label, desc: sajuRow.desc });
+        const pMap = v3MapBirth(partnerDate);
+        if (myMap && pMap) {
+          zodiacRow = v3ZodiacCompat(myMap.zi, pMap.zi);
+          rows.push({
+            name: '🐲 12띠 궁합',
+            sub: `${V3_ZODIAC[myMap.zi].animal}띠 × ${V3_ZODIAC[pMap.zi].animal}띠`,
+            score: zodiacRow.score,
+            label: zodiacRow.label,
+            desc: zodiacRow.desc
+          });
+        }
+      }
+      box.innerHTML = '';
+      rows.forEach(r => {
+        const d = document.createElement('div');
+        d.className = 'compat3-row';
+        d.setAttribute('data-compat-row', r.name.replace(/[^가-힣]/g, ''));
+        d.innerHTML = `<div class="compat3-head"><span>${r.name} <small style="color:var(--muted);font-weight:600;">${r.sub}</small></span><span class="c3-score">${r.label} · ${r.score}점</span></div>` +
+          `<p class="compat3-desc">${r.desc}</p>`;
+        box.appendChild(d);
+      });
+      const avg = Math.round(rows.reduce((s, r) => s + r.score, 0) / rows.length);
+      const grade = avg >= 90 ? '최상의 조합' : (avg >= 82 ? '좋은 조합' : (avg >= 72 ? '무난한 조합' : '조율이 필요한 조합'));
+      const total = document.createElement('div');
+      total.className = 'compat-total';
+      total.id = 'compat3Total';
+      total.innerHTML = `<strong>3종 종합 ${avg}점 · ${grade}</strong><br>` +
+        `MBTI ${mbti.score}점` +
+        (partnerDate ? ` · 사주 오행 ${sajuRow ? sajuRow.score + '점' : '-'} · 12띠 ${zodiacRow ? zodiacRow.score + '점' : '-'}` : '') +
+        (partnerDate ? '' : ' · 상대 생년월일을 입력하면 사주·띠 궁합까지 함께 계산됩니다.') +
+        `<br><span style="color:var(--muted);font-size:0.76rem;">엔터테인먼트·참고용 결과이며 실제 관계를 예측하지 않습니다.</span>`;
+      box.appendChild(total);
+      return { avg, grade, rows: rows.length };
+    }
+    window.v3RenderCompat3 = v3RenderCompat3;
+
+    /* ---------- v0.3 초기화 & 연동 ---------- */
+    document.addEventListener('DOMContentLoaded', () => {
+      try {
+        v3RenderYearFortune(currentSajuData);
+        const mapped = v3MapBirth((document.getElementById('todayBirthDate') || {}).value);
+        if (mapped) { v3ZodiacIdx = mapped.zi; v3SignIdx = mapped.si; }
+        v3RenderZodiacChips();
+        v3RenderSignChips();
+        v3RenderToday();
+        const note = document.getElementById('zodiacAutoNote');
+        const bd = (document.getElementById('todayBirthDate') || {}).value || '';
+        if (note && mapped) note.textContent = `자동 매핑: ${V3_ZODIAC[mapped.zi].animal}띠 · ${V3_SIGNS[mapped.si].name}자리 (${bd} 기준)`;
+        v3RenderSpouse(currentSajuData, myMbti);
+        v3RenderCompat3(currentSajuData, (document.getElementById('partnerBirthDate') || {}).value, myMbti, friendMbti);
+
+        const refreshAll = () => {
+          v3RenderYearFortune(currentSajuData);
+          v3RenderSpouse(currentSajuData, myMbti);
+          v3RenderCompat3(currentSajuData, (document.getElementById('partnerBirthDate') || {}).value, myMbti, friendMbti);
+          // 사주 패널에서 계산한 생년월일을 오늘의 띠·별자리에도 함께 매핑
+          const bd = document.getElementById('birthDate');
+          const todayInput = document.getElementById('todayBirthDate');
+          if (bd && todayInput && bd.value && todayInput.value !== bd.value) {
+            todayInput.value = bd.value;
+            v3ApplyTodayBirth();
+          }
+        };
+        const calcBtn = document.getElementById('calcSajuBtn');
+        const exBtn = document.getElementById('exampleSajuBtn');
+        if (calcBtn) calcBtn.addEventListener('click', refreshAll);
+        if (exBtn) exBtn.addEventListener('click', refreshAll);
+
+        const todayBtn = document.getElementById('todayAutoBtn');
+        if (todayBtn) todayBtn.addEventListener('click', v3ApplyTodayBirth);
+        const todayInput = document.getElementById('todayBirthDate');
+        if (todayInput) todayInput.addEventListener('change', v3ApplyTodayBirth);
+
+        const c3Btn = document.getElementById('calcCompat3Btn');
+        if (c3Btn) c3Btn.addEventListener('click', () => {
+          v3RenderCompat3(currentSajuData, (document.getElementById('partnerBirthDate') || {}).value, myMbti, friendMbti);
+          showToast('궁합 3종을 다시 계산했습니다.');
+        });
+
+        const panelMbti = document.getElementById('panelMbti');
+        if (panelMbti) panelMbti.addEventListener('click', (e) => {
+          if (e.target.closest('.mbti-btn') || e.target.closest('.top3-item')) {
+            v3RenderSpouse(currentSajuData, myMbti);
+            v3RenderCompat3(currentSajuData, (document.getElementById('partnerBirthDate') || {}).value, myMbti, friendMbti);
+          }
+        });
+
+        const shareSpouse = document.getElementById('shareSpouseBtn');
+        if (shareSpouse) shareSpouse.addEventListener('click', () => {
+          const url = `${BASE_SHARE_URL}?tab=today`;
+          triggerKakaoStyleShare('notopened 미래 배우자 카드', '내 배우자궁 카드 나왔는데 너도 한번 봐봐', url);
+        });
+
+        try {
+          const p = new URLSearchParams(window.location.search);
+          if (p.get('tab') === 'today') switchTab('today');
+        } catch (e) { /* ignore */ }
+      } catch (err) {
+        if (window.console && console.error) console.error('[v0.3 init]', err);
+      }
+    });
+  </script>
+</body>
+</html>
