@@ -444,6 +444,40 @@
     .btn-share { background: #082033; color: var(--text); border-color: var(--accent); margin-top: 8px; }
     .btn-share:active { background: var(--accent-soft); }
     .footer a { color: var(--accent); font-weight: 700; }
+    /* 상단 슬림 유튜브 배너 */
+    .yt-banner {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 46px;
+      padding: 6px 12px;
+      margin: 0 0 10px;
+      border: 1px solid rgba(239, 68, 68, 0.4);
+      border-radius: 12px;
+      background: linear-gradient(135deg, rgba(239, 68, 68, 0.13), rgba(30, 41, 59, 0.85));
+      color: var(--text);
+      font-size: 0.78rem;
+      font-weight: 700;
+      line-height: 1.35;
+      text-align: center;
+      text-decoration: none;
+    }
+    .yt-banner:active { border-color: rgba(239, 68, 68, 0.75); background: linear-gradient(135deg, rgba(239, 68, 68, 0.22), rgba(30, 41, 59, 0.95)); }
+    .yt-banner .yt-play {
+      flex: 0 0 auto;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: #ef4444;
+      color: #fff;
+      font-size: 0.58rem;
+      padding-left: 1px;
+    }
+    .yt-banner .yt-arrow { color: #fca5a5; }
     .saju-actions .btn { min-width: 0; white-space: normal; }
     .section-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 6px; flex-wrap: wrap; }
     .section-head h2 { margin: 0; flex: 1 1 12rem; }
@@ -465,6 +499,8 @@
       <h1>사주 · 꿈풀이 · MBTI 궁합</h1>
       <p>가입 없이 바로 확인하는 무료 운세 — 사주 · 꿈풀이 · MBTI · 12띠/별자리 · 배우자 카드</p>
     </header>
+
+    <a class="yt-banner" href="https://www.youtube.com/@notopened" target="_blank" rel="noopener noreferrer" aria-label="notopened 공식 유튜브 채널 (새 탭)"><span class="yt-play" aria-hidden="true">▶</span><span>notopened 공식 유튜브 — 매일 30초 쇼츠 보러가기</span><span class="yt-arrow" aria-hidden="true">→</span></a>
 
     <aside class="ad-slot" aria-label="광고 영역"></aside>
 
