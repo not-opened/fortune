@@ -3,8 +3,46 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
-  <meta name="description" content="notopened 사주·꿈풀이·MBTI 궁합 — 설치·가입 없이 30초 만에 확인하는 모바일 운세·꿈해몽·MBTI 16유형 궁합">
-  <title>notopened 사주 · 꿈풀이 · MBTI 궁합 — 가입 없이 30초 무료 운세</title>
+  <title>무료 사주 · 꿈풀이 · MBTI 궁합 · 오늘의 띠 운세 | notopened</title>
+  <meta name="description" content="가입 없이 바로 보는 무료 운세. 사주 오행, 꿈해몽 30종, MBTI 16유형 궁합, 12띠·12별자리 오늘 운세, 미래 배우자 카드를 브라우저에서만 계산합니다. 엔터테인먼트·참고용이며 입력값은 서버로 전송되지 않습니다.">
+  <meta name="robots" content="index,follow">
+  <meta name="theme-color" content="#0f172a">
+  <link rel="canonical" href="https://not-opened.github.io/fortune/">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230f172a'/%3E%3Ccircle cx='16' cy='16' r='7' fill='%2338bdf8'/%3E%3C/svg%3E">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="ko_KR">
+  <meta property="og:site_name" content="notopened 무료 운세">
+  <meta property="og:title" content="무료 사주 · 꿈풀이 · MBTI 궁합 · 오늘의 띠 운세">
+  <meta property="og:description" content="가입 없이 바로 보는 무료 운세. 사주, 꿈해몽, MBTI 궁합, 12띠·별자리, 미래 배우자 카드를 브라우저에서만 계산합니다.">
+  <meta property="og:url" content="https://not-opened.github.io/fortune/">
+  <meta property="og:image" content="https://not-opened.github.io/fortune/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="notopened 무료 사주, 꿈풀이, MBTI 궁합">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="무료 사주 · 꿈풀이 · MBTI 궁합 · 오늘의 띠 운세">
+  <meta name="twitter:description" content="가입 없이 바로 보는 무료 운세. 사주, 꿈해몽, MBTI 궁합, 12띠·별자리, 미래 배우자 카드를 브라우저에서만 계산합니다.">
+  <meta name="twitter:image" content="https://not-opened.github.io/fortune/og.png">
+  <meta name="twitter:image:alt" content="notopened 무료 사주, 꿈풀이, MBTI 궁합">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "notopened 무료 운세",
+    "url": "https://not-opened.github.io/fortune/",
+    "description": "가입 없이 바로 보는 무료 운세. 사주 오행, 꿈해몽, MBTI 궁합, 12띠·12별자리 오늘 운세, 미래 배우자 카드를 브라우저에서만 계산합니다.",
+    "applicationCategory": "EntertainmentApplication",
+    "operatingSystem": "Any",
+    "inLanguage": "ko",
+    "isAccessibleForFree": true,
+    "browserRequirements": "Requires JavaScript. Calculations stay in the browser.",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "KRW"
+    }
+  }
+  </script>
   <style>
     :root {
       --bg: #0f172a;
@@ -28,6 +66,7 @@
       color: var(--text);
       padding: 14px 12px 42px;
       line-height: 1.5;
+      word-break: keep-all;
     }
     .container { max-width: 480px; margin: 0 auto; }
     .header { text-align: center; margin-bottom: 12px; }
@@ -134,7 +173,7 @@
     .pill-reflect { background: rgba(56, 189, 248, 0.16); color: var(--accent); }
     .pillars-grid {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: 6px;
       margin: 10px 0;
     }
@@ -146,7 +185,7 @@
       text-align: center;
     }
     .pillar-box .lbl { font-size: 0.68rem; color: var(--muted); }
-    .pillar-box .val { font-size: 0.92rem; font-weight: 800; margin-top: 2px; }
+    .pillar-box .val { font-size: 0.78rem; font-weight: 800; margin-top: 2px; line-height: 1.25; word-break: keep-all; }
     .ohaeng-bar {
       display: flex;
       gap: 6px;
@@ -333,18 +372,18 @@
 
     /* ================= v0.3 2차 확장 (§ v0.3) ================= */
     /* 4탭 네비게이션 (기존 3탭 덮어쓰기) */
-    .nav-tabs { grid-template-columns: repeat(4, 1fr); gap: 5px; }
-    .nav-tab { font-size: 0.74rem; padding: 9px 3px; letter-spacing: -0.01em; }
+    .nav-tabs { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 5px; }
+    .nav-tab { font-size: 0.68rem; padding: 6px 2px; letter-spacing: -0.02em; line-height: 1.25; white-space: normal; word-break: keep-all; }
 
-    /* 2.5D 사주 카드 프레임 (WebP, CCO 하이디 11/25 납품 360x200) */
+    /* 사주 결과 카드 프레임 */
     .saju-frame { position: relative; margin: 6px 0 12px; border-radius: 14px; overflow: hidden; background: #191937; }
     .saju-frame-img { display: block; width: 100%; height: auto; border-radius: 14px; }
-    .saju-frame-inner { position: absolute; inset: 0; padding: 27% 9% 9%; display: flex; flex-direction: column; gap: 4px; }
+    .saju-frame-inner { position: absolute; inset: 0; padding: 28% 8% 8%; display: flex; flex-direction: column; gap: 4px; justify-content: flex-start; }
     .saju-frame-label { font-size: 0.64rem; font-weight: 800; color: var(--gold); letter-spacing: 0.02em; }
-    .saju-frame-headline { font-size: 0.78rem; font-weight: 800; color: var(--text); line-height: 1.34; word-break: keep-all; }
+    .saju-frame-headline { font-size: 0.74rem; font-weight: 800; color: var(--text); line-height: 1.34; word-break: keep-all; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
     .saju-frame-weak { font-size: 0.68rem; color: #cbd5e1; }
 
-    /* 2.5D 꿈/MBTI 엠블럼 배지 (WebP 스프라이트 256x128 좌=꿈 초승달 / 우=MBTI 듀얼) */
+    /* 꿈해몽·궁합 아이콘 (왼쪽 초승달, 오른쪽 궁합) */
     .emblem-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
     .emblem { width: 44px; height: 44px; border-radius: 50%; overflow: hidden; display: inline-block; flex: 0 0 auto; }
     .emblem img { width: 88px; height: 44px; display: block; }
@@ -363,8 +402,8 @@
     .ya-key { font-size: 0.74rem; margin-top: 6px; color: var(--accent); font-weight: 700; }
 
     /* 12띠 · 12별자리 선택 칩 */
-    .mini-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 5px; margin: 8px 0 12px; }
-    .mini-btn { background: var(--sub); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 0.68rem; padding: 7px 1px; cursor: pointer; min-height: 36px; line-height: 1.2; }
+    .mini-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 5px; margin: 8px 0 12px; }
+    .mini-btn { background: var(--sub); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 0.72rem; padding: 7px 2px; cursor: pointer; min-height: 44px; line-height: 1.2; word-break: keep-all; }
     .mini-btn.active { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); font-weight: 800; }
     .today-card { background: var(--sub); border: 1px solid var(--border); border-radius: 10px; padding: 11px 12px; margin-bottom: 10px; }
     .today-card h4 { font-size: 0.9rem; font-weight: 800; margin-bottom: 2px; }
@@ -380,11 +419,26 @@
 
     /* 궁합 3종 (MBTI + 사주 오행 + 12띠) */
     .compat3-row { background: var(--sub); border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; margin-bottom: 8px; }
-    .compat3-head { display: flex; justify-content: space-between; align-items: center; font-size: 0.83rem; font-weight: 800; gap: 8px; }
+    .compat3-head { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; font-size: 0.83rem; font-weight: 800; gap: 4px 8px; }
     .compat3-head .c3-score { color: var(--gold); white-space: nowrap; }
     .compat3-desc { font-size: 0.78rem; color: var(--muted); margin-top: 4px; line-height: 1.5; }
     .compat-total { background: rgba(56, 189, 248, 0.1); border: 1px solid rgba(56, 189, 248, 0.42); border-radius: 10px; padding: 11px 12px; margin-top: 6px; font-size: 0.81rem; line-height: 1.55; }
     .compat-total strong { color: var(--accent); }
+    .btn-share { background: #082033; color: var(--text); border-color: var(--accent); margin-top: 8px; }
+    .btn-share:active { background: var(--accent-soft); }
+    .footer a { color: var(--accent); font-weight: 700; }
+    .saju-actions .btn { min-width: 0; white-space: normal; }
+    .section-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 6px; flex-wrap: wrap; }
+    .section-head h2 { margin: 0; flex: 1 1 12rem; }
+    .section-head .btn { width: auto; flex: 0 0 auto; white-space: nowrap; }
+    @media (min-width: 480px) {
+      .mini-grid { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+    }
+    @media (max-width: 420px) {
+      .saju-actions { flex-direction: column; }
+      .saju-actions .btn { width: 100%; flex: 1 1 auto; }
+      .nav-tab { font-size: 0.64rem; }
+    }
   </style>
 </head>
 <body>
@@ -392,7 +446,7 @@
     <header class="header">
       <div class="badge">notopened · 사주 · 꿈풀이 · MBTI 궁합</div>
       <h1>사주 · 꿈풀이 · MBTI 궁합</h1>
-      <p>가입 없이 30초 만에 확인하는 무료 운세·궁합 — 사주 · 꿈풀이 · MBTI 16유형</p>
+      <p>가입 없이 바로 확인하는 무료 운세 — 사주 · 꿈풀이 · MBTI · 12띠/별자리 · 배우자 카드</p>
     </header>
 
     <aside class="ad-slot" aria-label="광고 영역"></aside>
@@ -403,15 +457,19 @@
       <p id="inviteBannerDesc">아래에서 내 MBTI를 한 번만 누르면 친구와의 오늘 궁합과 대화 한마디가 바로 열립니다.</p>
     </section>
 
+    <noscript>
+      <p class="disclaimer">결과를 보려면 브라우저에서 자바스크립트를 켜 주세요. 계산은 이 기기에만 남고 서버로 전송되지 않습니다.</p>
+    </noscript>
+
     <nav class="nav-tabs" role="tablist" aria-label="서비스 메뉴">
-      <button type="button" class="nav-tab active" data-tab="saju" id="tabSaju">🔮 사주·운세</button>
-      <button type="button" class="nav-tab" data-tab="dream" id="tabDream">🌙 꿈풀이</button>
-      <button type="button" class="nav-tab" data-tab="mbti" id="tabMbti">💞 MBTI·궁합</button>
-      <button type="button" class="nav-tab" data-tab="today" id="tabToday">🗓️ 오늘·배우자</button>
+      <button type="button" class="nav-tab active" data-tab="saju" id="tabSaju" role="tab" aria-selected="true" aria-controls="panelSaju">🔮 사주·운세</button>
+      <button type="button" class="nav-tab" data-tab="dream" id="tabDream" role="tab" aria-selected="false" aria-controls="panelDream">🌙 꿈풀이</button>
+      <button type="button" class="nav-tab" data-tab="mbti" id="tabMbti" role="tab" aria-selected="false" aria-controls="panelMbti">💞 MBTI·궁합</button>
+      <button type="button" class="nav-tab" data-tab="today" id="tabToday" role="tab" aria-selected="false" aria-controls="panelToday">🗓️ 오늘·배우자</button>
     </nav>
 
     <!-- 1. 사주·오행·오늘의 운세 -->
-    <section class="panel active" id="panelSaju">
+    <section class="panel active" id="panelSaju" role="tabpanel" aria-labelledby="tabSaju">
       <div class="card">
         <h2>오늘의 사주 · 오행 운세</h2>
         <p class="sub-note">입력 정보는 서버로 전송되지 않으며 브라우저에만 임시 보관됩니다. (엔터테인먼트·참고용)</p>
@@ -439,20 +497,19 @@
           </select>
         </div>
 
-        <div class="row">
-          <button type="button" class="btn btn-primary" id="calcSajuBtn" style="flex:1;">🧮 내 사주 로컬 계산하기</button>
-          <button type="button" class="btn btn-secondary" id="exampleSajuBtn" style="flex:1;">📌 대표 사주 예시 보기 (1995-05-15)</button>
+        <div class="row saju-actions">
+          <button type="button" class="btn btn-primary" id="calcSajuBtn" style="flex:1;">🧮 내 사주 계산하기</button>
+          <button type="button" class="btn btn-secondary" id="exampleSajuBtn" style="flex:1;">📌 예시 사주 보기 (1995-05-15)</button>
         </div>
       </div>
 
       <div class="card" id="sajuResultCard">
-        <span class="pill pill-example" id="sajuModeBadge">📌 대표 예시 사주 (1995-05-15 午時 기준)</span>
-        <!-- 2.5D 오행 사주 카드 프레임 (CCO 하이디 11/25 08:38 납품 WebP 360x200 · Base64 임베드) -->
+        <span class="pill pill-example" id="sajuModeBadge">📌 대표 예시 (1995-05-15 · 오시)</span>
         <figure class="saju-frame" id="sajuFrameBox">
-          <img id="imgSajuFrame" class="saju-frame-img" src="data:image/webp;base64,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" width="360" height="200" alt="2.5D 오행 사주 결과 카드 프레임" decoding="sync">
+          <img id="imgSajuFrame" class="saju-frame-img" src="data:image/webp;base64,UklGRkYMAABXRUJQVlA4WAoAAAAQAAAAZwEAxwAAQUxQSEMBAAABN6CgbRum/MGVS/cPkYgI5L+KgBxJkttIWSDXAIo/GeMCAAMoDDi1/tsA9AzEBuv0bUT/GbltG0lOIASz5TZ9w9U3dgwvU9gZYG6nNGJN6Du8jJfZwx1g9maxh0asWP4q4cUxY2rcGS1eY37ODVpycvJIdw1c3qQ86r7xShXy3AAmCW52BpSOihpRIWpECXqFlb0pMkOOn3GKXTmf27JrlLlQnvNqdWjLrnGJnFZ9DmXXuES2A6u27BrFKWLhUHaNzxFbZdWWXeP7mU/zi5j/v8jnnA/zPPkRnNsvMdV/qv9U/6n+U/2n8skzJelzzl1HecWzM1bs1oE5pphBjFb0AqWSXnGICO2IxucOr5PODtVzZiMncY8b7U6S0XInsX6OBJjAgfiIHArUoR4Qe3AswotmvceKL9pjxdgTwsfV93WuAABWUDgg3AoAADBGAJ0BKmgByAA+MRiLQ6IhoRFKBVwgAwSxt3FgA/sGsOegGm1n/0z8k/y36oDb/v9+TuX38J/5P+tfuj/jPgd0AH6If5f+v/kZ3PPMH+sf/A/0Xu+frN7OfQA/nf9M9Xn1APQA/Wn1TP8f/0/9F8D39r/z/7X/Al+q/30fIB6AHCU/yX8R/Ab+wfymvY/s35d+k/9a/F3zB2of7XvRWLf9F/Vf2S8xb9V/IDmQP9B6df1LwBvm3+H9gD+Ify7/Sfbh9JP5z/nP8j/av+t/gPYp+Rf1j/b/bX9gv8d/jv+J/tH+B/9P+B///0Z+uL9dvYA/Sn70gEwYcSbL5Auntkx0JjXwfWmk31mSiP5xoAxyWDgS5K/afpgJnoMmJsmrcacF9g2a98jRWmXqepVCHZCUiLVoWe1Bvr8ndldMOYXaE9o1FOXxnd9erYdROAmxSJdGSvMXWVRWXeTGdfk49q3MGIHsLyGfb8Z/nBMu9FxCD/VA0kU+sa313727FxMOkvOI8op0FsrQZMSKgy3wh9E0X1ttdmFRp3MKjTuYT4xwV9ahZ1BzxLqDniVZWuepQVFl4j6LLxH0TRfW212YVGncwqNO5hPjHBX1qFnUHPEuoOeJVla56lBUWXiPosvEfRNF9bbXZhUadzCo07mE+MaAs6gm05THS1MOZ/1HL6zJRH840AY5LBwJclg4EuSv24qcV2Qp2u2sSobfaS+3N6XY5M4EuSwcCXJYOBLksHAlyWDfDzX7jq0oAAD+2LrQxUve/SV9bS1CBE9DKyL8/Bl8uTlUgt9UcJivTFO6pJvVJv3b0mjuWSELHn1ZJjz+5ARnSkPXfzthoQ0B93MU4JXrRthgzqdhAPBK7MYg/Cel2RYKZvU1kqZAwa5yjs54go2n4CNbtf4U00CZxRp9a3CF1/Mp434b5Cf59EkV0ucGfHSIxq3sxy3S5dUpRxqjf8GTYL0M8ESCnfAoZPLhNP4K6QpG7qedyZFlsP0o18QkkqMnWDISJ0OCYxLAOCYxLAOCYxLAODsFGt1jI0QpOAFNkRvWlT04ibQpwyBtzu4hnrqjFWBB5nHpNIS6xGw/pwhJlfbOBXi8ayqUcvoN+M9eF4+xHytL/zDNavKRlRraVOOAL4ZPqCNM0PvG8LpfcXoLqt8w2Lw2IkG/tQtDHsjf4ZM3XFC8ZW86raA3IN+wQ+CEnP93pv//7IiqQAPsu4EOJfebAbQSqFETirp1dUjzPWskqdU9qQMFee96cBarpByd9YOq6RjqKPi88B90xJY5DH/n8AoIkVKQmcjpEIDHxcd5m7VWwEJTMda5ofB0EVjT84i3jiqTmp+w41H/x+SFL7TbxzWN9f4Ps+3n+FP/mAzi+0AvBnxRjRBd3je+G9kX5pnlBlEBk02JDyOhixhuog9qEnCDvVlvqUX7IhEfKvIrkG5GznoAL08t7ziM2AMshKjn8F4mcX4P/7Kp0oWgDidGa2k//6+zk5SYsAjHUSHTKq/BJSAMWzbrJ3KrZLv64H9v4eEpLDBljocF6JONOArfnNdc8RzklQ1aCP/8pMPIX2sPBA6Kl3v/JhTRKf5uM7bRQAyIIwKnOHfdmeRMY1l/iJLX2H/adWH1e9uSE6wrS5TLj8pQ5cLmFxfh1UzRc8VkR+QTEEK4uLxVSIzytDrzN2mY1/khwJ8edbm1Th5CbyZMh5GFX0E9VoPulPFDoHC2r6HntIWg3AaGCuPXp/VuRsK36bCjo5YtkV2n0sOkhp0uNn3jFoHIGTANpnGig0RigPItLNqXsXg/7eQbROlrePQP4I/K+u1dTxEh8yNram8WR6ScKCoizPoN8O5Lv/vj4CjvnLX7NvL76GHGiD33l31WAsQ/F8/sqrVATv7vfQIEpx1Z+H4LoXW5LwL5FDx5rz/N6gVKdxST0YZDghu/vs7sC9vB0Qn8okH3yAaKyLugAU3foSogIwSPKnku88jXrljXmlEime4Vf/cDtyZB64XusHhMvc5RTkr385SXVaeBtPslSoIRbjdpT3as2/y+haPC3sxoMv+TrVO56s/r7cxMJxE9ThxKeTvVZmpheyj72pvMeUvFbgGBxoR/XCzcKjw7OQqlLoC3ofhjW4h3/8ecoeV/6CzEwD9NNKkzPUIYMEPvEqWimWQoxSVX5ENX7QCsi31P1449pmr8d1vgxE2DOG7SXZKfy+IvJ0/ebtj5lvYDiwBUQjRnmHes9dGrw/rODSsgm3pMr/jMhuJyRl6g9RFMv/xOCcg2o8B1crATNeB7a4bry/wFFSvqot1hUJovk4SmH+dA4sc6X0kYU3QjaMxMMQ5h0bIduxBOv+3qEfKVxExVV4Pce4G+n+tsiIxivjMW/3IMhwaLLoppg+bxth39N2V+0NVrCYbQ4pqisQssk1egI1takPeK9seVhTYV6c6t9CU/63GSMx92ubkkp6OMXn+B32mqiCzT0en3SuOYXGtVRNuUPPzmiARev6oiV41IXpcfB/E7FJCsWe9JbVB36XgGLqDPu2N8fH+Cx+zWZnJpipp4jl2KRNn3CfOCLA32psTiJfYS8iRC1kVBSOmFnALDonXrPZ+Q5yqPA6CnOLb2hglTC/oPKvt+At0Zgpp6vMF0lm7KsAFbxRBG81hurgnvniV3iRLUZXX5LSc9a8///piDCbOuhlGOuWL5QuhlJZr+soZAnstOcFvbhw8G/A6PdgCcXVBULon335HNSTmVxXJ6mz9lQjuKpXBIdhKQfxTe0jyt3up3cidmST8m61yB6k5EooPhhnXocr4RLFlAk4hrs4njwbzNsqgD6uxdMbwAqnBF6/qjDUtrukaSXptxdv3IN+PiTsMNOyTV6deLRyvqL5HJGJe1uhavtqd5du75PrVoLfXgisJG0l6GI/4RkVIUKp07iimKeVUvOT9T6/jv5ZeGCuVL42MVrlvpe735adWKlUH/SBqodiATf7jKipAgfXIgpuqi93KlGXXt/SKPPLMPI7tzW9CR5C5OLeEl0CPZ+DlKCAAAA4TL7uIAZVBiAGWYyAFeRCAEfvhADvdxADLMZACvTr0VJIgmLYt2n6OtPITAyvFht0QlYfve/z1o3MAhp0kgAYs5iF9giAwVy8YG7wmEoZ7KPMJCiTmuk5RBy/7Q+B4BOvQjmObW+rfJHATr1fTLf/3GqOCmZzpO0bndWa/vNwNFHtJgeCl3r5t+vFWrQpfVcSuPcQjj2mUPGIT9/DZWhtxVh8w6Af36LHgwoitcgu58wIdiec9Mlq8NGcQVFKkqXNHj4c0x0N46LoaTrmDLZ4gjjOuYMtniCOM65gy2dJFvgwTveTnPtkJLsgzHcm8oOxykg6dP3h9YiKaO7yiP+ew5hl0bDv5VQH6e95enYt8O/5ER9nM0QFXbNaJORq0nNdeIfmuh1k+90NHRbD4HDpAv8lynd+1n+Hq7vFlel/jz4jytYcNQazagaj47RQZ9yPgoCLEXDYJDgilOwhK2H5OM02KXlnnCtaxj40XSHSjjvNxKtnbmSHfieL/fZ/wY///sh3mvJwS28skNF3M0J+nUWCTuv6fa9XfOoHrXBohtj9KFGh2GUO/b/+S/w2ZZo7BezJxcXOUHdf/ss7270+O0ljK0ME1kVWDAI94brAABAGemgzoxW/KT7EDLnetXnN+PQ4mK9fucMn1ElXCAHCyte3VUxFj+VnKkjtf/XnJt4AAA" width="360" height="200" alt="사주 오행 결과 카드" decoding="sync">
           <figcaption class="saju-frame-inner">
             <span class="saju-frame-label">2026 병오년 세운 · 사주 원국</span>
-            <span id="sajuHeadline" class="saju-frame-headline">을해(乙亥) · 신사(辛巳) · 정사(丁巳) · 병오(丙午)</span>
+            <span id="sajuHeadline" class="saju-frame-headline">을해(乙亥) · 신사(辛巳) · 병오(丙午) · 갑오(甲午)</span>
             <span id="sajuFrameWeak" class="saju-frame-weak">부족한 기운: 土</span>
           </figcaption>
         </figure>
@@ -461,7 +518,7 @@
         <p id="sajuAdvice" style="font-size:0.86rem; margin-bottom:8px;"></p>
         <p id="sajuLucky" style="font-size:0.78rem; color:var(--accent); font-weight:700; margin-bottom:10px;"></p>
 
-        <button type="button" class="btn btn-kakao" id="shareSajuBtn">💬 카톡으로 오행 보완 궁합 물어보기</button>
+        <button type="button" class="btn btn-share" id="shareSajuBtn">📤 사주 결과 공유하기</button>
 
         <!-- §92 결과 맥락 연동 다음 콘텐츠 브릿지 -->
         <div class="bridge-box">
@@ -476,14 +533,14 @@
       <!-- ===== v0.3 ① 올해 운세 6대 영역 (2026 병오년 세운 × 일간/오행) ===== -->
       <div class="card" id="yearFortuneCard">
         <h2>🗓️ 올해 운세 6대 영역 (2026 병오년)</h2>
-        <p class="sub-note">내 사주 일간·오행과 2026년 세운(丙午 · 火火)의 상생·상극을 대조한 로컬 계산 결과입니다. 항목을 누르면 해설이 펼쳐집니다. (엔터테인먼트·참고용)</p>
-        <p class="sub-note" id="yearFortuneSummary" style="color:var(--accent); font-weight:700;">계산 중…</p>
+        <p class="sub-note">내 사주 일간·오행과 2026년 세운(丙午 · 火火)의 상생·상극을 이 브라우저에서만 계산합니다. 항목을 누르면 해설이 펼쳐집니다. (엔터테인먼트·참고용)</p>
+        <p class="sub-note" id="yearFortuneSummary" style="color:var(--accent); font-weight:700;">생년월일을 계산하면 올해 운세가 여기에 표시됩니다.</p>
         <div class="ya-list" id="yearFortuneList"></div>
       </div>
     </section>
 
     <!-- 2. 꿈풀이 키워드 검색 -->
-    <section class="panel" id="panelDream">
+    <section class="panel" id="panelDream" role="tabpanel" aria-labelledby="tabDream">
       <div class="card">
         <h2>꿈풀이 키워드 검색 (30종)</h2>
         <label for="dreamSearch">꿈에 나온 키워드 검색</label>
@@ -496,13 +553,13 @@
           <button type="button" class="chip" data-cat="행동">행동</button>
           <button type="button" class="chip" data-cat="사물/상황">사물/상황</button>
         </div>
-        <div class="dream-list" id="dreamList"></div>
+        <div class="dream-list" id="dreamList"><p class="sub-note">키워드 목록을 준비하지 못했습니다. 페이지를 새로고침해 주세요.</p></div>
       </div>
 
       <div class="card" id="dreamDetailCard" style="display:none;">
         <div class="emblem-row">
-          <span class="emblem emblem-dream"><img id="imgDreamEmblem" src="data:image/webp;base64,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" alt="2.5D 꿈해몽 황금 초승달 엠블럼" width="88" height="44"></span>
-          <span class="emblem-text">꿈해몽 인장 · 2.5D 엠블럼</span>
+          <span class="emblem emblem-dream"><img id="imgDreamEmblem" src="data:image/webp;base64,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" alt="꿈해몽" width="88" height="44"></span>
+          <span class="emblem-text">꿈해몽</span>
         </div>
         <span class="pill" id="dreamMoodBadge">길몽</span>
         <h2 id="dreamDetailTitle"></h2>
@@ -510,7 +567,7 @@
         <p id="dreamDetailBody" style="font-size:0.84rem; color:var(--text); margin-bottom:8px;"></p>
         <p id="dreamDetailAction" style="font-size:0.78rem; color:var(--gold); font-weight:700; margin-bottom:10px;"></p>
 
-        <button type="button" class="btn btn-kakao" id="shareDreamBtn">💬 카톡으로 꿈풀이 친구에게 공유하기</button>
+        <button type="button" class="btn btn-share" id="shareDreamBtn">📤 꿈풀이 결과 공유하기</button>
 
         <div class="bridge-box">
           <div class="bridge-title">✨ 이어서 보면 딱 좋은 다음 콘텐츠</div>
@@ -523,10 +580,10 @@
     </section>
 
     <!-- 3. MBTI 16유형 · 16문항 측정 · 특징 사전 · TOP 3 추천 · 친구 궁합 -->
-    <section class="panel" id="panelMbti">
+    <section class="panel" id="panelMbti" role="tabpanel" aria-labelledby="tabMbti">
       <div class="card">
-        <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; margin-bottom:6px;">
-          <h2 style="margin:0;">1) 내 MBTI 선택 · 특징 사전</h2>
+        <div class="section-head">
+          <h2>1) 내 MBTI 선택 · 특징 사전</h2>
           <button type="button" class="btn btn-secondary btn-sm" id="toggleQuickQuizBtn">📝 16문항 1분 측정</button>
         </div>
 
@@ -562,8 +619,8 @@
         <div class="mbti-grid" id="friendMbtiGrid"></div>
         <div id="compatResultBox" style="background:var(--sub); padding:12px; border-radius:10px; border:1px solid var(--border);">
           <div class="emblem-row">
-            <span class="emblem emblem-mbti"><img id="imgMbtiEmblem" src="data:image/webp;base64,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" alt="2.5D MBTI 궁합 듀얼 크리스탈 엠블럼" width="88" height="44"></span>
-            <span class="emblem-text">MBTI × 궁합 듀얼 엠블럼</span>
+            <span class="emblem emblem-mbti"><img id="imgMbtiEmblem" src="data:image/webp;base64,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" alt="MBTI 궁합" width="88" height="44"></span>
+            <span class="emblem-text">MBTI 궁합</span>
           </div>
           <span class="pill pill-good" id="compatGradeBadge">환상의 시너지</span>
           <h3 id="compatPairTitle" style="font-size:0.96rem; margin-bottom:4px;"></h3>
@@ -572,7 +629,7 @@
             <strong style="color:var(--gold); font-size:0.76rem; display:block; margin-bottom:2px;">💬 친구에게 건넬 한마디</strong>
             <span id="compatTalk"></span>
           </div>
-          <button type="button" class="btn btn-kakao" id="shareMbtiBtn" style="margin-top:10px;">💬 카톡으로 친구와 궁합 비교 링크 보내기</button>
+          <button type="button" class="btn btn-share" id="shareMbtiBtn">📤 궁합 결과 공유하기</button>
         </div>
 
         <div class="bridge-box">
@@ -595,12 +652,13 @@
           </div>
           <button type="button" class="btn btn-primary" id="calcCompat3Btn" style="flex:0 0 auto; width:auto; padding:11px 14px;">🧭 3종 궁합 계산</button>
         </div>
-        <div id="compat3Result"></div>
+        <div id="compat3Result"><p class="sub-note">생년월일과 MBTI를 고르면 궁합 3종이 여기에 표시됩니다.</p></div>
+        <button type="button" class="btn btn-share" id="shareCompat3Btn">📤 3종 궁합 결과 공유하기</button>
       </div>
     </section>
 
     <!-- ===== v0.3 ② 오늘의 12띠·12별자리 운세 & ③ 미래 배우자 카드 ===== -->
-    <section class="panel" id="panelToday">
+    <section class="panel" id="panelToday" role="tabpanel" aria-labelledby="tabToday">
       <div class="card" id="todayCard">
         <h2>🌞 오늘의 12띠 · 12별자리 운세</h2>
         <p class="sub-note">생년월일을 넣으면 띠·별자리가 자동으로 맞춰지고, 오늘 날짜와 조합한 총운·행운 시간대·주의 포인트가 표시됩니다. 아래 칩으로 직접 골라도 됩니다. (엔터테인먼트·참고용)</p>
@@ -616,7 +674,8 @@
         <div class="mini-grid" id="zodiacChips"></div>
         <label>12별자리 직접 선택</label>
         <div class="mini-grid" id="signChips"></div>
-        <div id="todayFortuneBox"></div>
+        <div id="todayFortuneBox"><p class="sub-note">생년월일을 넣거나 띠·별자리를 고르면 오늘 운세가 표시됩니다.</p></div>
+        <button type="button" class="btn btn-share" id="shareTodayBtn">📤 오늘 운세 결과 공유하기</button>
       </div>
 
       <div class="card" id="spouseCard">
@@ -624,19 +683,19 @@
         <p class="disclaimer" id="spouseDisclaimerTop">재미·참고용 카드입니다. 실제 인연·결혼을 예측하지 않으며, 어떤 결정의 근거로도 사용하지 마세요.</p>
         <p class="sub-note" id="spouseSourceNote">사주 일지(배우자궁) 오행 + 내 MBTI 보완 지표를 조합해 3단 카드로 보여 드립니다.</p>
         <div class="emblem-row">
-          <span class="emblem emblem-dream"><img id="imgSpouseEmblem" src="data:image/webp;base64,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" alt="2.5D 꿈·MBTI 엠블럼 배지" width="88" height="44"></span>
-          <span class="emblem-text">2.5D 엠블럼 배지 (CCO 하이디 납품 256x128)</span>
+          <span class="emblem emblem-dream"><img id="imgSpouseEmblem" src="data:image/webp;base64,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" alt="미래 배우자 카드" width="88" height="44"></span>
+          <span class="emblem-text">미래 배우자 카드</span>
         </div>
-        <div id="spouseStages"></div>
+        <div id="spouseStages"><p class="sub-note">사주를 계산하면 배우자 카드 3단이 여기에 표시됩니다.</p></div>
         <p class="disclaimer" id="spouseDisclaimerBottom">이 카드는 엔터테인먼트 콘텐츠이며 의학·법률·투자 자문을 대체하지 않습니다.</p>
-        <button type="button" class="btn btn-kakao" id="shareSpouseBtn">💬 카톡으로 배우자 카드 친구에게 보기</button>
+        <button type="button" class="btn btn-share" id="shareSpouseBtn">📤 배우자 카드 공유하기</button>
       </div>
     </section>
 
     <!-- 웹 → 앱 전환 브릿지 & 크로스프로모션 (§93) -->
     <section class="app-bridge" id="webToAppBridge" aria-label="앱 및 패밀리 게임 안내">
       <h3>📱 내 사주·MBTI 저장해두고 매일 새 결과 보기는 앱에서</h3>
-      <p>오프라인 로컬 저장 · 매일 아침 오늘의 운세 알림 지원 Android 앱 출시 예정</p>
+      <p>기기에만 저장 · 매일 아침 오늘의 운세 알림 지원 Android 앱 출시 예정</p>
       <div class="promo-row">
         <div class="promo-chip">
           <strong>🧩 퀴즈 머신 (#002)</strong>
@@ -652,6 +711,7 @@
     <footer class="footer">
       <p>notopened AI ENTERPRISE · 사주 · 꿈풀이 · MBTI 궁합 무료 서비스 · 입력 정보 서버 비전송</p>
       <p>엔터테인먼트·참고용 결과이며 의학·법률·재무 자문을 대체하지 않습니다.</p>
+      <p><a href="https://www.youtube.com/@notopened" target="_blank" rel="noopener noreferrer">notopened YouTube 채널</a></p>
     </footer>
   </main>
 
@@ -659,11 +719,12 @@
 
   <script>
     const IS_LIVE_ADS_APPROVED = false;
+    const CANONICAL_URL = 'https://not-opened.github.io/fortune/';
     const BASE_SHARE_URL = (typeof window !== 'undefined' && window.location && window.location.protocol.startsWith('http'))
       ? (window.location.origin + window.location.pathname)
-      : 'https://penta309.github.io/notopened-fortune-demo/';
+      : CANONICAL_URL;
 
-    let lastSharePayload = null; // E2E & dedup inspection
+    let lastSharePayload = null;
 
     function showToast(msg) {
       const t = document.getElementById('toast');
@@ -674,41 +735,62 @@
       window._mvp3Toast = setTimeout(() => t.classList.remove('show'), 2200);
     }
 
-    // URL 2회 중복 방지 공유 유틸 (navigator.share에는 URL 분리, 클립보드에는 URL 1회)
+    function copyWithExecCommand(text) {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.setAttribute('readonly', '');
+      ta.style.position = 'fixed';
+      ta.style.top = '0';
+      ta.style.left = '0';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.focus();
+      ta.select();
+      let ok = false;
+      try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+      document.body.removeChild(ta);
+      return ok;
+    }
+
     async function triggerKakaoStyleShare(title, nativeTextWithoutUrl, targetUrl) {
-      const clipboardText = `${nativeTextWithoutUrl} 👉 ${targetUrl}`;
+      const clipboardText = `${nativeTextWithoutUrl}\n${targetUrl}`;
       lastSharePayload = { title, nativeTextWithoutUrl, targetUrl, clipboardText };
       window._lastSharePayload = lastSharePayload;
 
       if (navigator.share) {
         try {
           await navigator.share({ title, text: nativeTextWithoutUrl, url: targetUrl });
-          showToast('공유가 완료되었습니다!');
+          showToast('공유가 완료되었습니다.');
           return;
         } catch (err) {
           if (err && err.name === 'AbortError') return;
         }
       }
+      if (copyWithExecCommand(clipboardText)) {
+        showToast('결과 링크를 복사했습니다. 원하는 곳에 붙여 넣으세요.');
+        return;
+      }
       if (navigator.clipboard && navigator.clipboard.writeText) {
         try {
-          await navigator.clipboard.writeText(clipboardText);
-          showToast('카톡 공유 문구가 복사되었습니다!');
-          return;
-        } catch (e) { /* fallback */ }
+          const timed = await Promise.race([
+            navigator.clipboard.writeText(clipboardText).then(() => 'ok').catch(() => 'fail'),
+            new Promise(resolve => setTimeout(() => resolve('timeout'), 700))
+          ]);
+          if (timed === 'ok') {
+            showToast('결과 링크를 복사했습니다. 원하는 곳에 붙여 넣으세요.');
+            return;
+          }
+        } catch (e) { /* prompt fallback */ }
       }
-      const ta = document.createElement('textarea');
-      ta.value = clipboardText;
-      ta.style.position = 'fixed';
-      ta.style.opacity = '0';
-      document.body.appendChild(ta);
-      ta.select();
-      try { document.execCommand('copy'); } catch (e) { /* ignore */ }
-      document.body.removeChild(ta);
-      showToast('카톡 공유 문구가 복사되었습니다!');
+      window.prompt('아래 문구를 복사해 공유하세요.', clipboardText);
     }
 
     function switchTab(key) {
-      document.querySelectorAll('.nav-tab').forEach(t => t.classList.toggle('active', t.getAttribute('data-tab') === key));
+      document.querySelectorAll('.nav-tab').forEach(t => {
+        const on = t.getAttribute('data-tab') === key;
+        t.classList.toggle('active', on);
+        t.setAttribute('aria-selected', on ? 'true' : 'false');
+      });
       document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
       const target = document.getElementById('panel' + key.charAt(0).toUpperCase() + key.slice(1));
       if (target) target.classList.add('active');
@@ -721,21 +803,6 @@
     const BRANCH_EL = ['水', '土', '木', '木', '土', '火', '火', '土', '金', '金', '土', '水'];
     const MONTH_FIRST_STEM = [2, 4, 6, 8, 0, 2, 4, 6, 8, 0];
 
-    const SAJU_EXAMPLE = {
-      isExample: true,
-      weakEl: '土',
-      badge: '📌 대표 예시 사주 (1995-05-15 양력 · 午時 · 2026-11-23 기준)',
-      pillars: [
-        { lbl: '년주', val: '을해(乙亥)', el: '木水' },
-        { lbl: '월주', val: '신사(辛巳)', el: '金火' },
-        { lbl: '일주', val: '정사(丁巳)', el: '火火' },
-        { lbl: '시주', val: '병오(丙午)', el: '火火' }
-      ],
-      counts: { '木': 1, '火': 4, '土': 0, '金': 1, '水': 1 },
-      advice: '火 강세 · 土 부족 흐름입니다. 추진력과 집중력이 높은 날이지만 속도 조절이 필요합니다. 차분한 메모와 10분 산책(土 보완)이 실수를 줄여 줍니다.',
-      lucky: '행운 컬러: 베이지 / 머스터드 · 행운 숫자: 5, 0'
-    };
-
     const EL_ADVICE = {
       '木': { color: '그린 / 민트', num: '3, 8', msg: '새로운 시작과 기획력이 빛나는 흐름입니다. 가벼운 스트레칭과 메모 정리가 실행력을 높여 줍니다.' },
       '火': { color: '코랄 / 버건디', num: '2, 7', msg: '열정과 표현력이 살아나는 흐름입니다. 중요한 대화는 핵심 1줄부터 차분히 전하면 호응이 좋습니다.' },
@@ -744,11 +811,14 @@
       '水': { color: '네이비 / 스카이블루', num: '1, 6', msg: '유연한 사고와 통찰이 깊어지는 흐름입니다. 충분한 수분 섭취와 5분 휴식이 아이디어를 선명하게 합니다.' }
     };
 
-    let currentSajuData = SAJU_EXAMPLE;
+    const EXAMPLE_BIRTH = '1995-05-15';
+    const EXAMPLE_HOUR = 6;
+    let currentSajuData = null;
 
-    function computeLocalSaju(dateStr, hourIdx) {
-      const [y, m, d] = dateStr.split('-').map(Number);
-      if (!y || !m || !d) return SAJU_EXAMPLE;
+    function computeLocalSaju(dateStr, hourIdx, opts) {
+      const parts = String(dateStr || '').split('-').map(Number);
+      const y = parts[0], m = parts[1], d = parts[2];
+      if (!y || !m || !d) return null;
       const adjYear = (m < 2 || (m === 2 && d < 4)) ? y - 1 : y;
       const yStem = ((adjYear - 4) % 10 + 10) % 10;
       const yBranch = ((adjYear - 4) % 12 + 12) % 12;
@@ -770,9 +840,11 @@
         { lbl: '일주', val: STEMS[dStem].slice(0,1) + BRANCHES[dBranch].slice(0,1) + '(' + STEMS[dStem].slice(2,3) + BRANCHES[dBranch].slice(2,3) + ')', el: STEM_EL[dStem] + BRANCH_EL[dBranch], s: dStem, b: dBranch }
       ];
 
-      if (hourIdx >= 0) {
-        const hStem = ((dStem % 5) * 2 + hourIdx) % 10;
-        const hBranch = hourIdx % 12;
+      const hour = Number(hourIdx);
+      const knownHour = Number.isInteger(hour) && hour >= 0 && hour <= 11;
+      if (knownHour) {
+        const hStem = ((dStem % 5) * 2 + hour) % 10;
+        const hBranch = hour % 12;
         pillars.push({
           lbl: '시주',
           val: STEMS[hStem].slice(0,1) + BRANCHES[hBranch].slice(0,1) + '(' + STEMS[hStem].slice(2,3) + BRANCHES[hBranch].slice(2,3) + ')',
@@ -794,11 +866,15 @@
       const strong = entries[0][0];
       const weak = entries[entries.length - 1][0];
       const info = EL_ADVICE[weak];
+      const asExample = !!(opts && opts.example);
+      const hourLabel = knownHour ? `${BRANCHES[hour].slice(0, 1)}시` : '시간 미상';
 
       return {
-        isExample: false,
+        isExample: asExample,
         weakEl: weak,
-        badge: `🧮 로컬 만세력 계산 (${dateStr}${hourIdx >= 0 ? ' · ' + BRANCHES[hourIdx] + '시' : ' · 시간 미상'})`,
+        badge: asExample
+          ? `📌 대표 예시 (${dateStr} · ${hourLabel})`
+          : `🧮 직접 계산 (${dateStr} · ${hourLabel})`,
         pillars,
         counts,
         advice: `${strong} 기운이 강하고 ${weak} 기운이 부족한 사주입니다. ${info.msg}`,
@@ -806,13 +882,18 @@
       };
     }
 
+    currentSajuData = computeLocalSaju(EXAMPLE_BIRTH, EXAMPLE_HOUR, { example: true });
+
     function renderSaju(data) {
+      if (!data) return;
       currentSajuData = data;
       const badge = document.getElementById('sajuModeBadge');
       badge.textContent = data.badge;
       badge.className = `pill ${data.isExample ? 'pill-example' : 'pill-calc'}`;
 
-      document.getElementById('sajuHeadline').textContent = data.pillars.map(p => `${p.val}(${p.el})`).join(' · ');
+      document.getElementById('sajuHeadline').textContent = data.pillars.map(p => p.val).join(' · ');
+      const frameWeak = document.getElementById('sajuFrameWeak');
+      if (frameWeak) frameWeak.textContent = `부족한 기운: ${data.weakEl}`;
       const grid = document.getElementById('pillarsGrid');
       grid.innerHTML = '';
       data.pillars.forEach(p => {
@@ -969,7 +1050,7 @@
 
     let myMbti = 'ENFP';
     let friendMbti = 'INTJ';
-    let quizAnswers = new Array(QUICK_QUIZ.length).fill('A');
+    let quizAnswers = new Array(QUICK_QUIZ.length).fill(null);
 
     function computeCompatibility(t1, t2) {
       let same = 0;
@@ -1105,7 +1186,13 @@
           btn.type = 'button';
           btn.className = `quiz-opt${quizAnswers[idx] === choice ? ' selected' : ''}`;
           btn.textContent = choice === 'A' ? item.a : item.b;
-          btn.onclick = () => { quizAnswers[idx] = choice; renderQuickQuiz(); };
+          btn.setAttribute('data-choice', choice);
+          btn.onclick = () => {
+            quizAnswers[idx] = choice;
+            opts.querySelectorAll('.quiz-opt').forEach(el => {
+              el.classList.toggle('selected', el.getAttribute('data-choice') === choice);
+            });
+          };
           opts.appendChild(btn);
         });
         qDiv.appendChild(opts);
@@ -1114,6 +1201,13 @@
     }
 
     function applyQuickQuiz() {
+      const missing = quizAnswers.findIndex(a => a !== 'A' && a !== 'B');
+      if (missing >= 0) {
+        showToast('16문항을 모두 골라 주세요.');
+        const q = document.querySelectorAll('#quickQuizList .quiz-q')[missing];
+        if (q) q.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return;
+      }
       const counts = [0, 0, 0, 0];
       QUICK_QUIZ.forEach((item, idx) => {
         if (quizAnswers[idx] === 'A') counts[item.dim]++;
@@ -1128,6 +1222,10 @@
       document.getElementById('quickQuizBox').style.display = 'none';
       saveLocalMbti();
       renderMbtiSection();
+      if (currentSajuData && typeof v3RenderSpouse === 'function') {
+        v3RenderSpouse(currentSajuData, myMbti);
+        v3RenderCompat3(currentSajuData, (document.getElementById('partnerBirthDate') || {}).value, myMbti, friendMbti);
+      }
       showToast(`내 MBTI가 ${myMbti}로 판정되었습니다!`);
     }
 
@@ -1161,7 +1259,7 @@
           }
           return;
         }
-        if (tab === 'mbti' || tab === 'saju') {
+        if (tab === 'mbti' || tab === 'saju' || tab === 'today') {
           switchTab(tab);
         }
       } catch (e) { /* ignore */ }
@@ -1187,18 +1285,34 @@
       });
 
       // Saju
-      renderSaju(SAJU_EXAMPLE);
-      document.getElementById('exampleSajuBtn').addEventListener('click', () => renderSaju(SAJU_EXAMPLE));
+      renderSaju(currentSajuData);
+      document.getElementById('exampleSajuBtn').addEventListener('click', () => {
+        const dateEl = document.getElementById('birthDate');
+        const hourEl = document.getElementById('birthHour');
+        if (dateEl) dateEl.value = EXAMPLE_BIRTH;
+        if (hourEl) hourEl.value = String(EXAMPLE_HOUR);
+        const data = computeLocalSaju(EXAMPLE_BIRTH, EXAMPLE_HOUR, { example: true });
+        if (data) renderSaju(data);
+      });
       document.getElementById('calcSajuBtn').addEventListener('click', () => {
         const d = document.getElementById('birthDate').value;
         const h = Number(document.getElementById('birthHour').value);
-        renderSaju(computeLocalSaju(d, h));
+        const data = computeLocalSaju(d, h);
+        if (!data) {
+          showToast('생년월일을 입력해 주세요.');
+          return;
+        }
+        renderSaju(data);
       });
       document.getElementById('shareSajuBtn').addEventListener('click', () => {
-        const weak = currentSajuData.weakEl || '土';
+        const data = currentSajuData || {};
+        const weak = data.weakEl || '土';
+        const pillars = (data.pillars || []).map(p => `${p.lbl} ${p.val}`).join(' · ');
         const url = `${BASE_SHARE_URL}?tab=saju`;
-        const text = `오늘 내 사주에 ${weak} 기운이 비어 있대. 너랑 만나면 서로 채워주는지 보기`;
-        triggerKakaoStyleShare('notopened 사주 오행 궁합', text, url);
+        const text = pillars
+          ? `사주 결과 ${pillars}. 부족한 기운은 ${weak}. ${(data.advice || '').slice(0, 90)}`
+          : `사주 오행을 브라우저에서 계산해 보세요. 부족한 기운은 ${weak}.`;
+        triggerKakaoStyleShare('notopened 사주 결과', text, url);
       });
 
       // Dream
@@ -1212,10 +1326,12 @@
         renderDreamList(false);
       });
       document.getElementById('shareDreamBtn').addEventListener('click', () => {
-        const kw = selectedDream ? selectedDream.keyword : '돼지';
-        const url = `${BASE_SHARE_URL}?tab=dream&q=${encodeURIComponent(kw)}`;
-        const text = `어젯밤 꾼 '${kw}' 꿈 해몽해봤는데 꽤 정확하네 ㅋㅋ 너도 최근에 꾼 꿈 바로 검색해봐`;
-        triggerKakaoStyleShare('notopened 꿈풀이 30종', text, url);
+        const kw = selectedDream ? selectedDream.keyword : '';
+        const url = `${BASE_SHARE_URL}?tab=dream${kw ? `&q=${encodeURIComponent(kw)}` : ''}`;
+        const text = selectedDream
+          ? `${selectedDream.keyword} 꿈풀이 (${selectedDream.mood}): ${selectedDream.summary}`
+          : '꿈에 나온 키워드로 꿈풀이를 찾아 보세요.';
+        triggerKakaoStyleShare('notopened 꿈풀이', text, url);
       });
 
       // MBTI & Deep-link
@@ -1228,8 +1344,9 @@
       });
       document.getElementById('applyQuickQuizBtn').addEventListener('click', applyQuickQuiz);
       document.getElementById('shareMbtiBtn').addEventListener('click', () => {
+        const compat = computeCompatibility(myMbti, friendMbti);
         const url = `${BASE_SHARE_URL}?tab=mbti&from=${encodeURIComponent(myMbti)}`;
-        const text = `나는 ${myMbti} 나왔는데, 너랑 나 오늘 궁합 어떨지 10초만 눌러봐`;
+        const text = `${myMbti} × ${friendMbti} 궁합 ${compat.grade} ${compat.score}점. ${compat.talk}`;
         triggerKakaoStyleShare('notopened MBTI 궁합', text, url);
       });
     });
@@ -1598,8 +1715,12 @@
       let sajuRow = null, zodiacRow = null;
       const myBirth = (document.getElementById('birthDate') || {}).value || '1995-05-15';
       const myMap = v3MapBirth(myBirth);
+      let partnerError = false;
       if (partnerDate) {
         const partner = computeLocalSaju(partnerDate, -1);
+        if (!partner) {
+          partnerError = true;
+        } else {
         sajuRow = v3OhaengCompat(saju, partner);
         rows.push({ name: '🔮 사주 오행 궁합', sub: `내 부족 ${saju.weakEl} ↔ 상대 부족 ${partner.weakEl}`, score: sajuRow.score, label: sajuRow.label, desc: sajuRow.desc });
         const pMap = v3MapBirth(partnerDate);
@@ -1612,6 +1733,7 @@
             label: zodiacRow.label,
             desc: zodiacRow.desc
           });
+        }
         }
       }
       box.innerHTML = '';
@@ -1628,10 +1750,12 @@
       const total = document.createElement('div');
       total.className = 'compat-total';
       total.id = 'compat3Total';
-      total.innerHTML = `<strong>3종 종합 ${avg}점 · ${grade}</strong><br>` +
+      const title = rows.length >= 3 ? `3종 종합 ${avg}점 · ${grade}` : `${mbti.grade} ${mbti.score}점`;
+      total.innerHTML = `<strong>${title}</strong><br>` +
         `MBTI ${mbti.score}점` +
-        (partnerDate ? ` · 사주 오행 ${sajuRow ? sajuRow.score + '점' : '-'} · 12띠 ${zodiacRow ? zodiacRow.score + '점' : '-'}` : '') +
+        (sajuRow ? ` · 사주 오행 ${sajuRow.score}점 · 12띠 ${zodiacRow ? zodiacRow.score + '점' : '-'}` : '') +
         (partnerDate ? '' : ' · 상대 생년월일을 입력하면 사주·띠 궁합까지 함께 계산됩니다.') +
+        (partnerError ? ' · 상대 생년월일을 확인해 주세요. 사주·띠 궁합은 제외했습니다.' : '') +
         `<br><span style="color:var(--muted);font-size:0.76rem;">엔터테인먼트·참고용 결과이며 실제 관계를 예측하지 않습니다.</span>`;
       box.appendChild(total);
       return { avg, grade, rows: rows.length };
@@ -1691,8 +1815,30 @@
 
         const shareSpouse = document.getElementById('shareSpouseBtn');
         if (shareSpouse) shareSpouse.addEventListener('click', () => {
-          const url = `${BASE_SHARE_URL}?tab=today`;
-          triggerKakaoStyleShare('notopened 미래 배우자 카드', '내 배우자궁 카드 나왔는데 너도 한번 봐봐', url);
+          const src = (document.getElementById('spouseSourceNote') || {}).textContent || '';
+          const first = (document.querySelector('#spouseStages .spouse-stage p') || {}).textContent || '';
+          const text = `미래 배우자 카드. ${src} ${first}`.replace(/\s+/g, ' ').trim();
+          triggerKakaoStyleShare('notopened 미래 배우자 카드', text, `${BASE_SHARE_URL}?tab=today`);
+        });
+
+        const shareToday = document.getElementById('shareTodayBtn');
+        if (shareToday) shareToday.addEventListener('click', () => {
+          const z = V3_ZODIAC[v3ZodiacIdx];
+          const s = V3_SIGNS[v3SignIdx];
+          const lines = Array.from(document.querySelectorAll('#todayFortuneBox .today-line')).map(el => el.textContent.replace(/\s+/g, ' ').trim());
+          const text = lines.length
+            ? `오늘의 ${z.animal}띠 · ${s.name}자리. ${lines.join(' / ')}`
+            : `오늘의 ${z.animal}띠 · ${s.name}자리 운세`;
+          triggerKakaoStyleShare('notopened 오늘 운세', text, `${BASE_SHARE_URL}?tab=today`);
+        });
+
+        const shareC3 = document.getElementById('shareCompat3Btn');
+        if (shareC3) shareC3.addEventListener('click', () => {
+          const strong = document.querySelector('#compat3Total strong');
+          const text = strong
+            ? `${myMbti} × ${friendMbti} ${strong.textContent}`
+            : `${myMbti} × ${friendMbti} 궁합`;
+          triggerKakaoStyleShare('notopened 궁합 3종', text, `${BASE_SHARE_URL}?tab=mbti&from=${encodeURIComponent(myMbti)}`);
         });
 
         try {
@@ -1700,7 +1846,11 @@
           if (p.get('tab') === 'today') switchTab('today');
         } catch (e) { /* ignore */ }
       } catch (err) {
-        if (window.console && console.error) console.error('[v0.3 init]', err);
+        if (window.console && console.error) console.error('[fortune]', err);
+        const list = document.getElementById('yearFortuneList');
+        if (list && !list.children.length) {
+          list.innerHTML = '<p class="sub-note">올해 운세를 표시하지 못했습니다. 새로고침 후 다시 계산해 주세요.</p>';
+        }
       }
     });
   </script>
