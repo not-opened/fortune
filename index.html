@@ -341,6 +341,46 @@
     .promo-chip strong { display: block; font-size: 0.8rem; margin-bottom: 2px; }
     .promo-chip span { color: var(--muted); font-size: 0.72rem; }
 
+    /* 꿈풀이 인기 키워드 칩 */
+    .hot-chip-title { font-size: 0.76rem; font-weight: 800; color: var(--accent); margin-bottom: 2px; }
+    .hot-chips { margin: 4px 0 6px; }
+    .hot-chip { font-size: 0.78rem; padding: 7px 12px; min-height: 38px; color: var(--text); }
+    .hot-chip:active { background: var(--accent-soft); color: var(--accent); border-color: var(--accent); }
+
+    /* 다른 무료 웹 콘텐츠 바로가기 */
+    .web-shortcuts { margin: 4px 0 14px; }
+    .web-shortcuts h3 { font-size: 0.86rem; font-weight: 800; color: var(--text); margin-bottom: 8px; }
+    .web-shortcut-row { display: flex; flex-direction: column; gap: 8px; }
+    .web-shortcut {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 11px 13px;
+      color: var(--text);
+      text-decoration: none;
+      font-size: 0.82rem;
+      font-weight: 700;
+    }
+    .web-shortcut small { display: block; font-size: 0.72rem; font-weight: 500; color: var(--muted); margin-top: 2px; }
+    .web-shortcut .go { color: var(--accent); font-weight: 800; white-space: nowrap; }
+
+    /* 쿠팡 파트너스 다이나믹 배너 */
+    .affiliate-section { margin: 4px 0 16px; }
+    .affiliate-section[hidden] { display: none; }
+    .coupang-wrap {
+      max-width: 100%;
+      overflow: hidden;
+      background: #ffffff;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+    .coupang-slot { transform-origin: top left; }
+    .affiliate-note { font-size: 0.68rem; color: var(--muted); line-height: 1.45; margin-top: 6px; text-align: left; }
+
     .toast {
       position: fixed;
       bottom: 20px;
@@ -543,6 +583,19 @@
     <section class="panel" id="panelDream" role="tabpanel" aria-labelledby="tabDream">
       <div class="card">
         <h2>꿈풀이 키워드 검색 (30종)</h2>
+        <p class="hot-chip-title">🔥 자주 찾는 꿈 — 한 번만 누르면 바로 풀이</p>
+        <div class="chip-bar hot-chips" id="dreamHotChips" aria-label="인기 꿈 키워드">
+          <button type="button" class="chip hot-chip" data-dream-hot="d03">🐍 뱀</button>
+          <button type="button" class="chip hot-chip" data-dream-hot="d25">🦷 이빨</button>
+          <button type="button" class="chip hot-chip" data-dream-hot="d11">💰 돈</button>
+          <button type="button" class="chip hot-chip" data-dream-hot="d07">💧 물</button>
+          <button type="button" class="chip hot-chip" data-dream-hot="d13">🙏 조상</button>
+          <button type="button" class="chip hot-chip" data-dream-hot="d22">📝 시험</button>
+          <button type="button" class="chip hot-chip" data-dream-hot="d26">🏠 집·이사</button>
+          <button type="button" class="chip hot-chip" data-dream-hot="d06">🐈 고양이</button>
+          <button type="button" class="chip hot-chip" data-dream-hot="d05">🐶 강아지</button>
+          <button type="button" class="chip hot-chip" data-dream-hot="d01">🐷 돼지</button>
+        </div>
         <label for="dreamSearch">꿈에 나온 키워드 검색</label>
         <input type="text" id="dreamSearch" placeholder="예: 돼지, 이빨, 날다, 돈, 뱀...">
         <div class="chip-bar" id="dreamCats">
@@ -708,8 +761,30 @@
       </div>
     </section>
 
+    <nav class="web-shortcuts" aria-label="notopened 다른 무료 웹 콘텐츠">
+      <h3>🎲 notopened 다른 무료 웹 콘텐츠</h3>
+      <div class="web-shortcut-row">
+        <a class="web-shortcut" href="https://not-opened.github.io/quiz/" rel="noopener">
+          <span>🧩 웹 1호 · 30초 상식 퀴즈<small>가입 없이 바로 푸는 데일리 퀴즈</small></span>
+          <span class="go">바로가기 →</span>
+        </a>
+        <a class="web-shortcut" href="https://not-opened.github.io/go-chess/" rel="noopener">
+          <span>♟️ 웹 2호 · 바둑·체스 한 수<small>오늘의 한 수 퍼즐과 입문 해설</small></span>
+          <span class="go">바로가기 →</span>
+        </a>
+      </div>
+    </nav>
+
+    <section class="affiliate-section" id="affiliateSection" aria-label="쿠팡 파트너스 추천 상품" hidden>
+      <div class="coupang-wrap" id="coupangWrap">
+        <div class="coupang-slot" id="coupangSlot"></div>
+      </div>
+      <p class="affiliate-note">이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.</p>
+    </section>
+
     <footer class="footer">
-      <p>notopened AI ENTERPRISE · 사주 · 꿈풀이 · MBTI 궁합 무료 서비스 · 입력 정보 서버 비전송</p>
+      <p>notopened AI ENTERPRISE · 사주 · 꿈풀이 · MBTI 궁합 무료 서비스</p>
+      <p>운세 계산은 기기 안에서만 이뤄지고 입력값은 서버로 전송되지 않습니다. 하단 제휴 배너는 쿠팡 파트너스 활동입니다.</p>
       <p>엔터테인먼트·참고용 결과이며 의학·법률·재무 자문을 대체하지 않습니다.</p>
       <p><a href="https://www.youtube.com/@notopened" target="_blank" rel="noopener noreferrer">notopened YouTube 채널</a></p>
     </footer>
@@ -725,6 +800,46 @@
       : CANONICAL_URL;
 
     let lastSharePayload = null;
+
+    const SHARE_DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
+
+    function buildShareUrl(params) {
+      const p = new URLSearchParams();
+      Object.keys(params || {}).forEach(k => {
+        const v = params[k];
+        if (v === undefined || v === null || v === '') return;
+        p.set(k, String(v));
+      });
+      const qs = p.toString();
+      return qs ? `${BASE_SHARE_URL}?${qs}` : BASE_SHARE_URL;
+    }
+
+    function readBirthInputs() {
+      const dateEl = document.getElementById('birthDate');
+      const hourEl = document.getElementById('birthHour');
+      const date = dateEl ? String(dateEl.value || '') : '';
+      const hourRaw = hourEl ? hourEl.value : '';
+      const hour = (hourRaw === '' || hourRaw === null || hourRaw === undefined) ? -1 : Number(hourRaw);
+      return { date: SHARE_DATE_RE.test(date) ? date : '', hour: Number.isInteger(hour) ? hour : -1 };
+    }
+
+    /* 사주 공유 URL — 결과를 연 사람이 자기 브라우저에서 같은 사주를 바로 다시 계산해 볼 수 있게 입력값을 담는다 */
+    function buildSajuShareUrl(data) {
+      if (!data || data.isExample) return buildShareUrl({ tab: 'saju' });
+      const b = readBirthInputs();
+      if (!b.date) return buildShareUrl({ tab: 'saju' });
+      return buildShareUrl({ tab: 'saju', bd: b.date, bh: b.hour });
+    }
+
+    /* 배우자 카드 공유 URL — 사주 입력값과 내 MBTI를 함께 담아 다른 브라우저에서도 같은 카드가 열리게 한다 */
+    function buildSpouseShareUrl() {
+      const b = readBirthInputs();
+      const data = currentSajuData || {};
+      if (!b.date || data.isExample) {
+        return buildShareUrl({ tab: 'today', me: myMbti, view: 'spouse' });
+      }
+      return buildShareUrl({ tab: 'today', bd: b.date, bh: b.hour, me: myMbti, view: 'spouse' });
+    }
 
     function showToast(msg) {
       const t = document.getElementById('toast');
@@ -1308,7 +1423,7 @@
         const data = currentSajuData || {};
         const weak = data.weakEl || '土';
         const pillars = (data.pillars || []).map(p => `${p.lbl} ${p.val}`).join(' · ');
-        const url = `${BASE_SHARE_URL}?tab=saju`;
+        const url = buildSajuShareUrl(data);
         const text = pillars
           ? `사주 결과 ${pillars}. 부족한 기운은 ${weak}. ${(data.advice || '').slice(0, 90)}`
           : `사주 오행을 브라우저에서 계산해 보세요. 부족한 기운은 ${weak}.`;
@@ -1317,6 +1432,23 @@
 
       // Dream
       renderDreamList();
+      const hotChips = document.getElementById('dreamHotChips');
+      if (hotChips) {
+        hotChips.addEventListener('click', (e) => {
+          const chip = e.target.closest('[data-dream-hot]');
+          if (!chip) return;
+          const dream = DREAMS.find(d => d.id === chip.getAttribute('data-dream-hot'));
+          if (!dream) return;
+          activeDreamCat = 'all';
+          document.querySelectorAll('#dreamCats .chip').forEach(c => c.classList.toggle('active', c.getAttribute('data-cat') === 'all'));
+          const search = document.getElementById('dreamSearch');
+          search.value = dream.keyword;
+          renderDreamList(false);
+          showDreamDetail(dream);
+          const detail = document.getElementById('dreamDetailCard');
+          if (detail && detail.scrollIntoView) detail.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+      }
       document.getElementById('dreamSearch').addEventListener('input', () => renderDreamList(false));
       document.getElementById('dreamCats').addEventListener('click', (e) => {
         const chip = e.target.closest('.chip');
@@ -1762,6 +1894,89 @@
     }
     window.v3RenderCompat3 = v3RenderCompat3;
 
+    /* ---------- 공유 URL 복원 (사주 요약 · 배우자 카드 · 오늘 운세) ---------- */
+    function restoreSharedResult() {
+      let p;
+      try { p = new URLSearchParams(window.location.search); } catch (e) { return; }
+
+      const bd = (p.get('bd') || '').trim();
+      const bhRaw = p.get('bh');
+      const me = (p.get('me') || '').toUpperCase();
+      const view = p.get('view') || '';
+
+      if (me && MBTI_INFO[me] && me !== myMbti) {
+        myMbti = me;
+        saveLocalMbti();
+        renderMbtiSection();
+      }
+
+      let restoredSaju = false;
+      if (SHARE_DATE_RE.test(bd)) {
+        const dateEl = document.getElementById('birthDate');
+        const hourEl = document.getElementById('birthHour');
+        const hour = (bhRaw === null || bhRaw === '') ? -1 : Number(bhRaw);
+        const safeHour = (Number.isInteger(hour) && hour >= -1 && hour <= 11) ? hour : -1;
+        if (dateEl) dateEl.value = bd;
+        if (hourEl) hourEl.value = String(safeHour);
+        const data = computeLocalSaju(bd, safeHour);
+        if (data) {
+          renderSaju(data);
+          restoredSaju = true;
+          const todayInput = document.getElementById('todayBirthDate');
+          if (todayInput) todayInput.value = bd;
+          v3ApplyTodayBirth();
+        }
+      }
+
+      const zIdx = Number(p.get('z'));
+      const sgIdx = Number(p.get('sg'));
+      const hasZodiac = p.has('z') && Number.isInteger(zIdx) && zIdx >= 0 && zIdx < V3_ZODIAC.length;
+      const hasSign = p.has('sg') && Number.isInteger(sgIdx) && sgIdx >= 0 && sgIdx < V3_SIGNS.length;
+      if (hasZodiac) v3ZodiacIdx = zIdx;
+      if (hasSign) v3SignIdx = sgIdx;
+      if (hasZodiac || hasSign) {
+        v3RenderZodiacChips();
+        v3RenderSignChips();
+        v3RenderToday();
+      }
+
+      if (restoredSaju) v3RenderYearFortune(currentSajuData);
+      v3RenderSpouse(currentSajuData, myMbti);
+      v3RenderCompat3(currentSajuData, (document.getElementById('partnerBirthDate') || {}).value, myMbti, friendMbti);
+
+      if (view === 'spouse') {
+        switchTab('today');
+        window.setTimeout(() => {
+          const card = document.getElementById('spouseCard');
+          if (card && card.scrollIntoView) card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 240);
+      }
+
+      if (restoredSaju || hasZodiac || hasSign || view === 'spouse') {
+        showToast('공유된 결과를 이 브라우저에서 다시 계산했습니다.');
+      }
+    }
+
+    /* ---------- 쿠팡 파트너스 배너: 680px 위젯을 화면 폭에 맞춰 축소 (가로 오버플로 0) ---------- */
+    function fitCoupangBanner() {
+      const section = document.getElementById('affiliateSection');
+      const wrap = document.getElementById('coupangWrap');
+      const slot = document.getElementById('coupangSlot');
+      if (!section || !wrap || !slot) return;
+      const frame = slot.querySelector('iframe');
+      if (!frame) return;
+      const w = Number(frame.getAttribute('width')) || Number(frame.width) || 680;
+      const h = Number(frame.getAttribute('height')) || Number(frame.height) || 140;
+      if (!w || !h) return;
+      section.hidden = false;
+      const scale = Math.min(1, wrap.clientWidth / w);
+      slot.style.width = w + 'px';
+      slot.style.height = h + 'px';
+      slot.style.transform = 'scale(' + scale + ')';
+      wrap.style.height = Math.round(h * scale) + 'px';
+    }
+    window.fitCoupangBanner = fitCoupangBanner;
+
     /* ---------- v0.3 초기화 & 연동 ---------- */
     document.addEventListener('DOMContentLoaded', () => {
       try {
@@ -1818,7 +2033,7 @@
           const src = (document.getElementById('spouseSourceNote') || {}).textContent || '';
           const first = (document.querySelector('#spouseStages .spouse-stage p') || {}).textContent || '';
           const text = `미래 배우자 카드. ${src} ${first}`.replace(/\s+/g, ' ').trim();
-          triggerKakaoStyleShare('notopened 미래 배우자 카드', text, `${BASE_SHARE_URL}?tab=today`);
+          triggerKakaoStyleShare('notopened 미래 배우자 카드', text, buildSpouseShareUrl());
         });
 
         const shareToday = document.getElementById('shareTodayBtn');
@@ -1829,7 +2044,8 @@
           const text = lines.length
             ? `오늘의 ${z.animal}띠 · ${s.name}자리. ${lines.join(' / ')}`
             : `오늘의 ${z.animal}띠 · ${s.name}자리 운세`;
-          triggerKakaoStyleShare('notopened 오늘 운세', text, `${BASE_SHARE_URL}?tab=today`);
+          const url = buildShareUrl({ tab: 'today', z: v3ZodiacIdx, sg: v3SignIdx });
+          triggerKakaoStyleShare('notopened 오늘 운세', text, url);
         });
 
         const shareC3 = document.getElementById('shareCompat3Btn');
@@ -1845,6 +2061,12 @@
           const p = new URLSearchParams(window.location.search);
           if (p.get('tab') === 'today') switchTab('today');
         } catch (e) { /* ignore */ }
+
+        restoreSharedResult();
+
+        fitCoupangBanner();
+        [400, 1200, 2600, 4200].forEach(t => window.setTimeout(fitCoupangBanner, t));
+        window.addEventListener('resize', fitCoupangBanner);
       } catch (err) {
         if (window.console && console.error) console.error('[fortune]', err);
         const list = document.getElementById('yearFortuneList');
@@ -1853,6 +2075,19 @@
         }
       }
     });
+  </script>
+
+  <!-- 쿠팡 파트너스 다이나믹 배너 (not-opened.github.io/fortune 등록분) -->
+  <script src="https://ads-partners.coupang.com/g.js"></script>
+  <script>
+  (function () {
+    if (!window.PartnersCoupang || typeof window.PartnersCoupang.G !== 'function') return;
+    try {
+      new PartnersCoupang.G({"id":1059927,"template":"carousel","trackingCode":"AF2725831","width":"680","height":"140","tsource":"","container":"#coupangSlot","onLoaded":function(hasAd){
+        if (hasAd && typeof window.fitCoupangBanner === 'function') window.fitCoupangBanner();
+      }});
+    } catch (e) { /* 배너를 그리지 못하면 영역도 숨김 유지 */ }
+  })();
   </script>
 </body>
 </html>
