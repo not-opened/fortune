@@ -318,29 +318,6 @@
       min-height: 44px;
     }
 
-    /* Web-to-App & Cross-Promo Bridge (§93) */
-    .app-bridge {
-      background: linear-gradient(135deg, rgba(30, 41, 59, 0.95), rgba(15, 23, 42, 0.95));
-      border: 1px solid rgba(56, 189, 248, 0.35);
-      border-radius: 14px;
-      padding: 14px;
-      margin-top: 12px;
-    }
-    .app-bridge h3 { font-size: 0.9rem; color: var(--accent); margin-bottom: 4px; }
-    .app-bridge p { font-size: 0.76rem; color: var(--muted); margin-bottom: 10px; }
-    .promo-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-    .promo-chip {
-      background: var(--sub);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 9px 10px;
-      font-size: 0.75rem;
-      color: var(--text);
-      text-align: left;
-    }
-    .promo-chip strong { display: block; font-size: 0.8rem; margin-bottom: 2px; }
-    .promo-chip span { color: var(--muted); font-size: 0.72rem; }
-
     /* 꿈풀이 인기 키워드 칩 */
     .hot-chip-title { font-size: 0.76rem; font-weight: 800; color: var(--accent); margin-bottom: 2px; }
     .hot-chips { margin: 4px 0 6px; }
@@ -745,31 +722,15 @@
       </div>
     </section>
 
-    <!-- 웹 → 앱 전환 브릿지 & 크로스프로모션 (§93) -->
-    <section class="app-bridge" id="webToAppBridge" aria-label="앱 및 패밀리 게임 안내">
-      <h3>📱 내 사주·MBTI 저장해두고 매일 새 결과 보기는 앱에서</h3>
-      <p>기기에만 저장 · 매일 아침 오늘의 운세 알림 지원 Android 앱 출시 예정</p>
-      <div class="promo-row">
-        <div class="promo-chip">
-          <strong>🧩 퀴즈 머신 (#002)</strong>
-          <span>물리 퍼즐 · 출시 예정</span>
-        </div>
-        <div class="promo-chip">
-          <strong>✨ 낫 플로우 (#003)</strong>
-          <span>양자 라인 퍼즐 · 출시 예정</span>
-        </div>
-      </div>
-    </section>
-
     <nav class="web-shortcuts" aria-label="notopened 다른 무료 웹 콘텐츠">
       <h3>🎲 notopened 다른 무료 웹 콘텐츠</h3>
       <div class="web-shortcut-row">
         <a class="web-shortcut" href="https://not-opened.github.io/quiz/" rel="noopener">
-          <span>🧩 웹 1호 · 30초 상식 퀴즈<small>가입 없이 바로 푸는 데일리 퀴즈</small></span>
+          <span>🧩 30초 상식 퀴즈<small>가입 없이 바로 푸는 데일리 퀴즈</small></span>
           <span class="go">바로가기 →</span>
         </a>
         <a class="web-shortcut" href="https://not-opened.github.io/go-chess/" rel="noopener">
-          <span>♟️ 웹 2호 · 바둑·체스 한 수<small>오늘의 한 수 퍼즐과 입문 해설</small></span>
+          <span>♟️ 바둑·체스·장기 한 수<small>오늘의 한 수 퍼즐과 입문 해설</small></span>
           <span class="go">바로가기 →</span>
         </a>
       </div>
