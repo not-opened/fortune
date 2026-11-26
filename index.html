@@ -70,17 +70,6 @@
     }
     .container { max-width: 480px; margin: 0 auto; }
     .header { text-align: center; margin-bottom: 12px; }
-    .badge {
-      display: inline-block;
-      font-size: 0.72rem;
-      font-weight: 700;
-      color: var(--accent);
-      background: var(--accent-soft);
-      border: 1px solid rgba(56, 189, 248, 0.35);
-      padding: 4px 10px;
-      border-radius: 999px;
-      margin-bottom: 6px;
-    }
     .header h1 { font-size: 1.32rem; font-weight: 800; margin-bottom: 4px; }
     .header p { font-size: 0.8rem; color: var(--muted); }
     .ad-slot { display: none !important; }
@@ -444,7 +433,7 @@
     .btn-share { background: #082033; color: var(--text); border-color: var(--accent); margin-top: 8px; }
     .btn-share:active { background: var(--accent-soft); }
     .footer a { color: var(--accent); font-weight: 700; }
-    /* 상단 슬림 유튜브 배너 */
+    /* 최상단 슬림 유튜브 배너 */
     .yt-banner {
       display: flex;
       align-items: center;
@@ -452,7 +441,7 @@
       gap: 8px;
       min-height: 46px;
       padding: 6px 12px;
-      margin: 0 0 10px;
+      margin: 0 0 14px;
       border: 1px solid rgba(239, 68, 68, 0.4);
       border-radius: 12px;
       background: linear-gradient(135deg, rgba(239, 68, 68, 0.13), rgba(30, 41, 59, 0.85));
@@ -494,13 +483,13 @@
 </head>
 <body>
   <main class="container">
+    <!-- 최상단 슬림 유튜브 배너 -->
+    <a class="yt-banner" href="https://www.youtube.com/@notopened" target="_blank" rel="noopener noreferrer" aria-label="notopened 공식 유튜브 채널 (새 탭)"><span class="yt-play" aria-hidden="true">▶</span><span>notopened 공식 유튜브 — 매일 30초 쇼츠 보러가기</span><span class="yt-arrow" aria-hidden="true">→</span></a>
+
     <header class="header">
-      <div class="badge">notopened · 사주 · 꿈풀이 · MBTI 궁합</div>
       <h1>사주 · 꿈풀이 · MBTI 궁합</h1>
       <p>가입 없이 바로 확인하는 무료 운세 — 사주 · 꿈풀이 · MBTI · 12띠/별자리 · 배우자 카드</p>
     </header>
-
-    <a class="yt-banner" href="https://www.youtube.com/@notopened" target="_blank" rel="noopener noreferrer" aria-label="notopened 공식 유튜브 채널 (새 탭)"><span class="yt-play" aria-hidden="true">▶</span><span>notopened 공식 유튜브 — 매일 30초 쇼츠 보러가기</span><span class="yt-arrow" aria-hidden="true">→</span></a>
 
     <aside class="ad-slot" aria-label="광고 영역"></aside>
 
