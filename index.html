@@ -828,6 +828,7 @@
           <button type="button" class="chip hot-chip" data-dream-hot="d37">👻 귀신</button>
           <button type="button" class="chip hot-chip" data-dream-hot="d44">🐦 새</button>
         </div>
+        <p class="sub-note"><a href="/fortune/dream/" style="color:var(--accent);font-weight:700;">📚 상황별 꿈풀이 48편 전체 보기</a></p>
         <label for="dreamSearch">꿈 키워드 목록 검색 (48종)</label>
         <input type="text" id="dreamSearch" placeholder="예: 돼지, 이빨, 뱀, 돈, 날다 ...">
         <div class="chip-bar" id="dreamCats">
@@ -857,6 +858,7 @@
         <p id="dreamDetailBody" class="dream-detail-text"></p>
         <div class="dream-detail-label">상황별 세부 풀이</div>
         <div class="dream-scenes" id="dreamScenes"></div>
+        <p class="sub-note"><a id="dreamGuideLink" href="/fortune/dream/" style="color:var(--accent);font-weight:700;">상황별 꿈풀이 글 더 읽기 →</a></p>
         <div class="dream-detail-label">오늘의 행동 팁</div>
         <p id="dreamDetailAction" style="font-size:0.8rem; color:var(--gold); font-weight:700; margin-bottom:6px; word-break:keep-all;"></p>
         <p class="dream-music-link"><a href="https://www.youtube.com/@across_the_way" target="_blank" rel="noopener">잠 안 오는 밤엔 건너편 🎸</a></p>
@@ -1631,6 +1633,8 @@
       }
     }
 
+    const DREAM_GUIDE_SLUGS = {"d01":"pig","d02":"dragon","d03":"snake","d04":"tiger","d05":"dog","d06":"cat","d07":"water","d08":"fire","d09":"mountain","d10":"rain","d11":"money","d12":"poop","d13":"ancestor","d14":"partner","d15":"baby","d16":"friend","d17":"celebrity","d18":"stranger","d19":"flying","d20":"falling","d21":"chase","d22":"exam","d23":"crying","d24":"laughing","d25":"teeth","d26":"house","d27":"driving","d28":"lost","d29":"key","d30":"mirror","d31":"hair","d32":"blood","d33":"nails","d34":"birth","d35":"wedding","d36":"parents","d37":"ghost","d38":"death","d39":"drowning","d40":"bridge","d41":"door","d42":"stairs","d43":"insects","d44":"bird","d45":"fish","d46":"rat","d47":"food","d48":"fruit"};
+
     function showDreamDetail(d, sceneHits) {
       selectedDream = d;
       dreamSceneHits = new Set(Array.isArray(sceneHits) ? sceneHits : []);
@@ -1640,6 +1644,8 @@
       badge.textContent = `${d.mood} · ${d.category}`;
       badge.className = `pill ${d.mood === '길몽' ? 'pill-good' : (d.mood === '주의' ? 'pill-warn' : 'pill-reflect')}`;
       document.getElementById('dreamDetailTitle').textContent = `${d.keyword} 꿈 풀이`;
+      const guide = document.getElementById('dreamGuideLink');
+      if (guide) guide.href = DREAM_GUIDE_SLUGS[d.id] ? '/fortune/dream/' + DREAM_GUIDE_SLUGS[d.id] + '/' : '/fortune/dream/';
       const tagRow = document.getElementById('dreamTagRow');
       tagRow.innerHTML = '';
       (d.tags || []).forEach(tag => {
