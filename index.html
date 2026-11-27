@@ -819,6 +819,9 @@
         <p class="sub-note" id="luckyBasis">내 사주와 오늘 날짜의 기운을 겹쳐 뽑은 오늘 하루의 행운입니다.</p>
         <div class="lucky-grid" id="luckyGrid"></div>
         <p class="lucky-tip" id="luckyTip"></p>
+        <div class="row" style="margin-bottom:8px;">
+          <button type="button" class="btn btn-secondary" id="luckyTomorrowBtn" style="flex:1;font-size:0.82rem;">내일 행운 미리보기 →</button>
+        </div>
         <div class="share-actions">
           <button type="button" class="btn btn-share" id="shareLuckyBtn">📤 행운 카드 공유</button>
           <button type="button" class="btn btn-save-img" id="saveLuckyImgBtn">🖼️ 행운 카드 저장</button>
@@ -1466,6 +1469,7 @@
 
     /* ---------- 오늘의 행운 리포트 (오늘 날짜 + 일간) ---------- */
     let currentLucky = null;
+    let luckyOffset = 0;
 
     const LUCKY_COLOR_BY_EL = {
       '木': [{ name: '연두빛', hex: '#4ade80' }, { name: '청록빛', hex: '#2dd4bf' }],
@@ -1490,13 +1494,14 @@
       '水': '생각이 깊어지는 날입니다. 결정을 서두르지 말고 정보를 모아 보세요.'
     };
 
-    function luckyToday() {
+    function luckyToday(offsetDays) {
       const now = new Date();
       const kst = new Date(now.getTime() + now.getTimezoneOffset() * 60000 + 9 * 3600000);
-      const y = kst.getFullYear();
-      const m = kst.getMonth() + 1;
-      const d = kst.getDate();
-      const wd = ['일', '월', '화', '수', '목', '금', '토'][kst.getDay()];
+      const target = new Date(Date.UTC(kst.getFullYear(), kst.getMonth(), kst.getDate() + (offsetDays || 0)));
+      const y = target.getUTCFullYear();
+      const m = target.getUTCMonth() + 1;
+      const d = target.getUTCDate();
+      const wd = ['일', '월', '화', '수', '목', '금', '토'][target.getUTCDay()];
       const key = `${y}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
       const todaySaju = computeLocalSaju(key, -1);
       return {
@@ -1506,8 +1511,8 @@
       };
     }
 
-    function buildLuckyReport() {
-      const today = luckyToday();
+    function buildLuckyReport(offsetDays) {
+      const today = luckyToday(offsetDays || 0);
       const userDayStem = (currentSajuData && currentSajuData.pillars && currentSajuData.pillars[2] && currentSajuData.pillars[2].s >= 0)
         ? currentSajuData.pillars[2].s : today.stem;
       const fillEl = (currentSajuData && currentSajuData.weakEl) ? currentSajuData.weakEl : today.el;
@@ -1527,15 +1532,16 @@
       };
     }
 
-    function renderLuckyReport() {
+    function renderLuckyReport(offsetDays) {
+      const offset = offsetDays || 0;
       const grid = document.getElementById('luckyGrid');
       if (!grid) return;
-      const L = buildLuckyReport();
-      currentLucky = L;
+      const L = buildLuckyReport(offset);
+      if (!offset) currentLucky = L;
       const badge = document.getElementById('luckyDateBadge');
-      if (badge) badge.textContent = L.dateLabel;
+      if (badge) badge.textContent = offset ? `내일 ${L.dateLabel}` : L.dateLabel;
       const basis = document.getElementById('luckyBasis');
-      if (basis) basis.textContent = `오늘(${L.dateLabel})은 ${L.dayStemName}일 · ${L.todayEl} 기운의 날. 부족한 ${L.fillEl} 기운을 보태는 행운입니다.`;
+      if (basis) basis.textContent = `${offset ? '내일' : '오늘'}(${L.dateLabel})은 ${L.dayStemName}일 · ${L.todayEl} 기운의 날. 부족한 ${L.fillEl} 기운을 보태는 행운입니다.`;
       const items = [
         { k: '🎨 행운 컬러', v: L.color.name, swatch: L.color.hex },
         { k: '🔢 행운 숫자', v: String(L.number) },
@@ -3757,6 +3763,13 @@
 
         const resetBtn = document.getElementById('resetSajuInput');
         if (resetBtn) resetBtn.addEventListener('click', resetSajuInput);
+
+        const luckyTomBtn = document.getElementById('luckyTomorrowBtn');
+        if (luckyTomBtn) luckyTomBtn.addEventListener('click', () => {
+          luckyOffset = luckyOffset ? 0 : 1;
+          renderLuckyReport(luckyOffset);
+          luckyTomBtn.textContent = luckyOffset ? '← 오늘 행운으로 돌아가기' : '내일 행운 미리보기 →';
+        });
 
         const shareLucky = document.getElementById('shareLuckyBtn');
         if (shareLucky) shareLucky.addEventListener('click', () => {
