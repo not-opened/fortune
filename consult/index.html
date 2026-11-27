@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>무료운세 상담 신청 | notopened</title>
+<meta name="description" content="직장, 연애, 가족 등 궁금한 한 가지를 적어 이메일로 보내는 낫오픈드 무료운세 상담 신청 페이지.">
+<link rel="canonical" href="https://notopened.com/fortune/consult/">
+<meta name="theme-color" content="#101928">
+<link rel="stylesheet" href="../monthly/monthly.css?v=1">
+<link rel="stylesheet" href="./consult.css?v=1">
+<script defer src="./consult.js?v=1"></script>
+</head>
+<body>
+<header><a href="../?tab=saju&amp;year=2027#yearFortuneCard">← 사주·운세</a><strong>notopened</strong></header>
+<main>
+<p class="eyebrow">NOTOPENED · 이메일로 한 가지 질문</p>
+<h1>무료운세 상담 신청</h1>
+<p class="intro">요즘 마음에 걸리는 일을 한 가지 적어 주세요. 질문을 바탕으로 상황을 돌아볼 관점과 생각해 볼 질문을 AI가 정리해 드리는 형식이에요.</p>
+<form id="consult" class="reading" hidden>
+  <label class="field" for="topic"><strong>어떤 주제인가요?</strong>
+  <select id="topic" required>
+    <option value="">주제 선택</option><option value="직장·진로">직장·진로</option><option value="연애·관계">연애·관계</option><option value="가족·일상">가족·일상</option><option value="새해·계획">새해·계획</option><option value="기타">기타</option>
+  </select></label>
+  <label class="field" for="question"><strong>질문 한 가지</strong>
+  <textarea id="question" required maxlength="500" rows="4" aria-describedby="question-note" placeholder="예: 이직을 고민하고 있어요. 결정을 앞두고 무엇부터 점검하면 좋을까요?"></textarea></label>
+  <p class="hint" id="question-note">최대 500자. 실명, 전화번호, 주소, 계좌번호나 다른 사람의 개인정보는 적지 마세요.</p>
+  <details class="optional">
+    <summary>생년월일과 태어난 시간 추가하기 (선택)</summary>
+    <div class="birth-fields">
+      <label class="field" for="birth">생년월일<input id="birth" type="date" min="1900-01-01" aria-describedby="birth-note"></label>
+      <label class="field" for="calendar">달력 기준<select id="calendar"><option value="모름">잘 모르겠어요</option><option value="양력">양력</option><option value="음력">음력</option></select></label>
+      <label class="field" for="birth-time">태어난 시간<input id="birth-time" type="time" aria-describedby="birth-note"></label>
+    </div>
+    <p class="hint" id="birth-note">모르거나 보내고 싶지 않은 정보는 비워 두세요. 생년월일이나 시간이 없어도 신청할 수 있어요. 다른 사람의 정보는 보내지 마세요.</p>
+  </details>
+  <label class="agreement" for="agree"><input type="checkbox" id="agree" required><span>AI가 작성하는 참고용 풀이라는 점과, 내가 보내는 내용이 상담용 이메일로 전달된다는 점을 확인했어요.</span></label>
+  <button type="submit" class="primary">신청 메일 준비하기</button>
+  <p class="hint">메시지는 사이트가 전송하지 않아요. 다음 화면에서 메일 앱을 열고 직접 보내기를 눌러야 접수돼요.</p>
+</form>
+<section id="prepared" class="reading" aria-labelledby="prepared-title" hidden>
+  <p class="eyebrow">마지막 단계</p>
+  <h2 id="prepared-title" tabindex="-1">메일 앱에서 보내기</h2>
+  <p>아직 발송되지 않았어요. 아래 버튼으로 메일 앱을 열고, 내용과 발신 주소를 확인한 뒤 <strong>보내기</strong>를 눌러 주세요.</p>
+  <dl class="addresses"><dt>받는 주소</dt><dd>fortune@notopened.com</dd><dt>메일 제목</dt><dd id="subject">무료운세 상담 신청</dd></dl>
+  <div class="actions"><a id="open-mail" class="primary" href="mailto:fortune@notopened.com">메일 앱 열기 →</a><button type="button" id="copy">본문 복사</button></div>
+  <label class="field preview" for="body">보낼 내용<textarea id="body" rows="6" readonly></textarea></label>
+  <p class="hint">메일 앱이 열리지 않으면 쓰는 메일 서비스에서 새 메일을 열고, 위 주소·제목·본문을 옮겨 보내면 돼요.</p>
+  <p id="status" class="hint" role="status"></p>
+</section>
+<noscript><p class="reading">신청 양식을 쓰려면 자바스크립트가 필요해요. 또는 <a href="mailto:fortune@notopened.com?subject=%EB%AC%B4%EB%A3%8C%EC%9A%B4%EC%84%B8%20%EC%83%81%EB%8B%B4%20%EC%8B%A0%EC%B2%AD">fortune@notopened.com</a>으로 질문 하나를 보내 주세요.</p></noscript>
+</main>
+<footer>
+  <p><strong>메일과 개인정보 안내</strong></p>
+  <p>이 페이지는 입력 내용을 사이트에 저장하거나 전송하지 않습니다. 메일 앱에서 직접 발송하면 내용과 보낸 주소가 낫오픈드 상담 메일함에 전달되며, 문의 확인과 답변에 쓰입니다. 답변은 연락에 사용한 주소로 보내는 방식이고, 즉시 답변이나 답변 시간을 보장하지 않습니다.</p>
+  <p>운세는 오락과 자기 성찰을 위한 참고용이며, 의료·법률·재정 판단을 대신하지 않습니다.</p>
+</footer>
+</body>
+</html>
