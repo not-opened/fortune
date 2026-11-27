@@ -70,6 +70,31 @@
       word-break: keep-all;
     }
     .container { max-width: 480px; margin: 0 auto; }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      width: max-content;
+      margin: 0 0 10px;
+      color: #fff;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .brand:hover,
+    .brand:focus,
+    .brand:active,
+    .brand:visited {
+      color: #fff;
+      text-decoration: none;
+    }
+    .brand:active { opacity: 0.72; }
+    .brand:focus-visible {
+      outline: 2px solid var(--gold);
+      outline-offset: 3px;
+      border-radius: 8px;
+    }
+    .brand-logo { display: block; width: 22px; height: 22px; flex: 0 0 auto; }
+    .brand-name { font-size: 0.92rem; font-weight: 700; letter-spacing: -0.03em; line-height: 1; color: #fff; }
     .header { text-align: center; margin-bottom: 12px; }
     .header h1 { font-size: 1.32rem; font-weight: 800; margin-bottom: 4px; }
     .header p { font-size: 0.8rem; color: var(--muted); }
@@ -531,6 +556,13 @@
     <a class="yt-banner" href="https://www.youtube.com/@notopened" target="_blank" rel="noopener noreferrer" aria-label="notopened 공식 유튜브 채널 (새 탭)"><span class="yt-play" aria-hidden="true">▶</span><span>notopened 공식 유튜브 — 매일 30초 쇼츠 보러가기</span><span class="yt-arrow" aria-hidden="true">→</span></a>
 
     <header class="header">
+      <a class="brand" href="https://notopened.com/" aria-label="노트오픈드 홈으로">
+        <svg class="brand-logo" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+          <rect width="32" height="32" rx="8" fill="#facc15"/>
+          <polygon points="13,9 13,23 24,16" fill="#0b1220"/>
+        </svg>
+        <span class="brand-name">notopened</span>
+      </a>
       <h1>사주 · 꿈풀이 · MBTI 궁합</h1>
       <p>가입 없이 바로 확인하는 무료 운세 — 사주 · 꿈풀이 · MBTI · 12띠/별자리 · 배우자 카드</p>
     </header>
