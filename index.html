@@ -3781,7 +3781,7 @@
         if (shareLucky) shareLucky.addEventListener('click', () => {
           const L = currentLucky || renderLuckyReport();
           if (!L) return;
-          const text = `오늘의 행운 리포트 (${L.dateLabel}) — 행운 컬러 ${L.color.name}, 행운 숫자 ${L.number}, 행운 방위 ${L.dir}, 추천 음식 ${L.food}. ${L.tip}`;
+          const text = `오늘의 행운 리포트 (${L.dateLabel}) — 행운 컬러 ${L.color.name}, 행운 숫자 ${L.number}, 행운 방위 ${L.dir}, 추천 음식 ${L.food}, 행운의 시간 ${L.hourLabel}. ${L.tip}`;
           triggerKakaoStyleShare('notopened 오늘의 행운 카드', text, buildShareUrl({ tab: 'saju' }), fortuneCardSpec('lucky'));
         });
 
