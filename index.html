@@ -433,6 +433,20 @@
     .compat-total strong { color: var(--accent); }
     .btn-share { background: #082033; color: var(--text); border-color: var(--accent); margin-top: 8px; }
     .btn-share:active { background: var(--accent-soft); }
+    .share-actions { display: flex; gap: 8px; margin-top: 8px; align-items: stretch; }
+    .share-actions .btn-share,
+    .share-actions .btn-save-img {
+      flex: 1 1 0;
+      width: auto;
+      min-width: 0;
+      margin-top: 0;
+      font-size: 0.74rem;
+      line-height: 1.25;
+      padding: 10px 6px;
+      white-space: normal;
+    }
+    .btn-save-img { background: #120826; color: var(--text); border-color: var(--violet); }
+    .btn-save-img:active { background: rgba(167, 139, 250, 0.18); }
     .footer a { color: var(--accent); font-weight: 700; }
     /* 최상단 슬림 유튜브 배너 */
     .yt-banner {
@@ -561,7 +575,10 @@
         <p id="sajuAdvice" style="font-size:0.86rem; margin-bottom:8px;"></p>
         <p id="sajuLucky" style="font-size:0.78rem; color:var(--accent); font-weight:700; margin-bottom:10px;"></p>
 
-        <button type="button" class="btn btn-share" id="shareSajuBtn">📤 사주 결과 공유하기</button>
+        <div class="share-actions">
+          <button type="button" class="btn btn-share" id="shareSajuBtn">📤 사주 결과 공유하기</button>
+          <button type="button" class="btn btn-save-img" id="saveSajuImgBtn">🖼️ 결과 이미지 저장</button>
+        </div>
 
         <!-- §92 결과 맥락 연동 다음 콘텐츠 브릿지 -->
         <div class="bridge-box">
@@ -623,7 +640,10 @@
         <p id="dreamDetailBody" style="font-size:0.84rem; color:var(--text); margin-bottom:8px;"></p>
         <p id="dreamDetailAction" style="font-size:0.78rem; color:var(--gold); font-weight:700; margin-bottom:10px;"></p>
 
-        <button type="button" class="btn btn-share" id="shareDreamBtn">📤 꿈풀이 결과 공유하기</button>
+        <div class="share-actions">
+          <button type="button" class="btn btn-share" id="shareDreamBtn">📤 꿈풀이 결과 공유하기</button>
+          <button type="button" class="btn btn-save-img" id="saveDreamImgBtn">🖼️ 결과 이미지 저장</button>
+        </div>
 
         <div class="bridge-box">
           <div class="bridge-title">✨ 이어서 보면 딱 좋은 다음 콘텐츠</div>
@@ -685,7 +705,10 @@
             <strong style="color:var(--gold); font-size:0.76rem; display:block; margin-bottom:2px;">💬 친구에게 건넬 한마디</strong>
             <span id="compatTalk"></span>
           </div>
-          <button type="button" class="btn btn-share" id="shareMbtiBtn">📤 궁합 결과 공유하기</button>
+          <div class="share-actions">
+            <button type="button" class="btn btn-share" id="shareMbtiBtn">📤 궁합 결과 공유하기</button>
+            <button type="button" class="btn btn-save-img" id="saveMbtiImgBtn">🖼️ 결과 이미지 저장</button>
+          </div>
         </div>
 
         <div class="bridge-box">
@@ -700,7 +723,12 @@
       <!-- ===== v0.3 ④ 궁합 3종 통합 (MBTI + 사주 오행 + 12띠) ===== -->
       <div class="card" id="compat3Card">
         <h2>🧭 궁합 3종 통합 (MBTI + 사주 오행 + 12띠)</h2>
-        <p class="sub-note">위에서 고른 내 MBTI·친구 MBTI에 상대 생년월일로 계산한 사주 오행·띠 궁합을 더합니다. 입력값은 서버로 전송되지 않고 브라우저에서만 계산됩니다.</p>
+        <p class="sub-note">위에서 고른 내 MBTI·친구 MBTI에 내 생년월일·상대 생년월일로 계산한 사주 오행·띠 궁합을 더합니다. 입력값은 서버로 전송되지 않고 브라우저에서만 계산됩니다.</p>
+        <div style="margin-bottom:10px;">
+          <label for="myCompatBirthDate">내 생년월일 (양력 · 선택)</label>
+          <input type="date" id="myCompatBirthDate" autocomplete="bday" aria-describedby="myCompatBirthHint">
+        </div>
+        <p class="sub-note" id="myCompatBirthHint" hidden>내 생년월일을 넣으면 더 정확해요</p>
         <div class="row" style="align-items:flex-end;">
           <div style="flex:1; min-width:150px;">
             <label for="partnerBirthDate">상대방 생년월일 (양력 · 선택)</label>
@@ -709,7 +737,10 @@
           <button type="button" class="btn btn-primary" id="calcCompat3Btn" style="flex:0 0 auto; width:auto; padding:11px 14px;">🧭 3종 궁합 계산</button>
         </div>
         <div id="compat3Result"><p class="sub-note">생년월일과 MBTI를 고르면 궁합 3종이 여기에 표시됩니다.</p></div>
-        <button type="button" class="btn btn-share" id="shareCompat3Btn">📤 3종 궁합 결과 공유하기</button>
+        <div class="share-actions">
+          <button type="button" class="btn btn-share" id="shareCompat3Btn">📤 3종 궁합 결과 공유하기</button>
+          <button type="button" class="btn btn-save-img" id="saveCompat3ImgBtn">🖼️ 결과 이미지 저장</button>
+        </div>
       </div>
     </section>
 
@@ -731,7 +762,10 @@
         <label>12별자리 직접 선택</label>
         <div class="mini-grid" id="signChips"></div>
         <div id="todayFortuneBox"><p class="sub-note">생년월일을 넣거나 띠·별자리를 고르면 오늘 운세가 표시됩니다.</p></div>
-        <button type="button" class="btn btn-share" id="shareTodayBtn">📤 오늘 운세 결과 공유하기</button>
+        <div class="share-actions">
+          <button type="button" class="btn btn-share" id="shareTodayBtn">📤 오늘 운세 결과 공유하기</button>
+          <button type="button" class="btn btn-save-img" id="saveTodayImgBtn">🖼️ 결과 이미지 저장</button>
+        </div>
       </div>
 
       <div class="card" id="spouseCard">
@@ -744,7 +778,10 @@
         </div>
         <div id="spouseStages"><p class="sub-note">사주를 계산하면 배우자 카드 3단이 여기에 표시됩니다.</p></div>
         <p class="disclaimer" id="spouseDisclaimerBottom">이 카드는 엔터테인먼트 콘텐츠이며 의학·법률·투자 자문을 대체하지 않습니다.</p>
-        <button type="button" class="btn btn-share" id="shareSpouseBtn">📤 배우자 카드 공유하기</button>
+        <div class="share-actions">
+          <button type="button" class="btn btn-share" id="shareSpouseBtn">📤 배우자 카드 공유하기</button>
+          <button type="button" class="btn btn-save-img" id="saveSpouseImgBtn">🖼️ 결과 이미지 저장</button>
+        </div>
       </div>
     </section>
 
@@ -1826,13 +1863,90 @@
       const label = score >= 88 ? '상호 보완형' : (score >= 80 ? '균형형' : (score >= 68 ? '조율형' : '같은 빈 곳을 채우는 형'));
       return { score, label, desc: `${notes.join(' · ')}.` };
     }
+    const MY_BIRTH_LS_KEY = 'notopened_mvp3_birth';
+    let syncingMyBirth = false;
+
+    function validBirthValue(el) {
+      const v = el ? String(el.value || '').trim() : '';
+      return SHARE_DATE_RE.test(v) ? v : '';
+    }
+    function readStoredMyBirth() {
+      try {
+        const v = String(localStorage.getItem(MY_BIRTH_LS_KEY) || '');
+        return SHARE_DATE_RE.test(v) ? v : '';
+      } catch (e) { return ''; }
+    }
+    function writeStoredMyBirth(date) {
+      if (!SHARE_DATE_RE.test(date || '')) return;
+      try { localStorage.setItem(MY_BIRTH_LS_KEY, date); } catch (e) { /* ignore */ }
+    }
+    function myCompatBirthValue() {
+      return validBirthValue(document.getElementById('myCompatBirthDate'));
+    }
+    function updateMyCompatHint() {
+      const hint = document.getElementById('myCompatBirthHint');
+      if (!hint) return;
+      hint.hidden = !!myCompatBirthValue();
+    }
+    /* 사주·오늘 운세·궁합의 내 생년월일을 같은 값으로 맞추고 이 기기에만 보관한다. */
+    function syncMyBirthFrom(sourceId) {
+      if (syncingMyBirth) return;
+      const date = validBirthValue(document.getElementById(sourceId));
+      if (!date) {
+        updateMyCompatHint();
+        return;
+      }
+      syncingMyBirth = true;
+      try {
+        writeStoredMyBirth(date);
+        ['birthDate', 'todayBirthDate', 'myCompatBirthDate'].forEach(id => {
+          const el = document.getElementById(id);
+          if (el && el.value !== date) el.value = date;
+        });
+      } finally {
+        syncingMyBirth = false;
+      }
+      updateMyCompatHint();
+    }
+    function hydrateMyBirth() {
+      const mine = document.getElementById('myCompatBirthDate');
+      const dateEl = document.getElementById('birthDate');
+      const todayEl = document.getElementById('todayBirthDate');
+      const stored = readStoredMyBirth();
+      const fromSaju = validBirthValue(dateEl);
+      const fromToday = validBirthValue(todayEl);
+      if (stored) {
+        if (dateEl && dateEl.value !== stored) {
+          dateEl.value = stored;
+          const hourEl = document.getElementById('birthHour');
+          const hour = hourEl ? Number(hourEl.value) : -1;
+          const data = computeLocalSaju(stored, Number.isInteger(hour) ? hour : -1);
+          if (data) renderSaju(data);
+        }
+        if (todayEl && todayEl.value !== stored) todayEl.value = stored;
+        if (mine) mine.value = stored;
+      } else if (mine && !validBirthValue(mine)) {
+        mine.value = fromSaju || fromToday || '';
+      }
+      updateMyCompatHint();
+    }
+
     function v3RenderCompat3(saju, partnerDate, myType, friendType) {
       const box = document.getElementById('compat3Result');
       if (!box || !saju) return;
       const mbti = computeCompatibility(myType, friendType);
       const rows = [{ name: '💞 MBTI 궁합', sub: `${myType} × ${friendType}`, score: mbti.score, label: mbti.grade, desc: mbti.desc }];
       let sajuRow = null, zodiacRow = null;
-      const myBirth = (document.getElementById('birthDate') || {}).value || '1995-05-15';
+      const ownBirth = myCompatBirthValue();
+      let mySaju = saju;
+      let myBirth = validBirthValue(document.getElementById('birthDate')) || EXAMPLE_BIRTH;
+      if (ownBirth) {
+        const computed = computeLocalSaju(ownBirth, -1);
+        if (computed) {
+          mySaju = computed;
+          myBirth = ownBirth;
+        }
+      }
       const myMap = v3MapBirth(myBirth);
       let partnerError = false;
       if (partnerDate) {
@@ -1840,8 +1954,8 @@
         if (!partner) {
           partnerError = true;
         } else {
-        sajuRow = v3OhaengCompat(saju, partner);
-        rows.push({ name: '🔮 사주 오행 궁합', sub: `내 부족 ${saju.weakEl} ↔ 상대 부족 ${partner.weakEl}`, score: sajuRow.score, label: sajuRow.label, desc: sajuRow.desc });
+        sajuRow = v3OhaengCompat(mySaju, partner);
+        rows.push({ name: '🔮 사주 오행 궁합', sub: `내 부족 ${mySaju.weakEl} ↔ 상대 부족 ${partner.weakEl}`, score: sajuRow.score, label: sajuRow.label, desc: sajuRow.desc });
         const pMap = v3MapBirth(partnerDate);
         if (myMap && pMap) {
           zodiacRow = v3ZodiacCompat(myMap.zi, pMap.zi);
@@ -1873,9 +1987,11 @@
       total.innerHTML = `<strong>${title}</strong><br>` +
         `MBTI ${mbti.score}점` +
         (sajuRow ? ` · 사주 오행 ${sajuRow.score}점 · 12띠 ${zodiacRow ? zodiacRow.score + '점' : '-'}` : '') +
+        (ownBirth ? '' : ' · 내 생년월일을 넣으면 더 정확해요') +
         (partnerDate ? '' : ' · 상대 생년월일을 입력하면 사주·띠 궁합까지 함께 계산됩니다.') +
         (partnerError ? ' · 상대 생년월일을 확인해 주세요. 사주·띠 궁합은 제외했습니다.' : '') +
         `<br><span style="color:var(--muted);font-size:0.76rem;">엔터테인먼트·참고용 결과이며 실제 관계를 예측하지 않습니다.</span>`;
+      updateMyCompatHint();
       box.appendChild(total);
       return { avg, grade, rows: rows.length };
     }
@@ -1905,6 +2021,9 @@
         const safeHour = (Number.isInteger(hour) && hour >= -1 && hour <= 11) ? hour : -1;
         if (dateEl) dateEl.value = bd;
         if (hourEl) hourEl.value = String(safeHour);
+        const mine = document.getElementById('myCompatBirthDate');
+        if (mine) mine.value = bd;
+        writeStoredMyBirth(bd);
         const data = computeLocalSaju(bd, safeHour);
         if (data) {
           renderSaju(data);
@@ -1964,9 +2083,354 @@
     }
     window.fitCoupangBanner = fitCoupangBanner;
 
+    /* ---------- 결과 카드 이미지 (1080×1350, 브라우저 Canvas만 사용) ---------- */
+    const CARD_W = 1080;
+    const CARD_H = 1350;
+    const CARD_FONT = '"Noto Sans CJK KR", "NanumGothic", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif';
+    const CARD_FOOTER = 'notopened.com/fortune';
+
+    function privateCardText(value) {
+      return String(value || '')
+        .replace(/\d{4}\s*[.\-/년]\s*\d{1,2}\s*[.\-/월]\s*\d{1,2}\s*일?/g, '')
+        .replace(/\d{4}\s*[.\-/]\s*\d{1,2}\s*[.\-/]\s*\d{1,2}/g, '')
+        .replace(/[ \t]{2,}/g, ' ')
+        .trim();
+    }
+
+    function traceRoundRect(ctx, x, y, w, h, r) {
+      const radius = Math.max(0, Math.min(r, w / 2, h / 2));
+      ctx.beginPath();
+      ctx.moveTo(x + radius, y);
+      ctx.arcTo(x + w, y, x + w, y + h, radius);
+      ctx.arcTo(x + w, y + h, x, y + h, radius);
+      ctx.arcTo(x, y + h, x, y, radius);
+      ctx.arcTo(x, y, x + w, y, radius);
+      ctx.closePath();
+    }
+
+    function wrapCardText(ctx, text, maxWidth) {
+      const src = String(text || '').replace(/\s+/g, ' ').trim();
+      if (!src) return [];
+      const tokens = src.split(/(\s+|·)/).filter(token => token !== '');
+      const out = [];
+      let line = '';
+      const pushLine = () => {
+        if (line.trim()) out.push(line.trim());
+        line = '';
+      };
+      const appendChars = token => {
+        Array.from(token).forEach(ch => {
+          if (line && ctx.measureText(line + ch).width > maxWidth) pushLine();
+          line += ch;
+        });
+      };
+      tokens.forEach(token => {
+        if (token === ' ') {
+          if (line && ctx.measureText(line + ' ').width <= maxWidth) line += ' ';
+          return;
+        }
+        const candidate = line + token;
+        if (!line) {
+          if (ctx.measureText(token).width > maxWidth) appendChars(token);
+          else line = token;
+          return;
+        }
+        if (ctx.measureText(candidate).width > maxWidth) {
+          pushLine();
+          if (ctx.measureText(token).width > maxWidth) appendChars(token);
+          else line = token;
+        } else {
+          line = candidate;
+        }
+      });
+      if (line.trim()) out.push(line.trim());
+      return out;
+    }
+
+    function drawResultCard(spec) {
+      const canvas = document.createElement('canvas');
+      canvas.width = CARD_W;
+      canvas.height = CARD_H;
+      const ctx = canvas.getContext('2d');
+      const bg = ctx.createLinearGradient(0, 0, CARD_W, CARD_H);
+      bg.addColorStop(0, '#0b1220');
+      bg.addColorStop(0.5, '#0f172a');
+      bg.addColorStop(1, '#1e1b4b');
+      ctx.fillStyle = bg;
+      ctx.fillRect(0, 0, CARD_W, CARD_H);
+
+      ctx.save();
+      ctx.globalAlpha = 0.55;
+      const glowA = ctx.createRadialGradient(160, 80, 10, 200, 140, 460);
+      glowA.addColorStop(0, 'rgba(56,189,248,0.55)');
+      glowA.addColorStop(1, 'rgba(56,189,248,0)');
+      ctx.fillStyle = glowA;
+      ctx.fillRect(0, 0, CARD_W, CARD_H);
+      const glowB = ctx.createRadialGradient(940, 1180, 10, 900, 1120, 520);
+      glowB.addColorStop(0, 'rgba(167,139,250,0.45)');
+      glowB.addColorStop(1, 'rgba(167,139,250,0)');
+      ctx.fillStyle = glowB;
+      ctx.fillRect(0, 0, CARD_W, CARD_H);
+      ctx.restore();
+
+      traceRoundRect(ctx, 48, 48, CARD_W - 96, CARD_H - 96, 36);
+      ctx.fillStyle = 'rgba(15, 23, 42, 0.9)';
+      ctx.fill();
+      ctx.strokeStyle = '#38bdf8';
+      ctx.lineWidth = 3;
+      ctx.stroke();
+
+      ctx.textBaseline = 'top';
+      ctx.textAlign = 'left';
+      ctx.fillStyle = '#38bdf8';
+      ctx.fillRect(88, 92, 112, 8);
+      ctx.font = `700 26px ${CARD_FONT}`;
+      ctx.fillText(spec.kicker || 'NOTOPENED', 88, 116);
+
+      const maxW = CARD_W - 176;
+      let y = 176;
+      ctx.fillStyle = '#f8fafc';
+      ctx.font = `800 60px ${CARD_FONT}`;
+      wrapCardText(ctx, spec.title || '운세 결과', maxW).slice(0, 3).forEach(line => {
+        ctx.fillText(line, 88, y);
+        y += 74;
+      });
+
+      if (spec.score) {
+        y += 6;
+        ctx.fillStyle = '#facc15';
+        ctx.font = `800 36px ${CARD_FONT}`;
+        wrapCardText(ctx, spec.score, maxW).slice(0, 3).forEach(line => {
+          ctx.fillText(line, 88, y);
+          y += 48;
+        });
+      }
+
+      y += 18;
+      ctx.strokeStyle = 'rgba(56, 189, 248, 0.45)';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(88, y);
+      ctx.lineTo(CARD_W - 88, y);
+      ctx.stroke();
+      y += 28;
+
+      const footerTop = CARD_H - 210;
+      const blocks = (spec.lines || []).filter(item => item && (item.text || item.label));
+      let bodySize = 32;
+      const measure = size => {
+        ctx.font = `500 ${size}px ${CARD_FONT}`;
+        let used = 0;
+        blocks.forEach(item => {
+          if (item.label) used += 36;
+          used += wrapCardText(ctx, item.text, maxW).length * (size + 14);
+          used += 16;
+        });
+        return used;
+      };
+      if (measure(bodySize) > footerTop - y - 12) bodySize = 28;
+      if (measure(bodySize) > footerTop - y - 12) bodySize = 24;
+
+      blocks.forEach(item => {
+        if (y > footerTop - 36) return;
+        if (item.label) {
+          ctx.fillStyle = '#38bdf8';
+          ctx.font = `700 26px ${CARD_FONT}`;
+          ctx.fillText(item.label, 88, y);
+          y += 36;
+        }
+        ctx.fillStyle = '#e2e8f0';
+        ctx.font = `500 ${bodySize}px ${CARD_FONT}`;
+        wrapCardText(ctx, item.text, maxW).forEach(line => {
+          if (y > footerTop - bodySize) return;
+          ctx.fillText(line, 88, y);
+          y += bodySize + 14;
+        });
+        y += 12;
+      });
+
+      ctx.strokeStyle = 'rgba(56, 189, 248, 0.55)';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(88, CARD_H - 168);
+      ctx.lineTo(CARD_W - 88, CARD_H - 168);
+      ctx.stroke();
+      ctx.fillStyle = '#f8fafc';
+      ctx.font = `700 34px ${CARD_FONT}`;
+      ctx.textAlign = 'center';
+      ctx.fillText(CARD_FOOTER, CARD_W / 2, CARD_H - 140);
+      ctx.textAlign = 'left';
+      return canvas;
+    }
+
+    function dataUrlToBlob(dataUrl) {
+      const parts = String(dataUrl || '').split(',');
+      const mime = (parts[0].match(/:(.*?);/) || [])[1] || 'image/png';
+      const bin = atob(parts[1] || '');
+      const arr = new Uint8Array(bin.length);
+      for (let i = 0; i < bin.length; i++) arr[i] = bin.charCodeAt(i);
+      return new Blob([arr], { type: mime });
+    }
+
+    async function saveResultImage(spec) {
+      const canvas = drawResultCard(spec);
+      const blob = dataUrlToBlob(canvas.toDataURL('image/png'));
+      const file = new File([blob], spec.filename || 'notopened-fortune.png', { type: 'image/png' });
+      const payload = { files: [file], title: spec.title || 'notopened' };
+      let canFileShare = false;
+      try { canFileShare = !!(navigator.canShare && navigator.canShare({ files: [file] })); } catch (e) { canFileShare = false; }
+      if (canFileShare) {
+        try {
+          await navigator.share(payload);
+          showToast('결과 이미지를 공유할 수 있게 열었습니다.');
+          return;
+        } catch (err) {
+          if (err && err.name === 'AbortError') return;
+        }
+      }
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = file.name;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 2500);
+      showToast('결과 이미지를 저장했습니다.');
+    }
+
+    function fortuneCardSpec(kind) {
+      if (kind === 'saju') {
+        const data = currentSajuData;
+        if (!data) return null;
+        const weak = data.weakEl || '土';
+        const pillars = (data.pillars || []).map(p => `${p.lbl} ${p.val}`).filter(Boolean).join(' · ');
+        const counts = data.counts ? Object.entries(data.counts).map(([k, v]) => `${k} ${v}`).join(' · ') : '';
+        return {
+          filename: 'notopened-saju.png',
+          kicker: '사주 · 오행',
+          title: `부족한 기운 ${weak}`,
+          score: privateCardText(data.lucky || ''),
+          lines: [
+            { label: data.isExample ? '원국 · 대표 예시' : '원국', text: privateCardText(pillars) },
+            { label: '오행', text: counts },
+            { label: '흐름', text: privateCardText(data.advice || '') }
+          ].filter(item => item.text)
+        };
+      }
+      if (kind === 'dream') {
+        if (!selectedDream) return null;
+        const d = selectedDream;
+        return {
+          filename: 'notopened-dream.png',
+          kicker: '꿈풀이',
+          title: `${d.keyword} 꿈풀이`,
+          score: `${d.mood} · ${d.category}`,
+          lines: [
+            { label: '한줄 풀이', text: privateCardText(d.summary) },
+            { label: '해설', text: privateCardText(d.detail) },
+            { label: '오늘의 행동', text: privateCardText(d.action) }
+          ].filter(item => item.text)
+        };
+      }
+      if (kind === 'mbti') {
+        const compat = computeCompatibility(myMbti, friendMbti);
+        return {
+          filename: 'notopened-mbti.png',
+          kicker: 'MBTI 궁합',
+          title: `${myMbti} × ${friendMbti}`,
+          score: `${compat.grade} · ${compat.score}점`,
+          lines: [
+            { label: '궁합', text: privateCardText(compat.desc) },
+            { label: '건넬 한마디', text: privateCardText(compat.talk) }
+          ].filter(item => item.text)
+        };
+      }
+      if (kind === 'compat3') {
+        const rows = Array.from(document.querySelectorAll('#compat3Result .compat3-row')).map(el => {
+          const head = el.querySelector('.compat3-head');
+          const label = head
+            ? Array.from(head.children).map(node => node.textContent.replace(/\s+/g, ' ').trim()).filter(Boolean).join(' ')
+            : '';
+          return {
+            label: privateCardText(label),
+            text: privateCardText((el.querySelector('.compat3-desc') || {}).textContent || '')
+          };
+        }).filter(item => item.label || item.text);
+        if (!rows.length) return null;
+        const total = privateCardText((document.querySelector('#compat3Total strong') || {}).textContent || '');
+        return {
+          filename: 'notopened-compat3.png',
+          kicker: '궁합 3종',
+          title: `${myMbti} × ${friendMbti}`,
+          score: total,
+          lines: rows
+        };
+      }
+      if (kind === 'today') {
+        const z = V3_ZODIAC[v3ZodiacIdx];
+        const s = V3_SIGNS[v3SignIdx];
+        if (!z || !s) return null;
+        const lines = Array.from(document.querySelectorAll('#todayFortuneBox .today-card')).map(card => ({
+          label: privateCardText((card.querySelector('h4') || {}).textContent || ''),
+          text: privateCardText(Array.from(card.querySelectorAll('.today-line')).map(el => el.textContent).join(' · '))
+        })).filter(item => item.text);
+        if (!lines.length) return null;
+        return {
+          filename: 'notopened-today.png',
+          kicker: '오늘의 운세',
+          title: `${z.animal}띠 · ${s.name}자리`,
+          score: `${z.trait} · ${s.trait}`,
+          lines
+        };
+      }
+      if (kind === 'spouse') {
+        const stages = Array.from(document.querySelectorAll('#spouseStages .spouse-stage')).map(el => ({
+          label: privateCardText((el.querySelector('h4') || {}).textContent || ''),
+          text: privateCardText((el.querySelector('p') || {}).textContent || '')
+        })).filter(item => item.text);
+        if (!stages.length) return null;
+        const day = (currentSajuData && currentSajuData.pillars && currentSajuData.pillars[2]) || {};
+        const el = day.el ? day.el.charAt(0) : '土';
+        return {
+          filename: 'notopened-spouse.png',
+          kicker: '미래 배우자 카드',
+          title: '미래 배우자',
+          score: `배우자궁 오행 ${el} · ${myMbti}`,
+          lines: stages
+        };
+      }
+      return null;
+    }
+
+    function bindFortuneImageButtons() {
+      const map = {
+        saveSajuImgBtn: 'saju',
+        saveDreamImgBtn: 'dream',
+        saveMbtiImgBtn: 'mbti',
+        saveCompat3ImgBtn: 'compat3',
+        saveTodayImgBtn: 'today',
+        saveSpouseImgBtn: 'spouse'
+      };
+      Object.keys(map).forEach(id => {
+        const btn = document.getElementById(id);
+        if (!btn) return;
+        btn.addEventListener('click', () => {
+          const spec = fortuneCardSpec(map[id]);
+          if (!spec) {
+            showToast(map[id] === 'dream' ? '꿈풀이를 먼저 골라 주세요.' : '저장할 결과를 먼저 만들어 주세요.');
+            return;
+          }
+          saveResultImage(spec);
+        });
+      });
+    }
+
     /* ---------- v0.3 초기화 & 연동 ---------- */
     document.addEventListener('DOMContentLoaded', () => {
       try {
+        bindFortuneImageButtons();
+        hydrateMyBirth();
         v3RenderYearFortune(currentSajuData);
         const mapped = v3MapBirth((document.getElementById('todayBirthDate') || {}).value);
         if (mapped) { v3ZodiacIdx = mapped.zi; v3SignIdx = mapped.si; }
@@ -1977,19 +2441,20 @@
         const bd = (document.getElementById('todayBirthDate') || {}).value || '';
         if (note && mapped) note.textContent = `자동 매핑: ${V3_ZODIAC[mapped.zi].animal}띠 · ${V3_SIGNS[mapped.si].name}자리 (${bd} 기준)`;
         v3RenderSpouse(currentSajuData, myMbti);
-        v3RenderCompat3(currentSajuData, (document.getElementById('partnerBirthDate') || {}).value, myMbti, friendMbti);
+        const renderCompat = () => {
+          v3RenderCompat3(currentSajuData, (document.getElementById('partnerBirthDate') || {}).value, myMbti, friendMbti);
+        };
+        renderCompat();
 
         const refreshAll = () => {
-          v3RenderYearFortune(currentSajuData);
-          v3RenderSpouse(currentSajuData, myMbti);
-          v3RenderCompat3(currentSajuData, (document.getElementById('partnerBirthDate') || {}).value, myMbti, friendMbti);
-          // 사주 패널에서 계산한 생년월일을 오늘의 띠·별자리에도 함께 매핑
           const bd = document.getElementById('birthDate');
-          const todayInput = document.getElementById('todayBirthDate');
-          if (bd && todayInput && bd.value && todayInput.value !== bd.value) {
-            todayInput.value = bd.value;
+          if (bd && SHARE_DATE_RE.test(String(bd.value || ''))) {
+            syncMyBirthFrom('birthDate');
             v3ApplyTodayBirth();
           }
+          v3RenderYearFortune(currentSajuData);
+          v3RenderSpouse(currentSajuData, myMbti);
+          renderCompat();
         };
         const calcBtn = document.getElementById('calcSajuBtn');
         const exBtn = document.getElementById('exampleSajuBtn');
@@ -1997,13 +2462,39 @@
         if (exBtn) exBtn.addEventListener('click', refreshAll);
 
         const todayBtn = document.getElementById('todayAutoBtn');
-        if (todayBtn) todayBtn.addEventListener('click', v3ApplyTodayBirth);
+        if (todayBtn) todayBtn.addEventListener('click', () => {
+          syncMyBirthFrom('todayBirthDate');
+          v3ApplyTodayBirth();
+          renderCompat();
+        });
         const todayInput = document.getElementById('todayBirthDate');
-        if (todayInput) todayInput.addEventListener('change', v3ApplyTodayBirth);
+        if (todayInput) todayInput.addEventListener('change', () => {
+          syncMyBirthFrom('todayBirthDate');
+          v3ApplyTodayBirth();
+          renderCompat();
+        });
+        const birthDateInput = document.getElementById('birthDate');
+        if (birthDateInput) birthDateInput.addEventListener('change', () => {
+          syncMyBirthFrom('birthDate');
+          if (validBirthValue(document.getElementById('todayBirthDate'))) v3ApplyTodayBirth();
+          renderCompat();
+        });
+        const myBirthInput = document.getElementById('myCompatBirthDate');
+        if (myBirthInput) myBirthInput.addEventListener('change', () => {
+          if (validBirthValue(myBirthInput)) {
+            syncMyBirthFrom('myCompatBirthDate');
+            v3ApplyTodayBirth();
+          } else {
+            updateMyCompatHint();
+          }
+          renderCompat();
+        });
+        const partnerInput = document.getElementById('partnerBirthDate');
+        if (partnerInput) partnerInput.addEventListener('change', renderCompat);
 
         const c3Btn = document.getElementById('calcCompat3Btn');
         if (c3Btn) c3Btn.addEventListener('click', () => {
-          v3RenderCompat3(currentSajuData, (document.getElementById('partnerBirthDate') || {}).value, myMbti, friendMbti);
+          renderCompat();
           showToast('궁합 3종을 다시 계산했습니다.');
         });
 
