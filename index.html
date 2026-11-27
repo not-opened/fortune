@@ -499,6 +499,14 @@
       padding: 10px 6px;
       white-space: normal;
     }
+    .share-actions .btn-share-link {
+      flex: 0 0 auto;
+      width: auto;
+      padding: 10px 8px;
+      font-size: 0.68rem;
+      line-height: 1.2;
+      white-space: nowrap;
+    }
     .btn-save-img { background: #120826; color: var(--text); border-color: var(--violet); }
     .btn-save-img:active { background: rgba(167, 139, 250, 0.18); }
     .footer a { color: var(--accent); font-weight: 700; }
@@ -638,6 +646,7 @@
 
         <div class="share-actions">
           <button type="button" class="btn btn-share" id="shareSajuBtn">📤 사주 결과 공유하기</button>
+          <button type="button" class="btn btn-share btn-share-link" id="shareSajuLinkBtn">링크 공유</button>
           <button type="button" class="btn btn-save-img" id="saveSajuImgBtn">🖼️ 결과 이미지 저장</button>
         </div>
 
@@ -659,6 +668,7 @@
         <div class="ya-list" id="yearFortuneList"></div>
         <div class="share-actions">
           <button type="button" class="btn btn-share" id="shareYearBtn">📤 결과 공유하기</button>
+          <button type="button" class="btn btn-share btn-share-link" id="shareYearLinkBtn">링크 공유</button>
           <button type="button" class="btn btn-save-img" id="saveYearImgBtn">🖼️ 결과 이미지 저장</button>
         </div>
       </div>
@@ -708,6 +718,7 @@
 
         <div class="share-actions">
           <button type="button" class="btn btn-share" id="shareDreamBtn">📤 꿈풀이 결과 공유하기</button>
+          <button type="button" class="btn btn-share btn-share-link" id="shareDreamLinkBtn">링크 공유</button>
           <button type="button" class="btn btn-save-img" id="saveDreamImgBtn">🖼️ 결과 이미지 저장</button>
         </div>
 
@@ -773,6 +784,7 @@
           </div>
           <div class="share-actions">
             <button type="button" class="btn btn-share" id="shareMbtiBtn">📤 궁합 결과 공유하기</button>
+            <button type="button" class="btn btn-share btn-share-link" id="shareMbtiLinkBtn">링크 공유</button>
             <button type="button" class="btn btn-save-img" id="saveMbtiImgBtn">🖼️ 결과 이미지 저장</button>
           </div>
         </div>
@@ -805,6 +817,7 @@
         <div id="compat3Result"><p class="sub-note">생년월일과 MBTI를 고르면 궁합 3종이 여기에 표시됩니다.</p></div>
         <div class="share-actions">
           <button type="button" class="btn btn-share" id="shareCompat3Btn">📤 3종 궁합 결과 공유하기</button>
+          <button type="button" class="btn btn-share btn-share-link" id="shareCompat3LinkBtn">링크 공유</button>
           <button type="button" class="btn btn-save-img" id="saveCompat3ImgBtn">🖼️ 결과 이미지 저장</button>
         </div>
       </div>
@@ -830,6 +843,7 @@
         <div id="todayFortuneBox"><p class="sub-note">생년월일을 넣거나 띠·별자리를 고르면 오늘 운세가 표시됩니다.</p></div>
         <div class="share-actions">
           <button type="button" class="btn btn-share" id="shareTodayBtn">📤 오늘 운세 결과 공유하기</button>
+          <button type="button" class="btn btn-share btn-share-link" id="shareTodayLinkBtn">링크 공유</button>
           <button type="button" class="btn btn-save-img" id="saveTodayImgBtn">🖼️ 결과 이미지 저장</button>
         </div>
       </div>
@@ -846,6 +860,7 @@
         <p class="disclaimer" id="spouseDisclaimerBottom">이 카드는 엔터테인먼트 콘텐츠이며 의학·법률·투자 자문을 대체하지 않습니다.</p>
         <div class="share-actions">
           <button type="button" class="btn btn-share" id="shareSpouseBtn">📤 배우자 카드 공유하기</button>
+          <button type="button" class="btn btn-share btn-share-link" id="shareSpouseLinkBtn">링크 공유</button>
           <button type="button" class="btn btn-save-img" id="saveSpouseImgBtn">🖼️ 결과 이미지 저장</button>
         </div>
       </div>
@@ -977,11 +992,19 @@
         }
         if (canFileShare) {
           try {
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+              navigator.clipboard.writeText(clipboardText).catch(() => {});
+            }
+          } catch (e) { /* clipboard unavailable */ }
+          try {
             await navigator.share({ files: [file], title, text: nativeTextWithoutUrl, url: targetUrl });
-            showToast('공유가 완료되었습니다.');
+            showToast('링크가 복사됐어요. 카톡에 붙여넣기 해주세요');
             return;
           } catch (err) {
-            if (err && err.name === 'AbortError') return;
+            if (err && err.name === 'AbortError') {
+              showToast('링크가 복사됐어요. 카톡에 붙여넣기 해주세요');
+              return;
+            }
           }
         }
       }
@@ -1533,7 +1556,7 @@
         }
         renderSaju(data);
       });
-      document.getElementById('shareSajuBtn').addEventListener('click', () => {
+      const shareSajuResult = (withImage) => {
         const data = currentSajuData || {};
         const weak = data.weakEl || '土';
         const pillars = (data.pillars || []).map(p => `${p.lbl} ${p.val}`).join(' · ');
@@ -1541,8 +1564,10 @@
         const text = pillars
           ? `사주 결과 ${pillars}. 부족한 기운은 ${weak}. ${(data.advice || '').slice(0, 90)}`
           : `사주 오행을 브라우저에서 계산해 보세요. 부족한 기운은 ${weak}.`;
-        triggerKakaoStyleShare('notopened 사주 결과', text, url, fortuneCardSpec('saju'));
-      });
+        triggerKakaoStyleShare('notopened 사주 결과', text, url, withImage ? fortuneCardSpec('saju') : null);
+      };
+      document.getElementById('shareSajuBtn').addEventListener('click', () => shareSajuResult(true));
+      document.getElementById('shareSajuLinkBtn').addEventListener('click', () => shareSajuResult(false));
 
       // Dream
       renderDreamList();
@@ -1571,14 +1596,16 @@
         document.querySelectorAll('#dreamCats .chip').forEach(c => c.classList.toggle('active', c === chip));
         renderDreamList(false);
       });
-      document.getElementById('shareDreamBtn').addEventListener('click', () => {
+      const shareDreamResult = (withImage) => {
         const kw = selectedDream ? selectedDream.keyword : '';
         const url = `${BASE_SHARE_URL}?tab=dream${kw ? `&q=${encodeURIComponent(kw)}` : ''}`;
         const text = selectedDream
           ? `${selectedDream.keyword} 꿈풀이 (${selectedDream.mood}): ${selectedDream.summary}`
           : '꿈에 나온 키워드로 꿈풀이를 찾아 보세요.';
-        triggerKakaoStyleShare('notopened 꿈풀이', text, url, fortuneCardSpec('dream'));
-      });
+        triggerKakaoStyleShare('notopened 꿈풀이', text, url, withImage ? fortuneCardSpec('dream') : null);
+      };
+      document.getElementById('shareDreamBtn').addEventListener('click', () => shareDreamResult(true));
+      document.getElementById('shareDreamLinkBtn').addEventListener('click', () => shareDreamResult(false));
 
       // MBTI & Deep-link
       applyUrlDeepLink();
@@ -1589,12 +1616,14 @@
         box.style.display = box.style.display === 'none' ? 'block' : 'none';
       });
       document.getElementById('applyQuickQuizBtn').addEventListener('click', applyQuickQuiz);
-      document.getElementById('shareMbtiBtn').addEventListener('click', () => {
+      const shareMbtiResult = (withImage) => {
         const compat = computeCompatibility(myMbti, friendMbti);
         const url = `${BASE_SHARE_URL}?tab=mbti&from=${encodeURIComponent(myMbti)}`;
         const text = `${myMbti} × ${friendMbti} 궁합 ${compat.grade} ${compat.score}점. ${compat.talk}`;
-        triggerKakaoStyleShare('notopened MBTI 궁합', text, url, fortuneCardSpec('mbti'));
-      });
+        triggerKakaoStyleShare('notopened MBTI 궁합', text, url, withImage ? fortuneCardSpec('mbti') : null);
+      };
+      document.getElementById('shareMbtiBtn').addEventListener('click', () => shareMbtiResult(true));
+      document.getElementById('shareMbtiLinkBtn').addEventListener('click', () => shareMbtiResult(false));
     });
 
     /* =====================================================================
@@ -2776,16 +2805,18 @@
           }
         });
 
-        const shareSpouse = document.getElementById('shareSpouseBtn');
-        if (shareSpouse) shareSpouse.addEventListener('click', () => {
+        const shareSpouseResult = (withImage) => {
           const src = (document.getElementById('spouseSourceNote') || {}).textContent || '';
           const first = (document.querySelector('#spouseStages .spouse-stage p') || {}).textContent || '';
           const text = `미래 배우자 카드. ${src} ${first}`.replace(/\s+/g, ' ').trim();
-          triggerKakaoStyleShare('notopened 미래 배우자 카드', text, buildSpouseShareUrl(), fortuneCardSpec('spouse'));
-        });
+          triggerKakaoStyleShare('notopened 미래 배우자 카드', text, buildSpouseShareUrl(), withImage ? fortuneCardSpec('spouse') : null);
+        };
+        const shareSpouse = document.getElementById('shareSpouseBtn');
+        if (shareSpouse) shareSpouse.addEventListener('click', () => shareSpouseResult(true));
+        const shareSpouseLink = document.getElementById('shareSpouseLinkBtn');
+        if (shareSpouseLink) shareSpouseLink.addEventListener('click', () => shareSpouseResult(false));
 
-        const shareToday = document.getElementById('shareTodayBtn');
-        if (shareToday) shareToday.addEventListener('click', () => {
+        const shareTodayResult = (withImage) => {
           const z = V3_ZODIAC[v3ZodiacIdx];
           const s = V3_SIGNS[v3SignIdx];
           const lines = Array.from(document.querySelectorAll('#todayFortuneBox .today-line')).map(el => el.textContent.replace(/\s+/g, ' ').trim());
@@ -2793,20 +2824,26 @@
             ? `오늘의 ${z.animal}띠 · ${s.name}자리. ${lines.join(' / ')}`
             : `오늘의 ${z.animal}띠 · ${s.name}자리 운세`;
           const url = buildShareUrl({ tab: 'today', z: v3ZodiacIdx, sg: v3SignIdx });
-          triggerKakaoStyleShare('notopened 오늘 운세', text, url, fortuneCardSpec('today'));
-        });
+          triggerKakaoStyleShare('notopened 오늘 운세', text, url, withImage ? fortuneCardSpec('today') : null);
+        };
+        const shareToday = document.getElementById('shareTodayBtn');
+        if (shareToday) shareToday.addEventListener('click', () => shareTodayResult(true));
+        const shareTodayLink = document.getElementById('shareTodayLinkBtn');
+        if (shareTodayLink) shareTodayLink.addEventListener('click', () => shareTodayResult(false));
 
-        const shareC3 = document.getElementById('shareCompat3Btn');
-        if (shareC3) shareC3.addEventListener('click', () => {
+        const shareCompat3Result = (withImage) => {
           const strong = document.querySelector('#compat3Total strong');
           const text = strong
             ? `${myMbti} × ${friendMbti} ${strong.textContent}`
             : `${myMbti} × ${friendMbti} 궁합`;
-          triggerKakaoStyleShare('notopened 궁합 3종', text, `${BASE_SHARE_URL}?tab=mbti&from=${encodeURIComponent(myMbti)}`, fortuneCardSpec('compat3'));
-        });
+          triggerKakaoStyleShare('notopened 궁합 3종', text, `${BASE_SHARE_URL}?tab=mbti&from=${encodeURIComponent(myMbti)}`, withImage ? fortuneCardSpec('compat3') : null);
+        };
+        const shareC3 = document.getElementById('shareCompat3Btn');
+        if (shareC3) shareC3.addEventListener('click', () => shareCompat3Result(true));
+        const shareC3Link = document.getElementById('shareCompat3LinkBtn');
+        if (shareC3Link) shareC3Link.addEventListener('click', () => shareCompat3Result(false));
 
-        const shareYear = document.getElementById('shareYearBtn');
-        if (shareYear) shareYear.addEventListener('click', () => {
+        const shareYearResult = (withImage) => {
           const model = v3YearFortuneModel(currentSajuData);
           if (!model) {
             showToast('저장할 결과를 먼저 만들어 주세요.');
@@ -2814,8 +2851,12 @@
           }
           const scores = model.areas.map(area => `${area.icon} ${area.name} ${area.score}점`).join(' · ');
           const text = `${model.summary} ${scores}`;
-          triggerKakaoStyleShare('notopened 올해 운세', text, buildSajuShareUrl(currentSajuData), fortuneCardSpec('year'));
-        });
+          triggerKakaoStyleShare('notopened 올해 운세', text, buildSajuShareUrl(currentSajuData), withImage ? fortuneCardSpec('year') : null);
+        };
+        const shareYear = document.getElementById('shareYearBtn');
+        if (shareYear) shareYear.addEventListener('click', () => shareYearResult(true));
+        const shareYearLink = document.getElementById('shareYearLinkBtn');
+        if (shareYearLink) shareYearLink.addEventListener('click', () => shareYearResult(false));
 
         try {
           const p = new URLSearchParams(window.location.search);
