@@ -683,6 +683,7 @@
       min-width: 0;
       word-break: keep-all;
     }
+    .lucky-item.lucky-wide { grid-column: 1 / -1; }
     .lucky-k { font-size: 0.68rem; color: var(--text-muted); font-weight: 700; }
     .lucky-v { font-size: 0.92rem; font-weight: 800; color: var(--text); display: flex; align-items: center; gap: 6px; min-width: 0; }
     .lucky-v .swatch { width: 14px; height: 14px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.35); flex: 0 0 auto; }
@@ -1486,6 +1487,7 @@
       '동북쪽': '조용히 집중하는 자리', '서북쪽': '생각을 정리하는 자리'
     };
     const LUCKY_FOODS = ['따뜻한 국물 요리', '제철 채소 샐러드', '붉은 과일(사과·딸기)', '견과류 한 줌', '생선구이', '두부 요리', '보리차·녹차', '고구마', '달걀 요리', '검은콩 밥', '김치찌개', '유자차'];
+    const LUCKY_HOUR_RANGES = ['23:30~01:29', '01:30~03:29', '03:30~05:29', '05:30~07:29', '07:30~09:29', '09:30~11:29', '11:30~13:29', '13:30~15:29', '15:30~17:29', '17:30~19:29', '19:30~21:29', '21:30~23:29'];
     const LUCKY_EL_TIP = {
       '木': '시작이 잘 풀리는 날입니다. 미뤄둔 첫 단계를 오늘 꺼내 보세요.',
       '火': '표현과 열정이 빛나는 날입니다. 하고 싶은 말을 한 번 더 분명하게 전해 보세요.',
@@ -1521,12 +1523,14 @@
       const number = ((today.stem * 7 + userDayStem * 3 + today.day) % 9) + 1;
       const dir = LUCKY_DIRS[(today.stem + userDayStem + today.day) % LUCKY_DIRS.length];
       const food = LUCKY_FOODS[(today.stem * 5 + userDayStem + today.day) % LUCKY_FOODS.length];
+      const hourIdx = (today.stem * 2 + userDayStem * 3 + today.day) % 12;
+      const hourLabel = `${BRANCHES[hourIdx].slice(0, 1)}시 (${LUCKY_HOUR_RANGES[hourIdx]})`;
       return {
         dateLabel: today.label,
         todayEl: today.el,
         fillEl,
         dayStemName: STEMS[today.stem].slice(0, 1),
-        color, number, dir, food,
+        color, number, dir, food, hourLabel,
         dirHint: LUCKY_DIR_HINTS[dir] || '',
         tip: LUCKY_EL_TIP[today.el] || ''
       };
@@ -1546,9 +1550,10 @@
         { k: '🎨 행운 컬러', v: L.color.name, swatch: L.color.hex },
         { k: '🔢 행운 숫자', v: String(L.number) },
         { k: '🧭 행운 방위', v: `${L.dir} · ${L.dirHint}` },
-        { k: '🍽️ 추천 음식', v: L.food }
+        { k: '🍽️ 추천 음식', v: L.food },
+        { k: '⏰ 행운의 시간', v: L.hourLabel, wide: true }
       ];
-      grid.innerHTML = items.map(it => `<div class="lucky-item"><span class="lucky-k">${it.k}</span>`
+      grid.innerHTML = items.map(it => `<div class="lucky-item${it.wide ? ' lucky-wide' : ''}"><span class="lucky-k">${it.k}</span>`
         + `<span class="lucky-v">${it.swatch ? `<span class="swatch" style="background:${it.swatch}"></span>` : ''}${it.v}</span></div>`).join('');
       const tip = document.getElementById('luckyTip');
       if (tip) tip.textContent = `💡 ${L.tip}`;
@@ -3589,6 +3594,7 @@
             { label: '행운 컬러', text: L.color.name },
             { label: '행운 방위', text: `${L.dir} · ${L.dirHint}` },
             { label: '추천 음식', text: L.food },
+            { label: '행운의 시간', text: L.hourLabel },
             { label: '오늘의 한마디', text: L.tip }
           ].filter(item => item.text)
         };
