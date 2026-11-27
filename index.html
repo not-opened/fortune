@@ -664,6 +664,38 @@
       .saju-actions .btn { width: 100%; flex: 1 1 auto; }
       .nav-tab { font-size: 0.64rem; }
     }
+
+    /* 오늘의 행운 리포트 */
+    .lucky-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      margin: 10px 0 8px;
+    }
+    .lucky-item {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: var(--sub);
+      min-width: 0;
+      word-break: keep-all;
+    }
+    .lucky-k { font-size: 0.68rem; color: var(--text-muted); font-weight: 700; }
+    .lucky-v { font-size: 0.92rem; font-weight: 800; color: var(--text); display: flex; align-items: center; gap: 6px; min-width: 0; }
+    .lucky-v .swatch { width: 14px; height: 14px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.35); flex: 0 0 auto; }
+    .lucky-tip {
+      margin: 2px 0 4px;
+      font-size: 0.8rem;
+      color: var(--accent);
+      font-weight: 700;
+      word-break: keep-all;
+      line-height: 1.5;
+    }
+    .dream-related-chips .chip { background: var(--accent-soft); color: var(--accent); border-color: rgba(56, 189, 248, 0.45); }
+    .dream-related-chips .chip:active { transform: scale(0.98); }
   </style>
 </head>
 <body>
@@ -741,6 +773,10 @@
           <button type="button" class="btn btn-primary" id="calcSajuBtn" style="flex:1;">🧮 내 사주 계산하기</button>
           <button type="button" class="btn btn-secondary" id="exampleSajuBtn" style="flex:1;">📌 예시 사주 보기 (1995-05-15)</button>
         </div>
+        <div class="row" style="margin-top:8px;">
+          <button type="button" class="btn btn-secondary" id="resetSajuInput" style="flex:1;font-size:0.8rem;">🧹 입력 저장 초기화</button>
+        </div>
+        <p class="sub-note" id="sajuInputNote" style="margin-top:8px;">최근 입력한 생년월일·시진은 이 브라우저에만 저장되어 다음 방문 때 자동으로 채워집니다.</p>
       </div>
 
       <div class="card" id="sajuResultCard">
@@ -771,6 +807,21 @@
             <button type="button" class="bridge-btn" id="sajuToMbtiBridge" data-jump-tab="mbti">💞 부족한 기운을 채워줄 오늘의 MBTI 행동 팁·궁합 보기 →</button>
             <button type="button" class="bridge-btn" id="sajuToDreamBridge" data-jump-tab="dream">🌙 어젯밤 꾼 꿈 키워드 바로 해몽하기 →</button>
           </div>
+        </div>
+      </div>
+
+      <!-- 오늘의 행운 리포트 (날짜 + 일간 조합) -->
+      <div class="card" id="luckyCard">
+        <div class="section-head">
+          <h2>🍀 오늘의 행운 리포트</h2>
+          <span class="pill pill-good" id="luckyDateBadge">오늘</span>
+        </div>
+        <p class="sub-note" id="luckyBasis">내 사주와 오늘 날짜의 기운을 겹쳐 뽑은 오늘 하루의 행운입니다.</p>
+        <div class="lucky-grid" id="luckyGrid"></div>
+        <p class="lucky-tip" id="luckyTip"></p>
+        <div class="share-actions">
+          <button type="button" class="btn btn-share" id="shareLuckyBtn">📤 행운 카드 공유</button>
+          <button type="button" class="btn btn-save-img" id="saveLuckyImgBtn">🖼️ 행운 카드 저장</button>
         </div>
       </div>
 
@@ -868,6 +919,9 @@
         <div class="dream-detail-label">상황별 세부 풀이</div>
         <div class="dream-scenes" id="dreamScenes"></div>
         <p class="sub-note"><a id="dreamGuideLink" href="/fortune/dream/" style="color:var(--accent);font-weight:700;">상황별 꿈풀이 글 더 읽기 →</a></p>
+        <div class="dream-detail-label">같은 테마의 연관 꿈</div>
+        <div class="chip-bar dream-related-chips" id="dreamRelatedChips"></div>
+
         <div class="dream-detail-label">오늘의 행동 팁</div>
         <p id="dreamDetailAction" style="font-size:0.8rem; color:var(--gold); font-weight:700; margin-bottom:6px; word-break:keep-all;"></p>
         <p class="dream-music-link"><a href="https://www.youtube.com/@across_the_way" target="_blank" rel="noopener">잠 안 오는 밤엔 건너편 🎸</a></p>
@@ -1355,6 +1409,144 @@
       document.getElementById('sajuAdvice').textContent = data.advice;
       document.getElementById('sajuLucky').textContent = data.lucky;
       document.getElementById('sajuToMbtiBridge').textContent = `💞 부족한 ${data.weakEl} 기운을 채워줄 오늘의 MBTI 행동 팁·궁합 보기 →`;
+      renderLuckyReport();
+    }
+
+    /* ---------- 최근 입력 저장 (localStorage) ---------- */
+    const SAJU_INPUT_KEY = 'notopened_saju_input_v1';
+
+    function saveSajuInput() {
+      const input = readBirthInputs();
+      if (!input.date) return;
+      try {
+        localStorage.setItem(SAJU_INPUT_KEY, JSON.stringify({ date: input.date, hour: input.hour, savedAt: new Date().toISOString() }));
+      } catch (e) { /* 사생활 보호 모드에서는 저장만 건너뜀 */ }
+      updateSajuInputNote();
+    }
+
+    function updateSajuInputNote() {
+      const note = document.getElementById('sajuInputNote');
+      if (!note) return;
+      let saved = null;
+      try { saved = JSON.parse(localStorage.getItem(SAJU_INPUT_KEY) || 'null'); } catch (e) { saved = null; }
+      if (saved && SHARE_DATE_RE.test(String(saved.date || ''))) {
+        const hourTxt = Number(saved.hour) >= 0 ? ` · ${BRANCHES[Number(saved.hour) % 12].slice(0, 1)}시` : ' · 시간 모름';
+        note.textContent = `최근 입력 ${saved.date}${hourTxt}를 이 브라우저에 저장했습니다. 다음 방문 때 자동으로 채워집니다.`;
+      } else {
+        note.textContent = '최근 입력한 생년월일·시진은 이 브라우저에만 저장되어 다음 방문 때 자동으로 채워집니다.';
+      }
+    }
+
+    function restoreSajuInput() {
+      let saved = null;
+      try { saved = JSON.parse(localStorage.getItem(SAJU_INPUT_KEY) || 'null'); } catch (e) { saved = null; }
+      if (!saved || !SHARE_DATE_RE.test(String(saved.date || ''))) return null;
+      const dEl = document.getElementById('birthDate');
+      const hEl = document.getElementById('birthHour');
+      if (dEl) dEl.value = saved.date;
+      if (hEl) {
+        const hv = String(Number.isInteger(Number(saved.hour)) ? Number(saved.hour) : -1);
+        if (Array.from(hEl.options).some(o => o.value === hv)) hEl.value = hv;
+      }
+      renderSaju(computeLocalSaju(saved.date, Number(saved.hour)));
+      updateSajuInputNote();
+      return saved;
+    }
+
+    function resetSajuInput() {
+      try { localStorage.removeItem(SAJU_INPUT_KEY); } catch (e) { /* ignore */ }
+      const dEl = document.getElementById('birthDate');
+      const hEl = document.getElementById('birthHour');
+      if (dEl) dEl.value = EXAMPLE_BIRTH;
+      if (hEl) hEl.value = String(EXAMPLE_HOUR);
+      renderSaju(computeLocalSaju(EXAMPLE_BIRTH, EXAMPLE_HOUR, { example: true }));
+      updateSajuInputNote();
+      showToast('저장한 입력을 지우고 대표 예시로 되돌렸습니다.');
+    }
+
+    /* ---------- 오늘의 행운 리포트 (오늘 날짜 + 일간) ---------- */
+    let currentLucky = null;
+
+    const LUCKY_COLOR_BY_EL = {
+      '木': [{ name: '연두빛', hex: '#4ade80' }, { name: '청록빛', hex: '#2dd4bf' }],
+      '火': [{ name: '주홍빛', hex: '#f97316' }, { name: '자주빛', hex: '#e11d48' }],
+      '土': [{ name: '황토빛', hex: '#d97706' }, { name: '카키빛', hex: '#a3a36b' }],
+      '金': [{ name: '아이보리', hex: '#e5e7eb' }, { name: '금빛', hex: '#facc15' }],
+      '水': [{ name: '네이비', hex: '#3b82f6' }, { name: '먹빛', hex: '#1f2937' }]
+    };
+    const LUCKY_DIRS = ['동쪽', '서쪽', '남쪽', '북쪽', '동남쪽', '서남쪽', '동북쪽', '서북쪽'];
+    const LUCKY_DIR_HINTS = {
+      '동쪽': '아침에 해 뜨는 방향으로 한 걸음', '서쪽': '저녁 노을 방향으로 잠시 산책',
+      '남쪽': '따뜻한 햇볕이 드는 자리', '북쪽': '차분한 북쪽 자리에서 정리',
+      '동남쪽': '창가의 밝은 자리', '서남쪽': '따뜻하고 포근한 자리',
+      '동북쪽': '조용히 집중하는 자리', '서북쪽': '생각을 정리하는 자리'
+    };
+    const LUCKY_FOODS = ['따뜻한 국물 요리', '제철 채소 샐러드', '붉은 과일(사과·딸기)', '견과류 한 줌', '생선구이', '두부 요리', '보리차·녹차', '고구마', '달걀 요리', '검은콩 밥', '김치찌개', '유자차'];
+    const LUCKY_EL_TIP = {
+      '木': '시작이 잘 풀리는 날입니다. 미뤄둔 첫 단계를 오늘 꺼내 보세요.',
+      '火': '표현과 열정이 빛나는 날입니다. 하고 싶은 말을 한 번 더 분명하게 전해 보세요.',
+      '土': '기반을 다지는 날입니다. 돈과 일정을 정리하면 마음이 편해집니다.',
+      '金': '마무리와 정리가 잘 되는 날입니다. 미완성인 일 하나를 끝내 보세요.',
+      '水': '생각이 깊어지는 날입니다. 결정을 서두르지 말고 정보를 모아 보세요.'
+    };
+
+    function luckyToday() {
+      const now = new Date();
+      const kst = new Date(now.getTime() + now.getTimezoneOffset() * 60000 + 9 * 3600000);
+      const y = kst.getFullYear();
+      const m = kst.getMonth() + 1;
+      const d = kst.getDate();
+      const wd = ['일', '월', '화', '수', '목', '금', '토'][kst.getDay()];
+      const key = `${y}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+      const todaySaju = computeLocalSaju(key, -1);
+      return {
+        key, label: `${m}월 ${d}일 (${wd})`, day: d,
+        stem: todaySaju && todaySaju.pillars[2] ? todaySaju.pillars[2].s : 0,
+        el: todaySaju ? STEM_EL[todaySaju.pillars[2].s] : '土'
+      };
+    }
+
+    function buildLuckyReport() {
+      const today = luckyToday();
+      const userDayStem = (currentSajuData && currentSajuData.pillars && currentSajuData.pillars[2] && currentSajuData.pillars[2].s >= 0)
+        ? currentSajuData.pillars[2].s : today.stem;
+      const fillEl = (currentSajuData && currentSajuData.weakEl) ? currentSajuData.weakEl : today.el;
+      const colorSet = LUCKY_COLOR_BY_EL[fillEl] || LUCKY_COLOR_BY_EL['土'];
+      const color = colorSet[today.stem % colorSet.length];
+      const number = ((today.stem * 7 + userDayStem * 3 + today.day) % 9) + 1;
+      const dir = LUCKY_DIRS[(today.stem + userDayStem + today.day) % LUCKY_DIRS.length];
+      const food = LUCKY_FOODS[(today.stem * 5 + userDayStem + today.day) % LUCKY_FOODS.length];
+      return {
+        dateLabel: today.label,
+        todayEl: today.el,
+        fillEl,
+        dayStemName: STEMS[today.stem].slice(0, 1),
+        color, number, dir, food,
+        dirHint: LUCKY_DIR_HINTS[dir] || '',
+        tip: LUCKY_EL_TIP[today.el] || ''
+      };
+    }
+
+    function renderLuckyReport() {
+      const grid = document.getElementById('luckyGrid');
+      if (!grid) return;
+      const L = buildLuckyReport();
+      currentLucky = L;
+      const badge = document.getElementById('luckyDateBadge');
+      if (badge) badge.textContent = L.dateLabel;
+      const basis = document.getElementById('luckyBasis');
+      if (basis) basis.textContent = `오늘(${L.dateLabel})은 ${L.dayStemName}일 · ${L.todayEl} 기운의 날. 부족한 ${L.fillEl} 기운을 보태는 행운입니다.`;
+      const items = [
+        { k: '🎨 행운 컬러', v: L.color.name, swatch: L.color.hex },
+        { k: '🔢 행운 숫자', v: String(L.number) },
+        { k: '🧭 행운 방위', v: `${L.dir} · ${L.dirHint}` },
+        { k: '🍽️ 추천 음식', v: L.food }
+      ];
+      grid.innerHTML = items.map(it => `<div class="lucky-item"><span class="lucky-k">${it.k}</span>`
+        + `<span class="lucky-v">${it.swatch ? `<span class="swatch" style="background:${it.swatch}"></span>` : ''}${it.v}</span></div>`).join('');
+      const tip = document.getElementById('luckyTip');
+      if (tip) tip.textContent = `💡 ${L.tip}`;
+      return L;
     }
 
     // --- 2. DREAM DATA (48 KEYWORDS / 문장 추출용 유의어 포함) ---
@@ -1682,6 +1874,47 @@
         scenesBox.appendChild(scene);
       });
       document.getElementById('dreamDetailAction').textContent = `💡 ${d.action}`;
+      renderRelatedDreams(d);
+    }
+
+    /* 같은 테마(카테고리·태그·분위기)의 연관 꿈 3개 — 1탭 탐색 */
+    function renderRelatedDreams(d) {
+      const box = document.getElementById('dreamRelatedChips');
+      if (!box) return;
+      const scored = DREAMS.filter(function (x) { return x.id !== d.id; }).map(function (x) {
+        let score = 0;
+        if (x.category === d.category) score += 2;
+        (x.tags || []).forEach(function (t) {
+          if ((d.tags || []).indexOf(t) !== -1) score += 3;
+        });
+        if (x.mood === d.mood) score += 1;
+        return { dream: x, score: score };
+      }).filter(function (o) { return o.score > 0; })
+        .sort(function (a, b) { return b.score - a.score; })
+        .slice(0, 3);
+
+      box.innerHTML = '';
+      if (!scored.length) {
+        box.hidden = true;
+        return;
+      }
+      box.hidden = false;
+      scored.forEach(function (o) {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'chip';
+        btn.textContent = `${o.dream.emoji} ${o.dream.keyword}`;
+        btn.setAttribute('aria-label', `${o.dream.keyword} 꿈 풀이 보기`);
+        btn.addEventListener('click', function () {
+          showDreamDetail(o.dream);
+          const card = document.getElementById('dreamDetailCard');
+          if (card && card.scrollIntoView) {
+            try { card.scrollIntoView({ behavior: 'smooth', block: 'start' }); } catch (e) { /* ignore */ }
+          }
+          showToast(`${o.dream.keyword} 꿈 풀이로 이어서 보세요.`);
+        });
+        box.appendChild(btn);
+      });
     }
 
     // --- 3. MBTI 16 TYPES DICTIONARY, 16-Q QUIZ, TOP 3 & COMPATIBILITY ---
@@ -3338,6 +3571,22 @@
           ].filter(item => item.text)
         };
       }
+      if (kind === 'lucky') {
+        const L = currentLucky || renderLuckyReport();
+        if (!L) return null;
+        return {
+          filename: 'notopened-lucky.png',
+          kicker: '오늘의 행운',
+          title: `${L.dateLabel} 행운 리포트`,
+          score: `행운 숫자 ${L.number}`,
+          lines: [
+            { label: '행운 컬러', text: L.color.name },
+            { label: '행운 방위', text: `${L.dir} · ${L.dirHint}` },
+            { label: '추천 음식', text: L.food },
+            { label: '오늘의 한마디', text: L.tip }
+          ].filter(item => item.text)
+        };
+      }
       if (kind === 'dream') {
         if (!selectedDream) return null;
         const d = selectedDream;
@@ -3446,7 +3695,8 @@
         saveCompat3ImgBtn: 'compat3',
         saveTodayImgBtn: 'today',
         saveSpouseImgBtn: 'spouse',
-        saveYearImgBtn: 'year'
+        saveYearImgBtn: 'year',
+        saveLuckyImgBtn: 'lucky'
       };
       Object.keys(map).forEach(id => {
         const btn = document.getElementById(id);
@@ -3466,6 +3716,9 @@
     document.addEventListener('DOMContentLoaded', () => {
       try {
         bindFortuneImageButtons();
+        restoreSajuInput();
+        updateSajuInputNote();
+        renderLuckyReport();
         hydrateMyBirth();
         const yearSelect = document.getElementById('yearFortuneSelect');
         if (yearSelect) {
@@ -3499,8 +3752,19 @@
         };
         const calcBtn = document.getElementById('calcSajuBtn');
         const exBtn = document.getElementById('exampleSajuBtn');
-        if (calcBtn) calcBtn.addEventListener('click', refreshAll);
+        if (calcBtn) calcBtn.addEventListener('click', () => { refreshAll(); saveSajuInput(); });
         if (exBtn) exBtn.addEventListener('click', refreshAll);
+
+        const resetBtn = document.getElementById('resetSajuInput');
+        if (resetBtn) resetBtn.addEventListener('click', resetSajuInput);
+
+        const shareLucky = document.getElementById('shareLuckyBtn');
+        if (shareLucky) shareLucky.addEventListener('click', () => {
+          const L = currentLucky || renderLuckyReport();
+          if (!L) return;
+          const text = `오늘의 행운 리포트 (${L.dateLabel}) — 행운 컬러 ${L.color.name}, 행운 숫자 ${L.number}, 행운 방위 ${L.dir}, 추천 음식 ${L.food}. ${L.tip}`;
+          triggerKakaoStyleShare('notopened 오늘의 행운 카드', text, buildShareUrl({ tab: 'saju' }), fortuneCardSpec('lucky'));
+        });
 
         const todayBtn = document.getElementById('todayAutoBtn');
         if (todayBtn) todayBtn.addEventListener('click', () => {
@@ -3519,7 +3783,10 @@
           syncMyBirthFrom('birthDate');
           if (validBirthValue(document.getElementById('todayBirthDate'))) v3ApplyTodayBirth();
           renderCompat();
+          saveSajuInput();
         });
+        const birthHourInput = document.getElementById('birthHour');
+        if (birthHourInput) birthHourInput.addEventListener('change', saveSajuInput);
         const myBirthInput = document.getElementById('myCompatBirthDate');
         if (myBirthInput) myBirthInput.addEventListener('change', () => {
           if (validBirthValue(myBirthInput)) {
