@@ -666,6 +666,12 @@
     }
 
     /* 오늘의 행운 리포트 */
+    .lucky-score { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin: 4px 0 10px; }
+    .lucky-score-label { font-size: 0.74rem; color: var(--text-muted); font-weight: 700; }
+    .lucky-score-num { font-size: 0.78rem; color: var(--text); }
+    .lucky-score-num strong { font-size: 1.3rem; font-weight: 900; color: var(--accent); margin-right: 2px; }
+    .lucky-bar { flex: 1 1 100%; height: 8px; border-radius: 999px; background: rgba(148, 163, 184, 0.25); overflow: hidden; }
+    .lucky-bar > span { display: block; height: 100%; width: 0; border-radius: 999px; background: linear-gradient(90deg, #38bdf8, #facc15); transition: width 0.35s ease; }
     .lucky-grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -818,6 +824,11 @@
           <span class="pill pill-good" id="luckyDateBadge">오늘</span>
         </div>
         <p class="sub-note" id="luckyBasis">내 사주와 오늘 날짜의 기운을 겹쳐 뽑은 오늘 하루의 행운입니다.</p>
+        <div class="lucky-score">
+          <span class="lucky-score-label">🍀 오늘의 행운 지수</span>
+          <span class="lucky-score-num"><strong id="luckyScoreNum">0</strong>점</span>
+          <div class="lucky-bar"><span id="luckyBarFill"></span></div>
+        </div>
         <div class="lucky-grid" id="luckyGrid"></div>
         <p class="lucky-tip" id="luckyTip"></p>
         <div class="row" style="margin-bottom:8px;">
@@ -1525,12 +1536,13 @@
       const food = LUCKY_FOODS[(today.stem * 5 + userDayStem + today.day) % LUCKY_FOODS.length];
       const hourIdx = (today.stem * 2 + userDayStem * 3 + today.day) % 12;
       const hourLabel = `${BRANCHES[hourIdx].slice(0, 1)}시 (${LUCKY_HOUR_RANGES[hourIdx]})`;
+      const score = 55 + ((today.stem * 7 + userDayStem * 5 + today.day * 3) % 45);
       return {
         dateLabel: today.label,
         todayEl: today.el,
         fillEl,
         dayStemName: STEMS[today.stem].slice(0, 1),
-        color, number, dir, food, hourLabel,
+        color, number, dir, food, hourLabel, score,
         dirHint: LUCKY_DIR_HINTS[dir] || '',
         tip: LUCKY_EL_TIP[today.el] || ''
       };
@@ -1546,6 +1558,10 @@
       if (badge) badge.textContent = offset ? `내일 ${L.dateLabel}` : L.dateLabel;
       const basis = document.getElementById('luckyBasis');
       if (basis) basis.textContent = `${offset ? '내일' : '오늘'}(${L.dateLabel})은 ${L.dayStemName}일 · ${L.todayEl} 기운의 날. 부족한 ${L.fillEl} 기운을 보태는 행운입니다.`;
+      const scoreEl = document.getElementById('luckyScoreNum');
+      if (scoreEl) scoreEl.textContent = String(L.score);
+      const barEl = document.getElementById('luckyBarFill');
+      if (barEl) barEl.style.width = L.score + '%';
       const items = [
         { k: '🎨 행운 컬러', v: L.color.name, swatch: L.color.hex },
         { k: '🔢 행운 숫자', v: String(L.number) },
@@ -3589,7 +3605,7 @@
           filename: 'notopened-lucky.png',
           kicker: '오늘의 행운',
           title: `${L.dateLabel} 행운 리포트`,
-          score: `행운 숫자 ${L.number}`,
+          score: `행운 지수 ${L.score}점 · 행운 숫자 ${L.number}`,
           lines: [
             { label: '행운 컬러', text: L.color.name },
             { label: '행운 방위', text: `${L.dir} · ${L.dirHint}` },
@@ -3781,7 +3797,7 @@
         if (shareLucky) shareLucky.addEventListener('click', () => {
           const L = currentLucky || renderLuckyReport();
           if (!L) return;
-          const text = `오늘의 행운 리포트 (${L.dateLabel}) — 행운 컬러 ${L.color.name}, 행운 숫자 ${L.number}, 행운 방위 ${L.dir}, 추천 음식 ${L.food}, 행운의 시간 ${L.hourLabel}. ${L.tip}`;
+          const text = `오늘의 행운 리포트 (${L.dateLabel}) — 행운 지수 ${L.score}점, 행운 컬러 ${L.color.name}, 행운 숫자 ${L.number}, 행운 방위 ${L.dir}, 추천 음식 ${L.food}, 행운의 시간 ${L.hourLabel}. ${L.tip}`;
           triggerKakaoStyleShare('notopened 오늘의 행운 카드', text, buildShareUrl({ tab: 'saju' }), fortuneCardSpec('lucky'));
         });
 
