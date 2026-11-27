@@ -1,0 +1,35 @@
+:root{color-scheme:dark;--bg:#101928;--panel:#162337;--scene:#1b2d47;--ink:#f4f7fd;--muted:#d1dbed;--accent:#ffd981;--line:#526784;font-family:system-ui,"Malgun Gothic",sans-serif}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:radial-gradient(ellipse at 44% -26%,#243a55 0%,var(--bg) 70%);color:var(--ink);line-height:1.55}
+header,main,footer{width:min(100% - 2rem,900px);margin-inline:auto}
+header{padding-top:1rem}
+header nav,.jump,.search-row{display:flex;gap:.45rem;flex-wrap:wrap}
+header a,.jump a{display:inline-flex;align-items:center;min-height:44px;padding:.45rem .75rem;border:1px solid var(--line);border-radius:11px;background:var(--panel)}
+a{color:var(--accent);text-underline-offset:3px;overflow-wrap:anywhere}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+main{padding-top:1.2rem}
+p{margin:.35rem 0 .7rem}
+h1,h2,h3{line-height:1.3;word-break:keep-all}
+h1{margin:.1rem 0 .6rem;font-size:clamp(2rem,7.6vw,3.25rem);letter-spacing:-.04em}
+h2{margin:.1rem 0 .45rem}
+h3{margin:.25rem 0 .45rem;font-size:1.05rem}
+.caption{margin:0;color:var(--accent);font-size:.82rem;font-weight:800;letter-spacing:.04em}
+.intro,.scene p:not(.caption),.lens p:not(.caption),footer{color:var(--muted)}
+.lead{max-width:64ch}
+.jump{margin:1rem 0}
+#search-tools{margin:1rem 0 1.45rem}
+#search-tools label{display:block;font-weight:700;margin-bottom:.32rem}
+.search-row{flex-wrap:nowrap}
+input,button{border:1px solid var(--line);border-radius:.6rem;background:var(--panel);color:var(--ink);font:inherit;padding:.55rem .65rem;min-height:44px}
+input{min-width:0;flex:1}
+button{cursor:pointer}
+#search-result{min-height:1.5em;font-size:.86rem;color:var(--muted)}
+.theme,.empty{padding:clamp(.8rem,3vw,1.35rem);margin-bottom:1.1rem;border:1px solid var(--line);border-radius:17px;background:var(--panel);scroll-margin-top:1rem}
+.scenes,.lenses{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.7rem}
+.lenses{margin-top:.9rem;padding-top:.9rem;border-top:1px solid var(--line)}
+.scene,.lens{display:flex;flex-direction:column;min-width:0;border:1px solid var(--line);border-radius:12px;padding:.85rem;background:var(--scene)}
+.lens{background:#132237}
+.scene a,.lens a{margin-top:auto;min-height:44px;display:inline-flex;align-items:center;align-self:flex-start}
+footer{font-size:.88rem;padding:0 0 2rem}
+@media(max-width:560px){.scenes,.lenses{grid-template-columns:minmax(0,1fr)}}
