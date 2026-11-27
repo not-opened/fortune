@@ -1,0 +1,28 @@
+:root{color-scheme:dark;--bg:#101928;--card:#1c2940;--ink:#f6f7fc;--muted:#cbd5e6;--accent:#f5d38d;--stroke:#4b607d}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:radial-gradient(ellipse at 50% -35%,#2c3c55,transparent 80%),var(--bg);color:var(--ink);font:1rem/1.65 system-ui,-apple-system,"Malgun Gothic",sans-serif;word-break:keep-all}
+header,main,footer{width:min(100%,720px);margin:auto;padding:1rem clamp(16px,5vw,34px)}
+header{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+header strong,.eyebrow{color:var(--accent);font-weight:750}
+a{color:var(--accent);text-underline-offset:.18em}
+a:focus-visible,select:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+h1{margin:.08em 0 .26em;font-size:clamp(2.1rem,8vw,3.55rem);line-height:1.12;letter-spacing:-.05em}
+h2{margin:.42rem 0 .65rem;font-size:clamp(1.35rem,5.5vw,2rem);line-height:1.22}
+p{margin:.4em 0 .8em}
+.intro,.small,footer{color:var(--muted)}
+.edition{display:inline-block;max-width:100%;padding:.3rem .7rem;border:1px solid var(--stroke);border-radius:999px;font-size:.9rem}
+.controls{display:grid;grid-template-columns:1fr 1.4fr;gap:.65rem;margin:.25rem 0 1rem}
+.controls label{display:grid;min-width:0;gap:.3rem;font-weight:700;font-size:.9rem;color:var(--muted)}
+select,button{font:inherit;color:var(--ink);background:var(--card);border:1px solid var(--stroke);border-radius:10px;min-height:44px;padding:.55rem .7rem}
+select{width:100%;min-width:0}
+.reading,.extras{padding:clamp(14px,5vw,24px);border:1px solid var(--stroke);border-radius:18px;background:var(--card);margin:0 0 1rem}
+.actions{display:flex;flex-wrap:wrap;gap:.5rem}
+button{cursor:pointer;text-align:left}
+button:hover{border-color:var(--accent)}
+#remember{background:var(--accent);color:#151f2f;font-weight:750}
+#save-status{color:var(--accent);min-height:1.3em}
+#save-status:empty{min-height:0;margin:0}
+.small,footer{font-size:.88rem}
+footer{border-top:1px solid var(--stroke)}
+#remember:disabled{opacity:.82;cursor:default}

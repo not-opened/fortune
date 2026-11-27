@@ -787,6 +787,7 @@
         <p class="sub-note">내 사주를 보려면 위에서 생년월일을 입력하고 ‘내 사주 계산하기’를 눌러 주세요. 점수와 해설은 오락·참고용이며 실제 건강이나 재정 상태를 예측하지 않습니다.</p>
         <p class="sub-note" id="yearFortuneSummary" aria-live="polite" style="color:var(--accent); font-weight:700;"></p>
         <div class="ya-list" id="yearFortuneList"></div>
+        <p class="sub-note"><a href="./monthly/" style="color:var(--accent);font-weight:700">관심 주제로 2027 월간 운세 보기 →</a></p>
         <div class="share-actions">
           <button type="button" class="btn btn-share" id="shareYearBtn">📤 결과 공유하기</button>
           <button type="button" class="btn btn-share btn-share-link" id="shareYearLinkBtn">링크 공유</button>
@@ -2471,6 +2472,13 @@
         det.innerHTML = `<summary><span>${area.icon} ${area.idx + 1}. ${area.name}</span><span class="ya-score">${area.score}점</span></summary>` +
           `<p class="ya-body">${area.text}</p>` +
           `<p class="ya-key">핵심 키워드: ${area.keyword}</p>`;
+        if (model.year === '2027') {
+          const monthly = document.createElement('a');
+          monthly.href = './monthly/?topic=' + V3_AREAS[area.idx].key;
+          monthly.textContent = area.name + ' 월간 운세 →';
+          monthly.style.cssText = 'display:inline-flex;align-items:center;min-height:44px;color:var(--accent);font-weight:700;margin:0 .75rem .45rem';
+          det.appendChild(monthly);
+        }
         list.appendChild(det);
       });
       if (summary) summary.textContent = (saju.isExample ? '대표 예시 · ' : '') + model.summary;
