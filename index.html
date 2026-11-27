@@ -112,6 +112,30 @@
     .invite-banner.show { display: block; }
     .invite-banner h2 { font-size: 0.96rem; font-weight: 800; color: #ffe4e6; margin-bottom: 4px; }
     .invite-banner p { font-size: 0.78rem; color: #e2e8f0; }
+    .invite-banner.is-done { border-color: rgba(34, 197, 94, 0.6); background: linear-gradient(135deg, rgba(34, 197, 94, 0.18), rgba(56, 189, 248, 0.12)); }
+    .invite-banner.is-done h2 { color: #dcfce7; }
+    .invite-grid { margin: 9px 0 6px; }
+    .invite-grid .mbti-btn {
+      background: rgba(15, 23, 42, 0.6);
+      border-color: rgba(251, 113, 133, 0.45);
+      min-height: 42px;
+      font-size: 0.82rem;
+    }
+    .invite-grid .mbti-btn.active { background: var(--rose); border-color: var(--rose); color: #0f172a; }
+    .invite-hint { font-size: 0.74rem; color: #fecdd3; font-weight: 700; margin-top: 2px; }
+    .invite-jump { margin-top: 9px; }
+
+    /* 내 유형을 담아 친구에게 보내는 카드 */
+    .invite-send {
+      background: linear-gradient(135deg, rgba(254, 229, 0, 0.1), rgba(251, 113, 133, 0.12));
+      border: 1px dashed rgba(254, 229, 0, 0.5);
+      border-radius: 12px;
+      padding: 11px 12px;
+      margin: 2px 0 12px;
+    }
+    .invite-send strong { display: block; font-size: 0.85rem; color: var(--gold); line-height: 1.35; }
+    .invite-msg { font-size: 0.86rem; color: #fff; font-weight: 700; margin: 6px 0 3px; }
+    .invite-url { font-size: 0.7rem; color: var(--muted); word-break: break-all; margin-bottom: 2px; }
 
     .nav-tabs {
       display: grid;
@@ -296,6 +320,28 @@
       margin-top: 8px;
       font-size: 0.84rem;
     }
+    .talk-tip { font-size: 0.76rem; color: #bae6fd; margin-top: 7px; line-height: 1.5; }
+    .compat-pending {
+      background: rgba(56, 189, 248, 0.1);
+      border: 1px dashed var(--accent);
+      border-radius: 9px;
+      padding: 11px 10px;
+      font-size: 0.82rem;
+      color: #bae6fd;
+      font-weight: 700;
+      text-align: center;
+      line-height: 1.5;
+    }
+    .invite-loop {
+      margin-top: 12px;
+      padding: 11px 12px;
+      background: rgba(254, 229, 0, 0.08);
+      border: 1px dashed rgba(254, 229, 0, 0.45);
+      border-radius: 10px;
+    }
+    .invite-loop strong { display: block; font-size: 0.85rem; color: var(--gold); margin-bottom: 4px; line-height: 1.35; }
+    .invite-loop .sub-note { margin-bottom: 8px; }
+    .invite-loop .invite-url { margin-bottom: 4px; }
     .quiz-q { margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
     .quiz-q p { font-size: 0.82rem; font-weight: 700; margin-bottom: 6px; }
     .quiz-opts { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
@@ -633,6 +679,9 @@
     <section class="invite-banner" id="inviteBanner" aria-live="polite">
       <h2 id="inviteBannerTitle">💌 친구가 보낸 MBTI와 내 궁합 바로 보기</h2>
       <p id="inviteBannerDesc">아래에서 내 MBTI를 한 번만 누르면 친구와의 오늘 궁합과 대화 한마디가 바로 열립니다.</p>
+      <div class="mbti-grid invite-grid" id="inviteMbtiGrid"></div>
+      <p class="invite-hint" id="inviteBannerHint">👆 내 MBTI를 한 번만 누르세요</p>
+      <button type="button" class="btn btn-primary invite-jump" id="inviteJumpBtn" hidden>💞 궁합 결과 다시 보기</button>
     </section>
 
     <noscript>
@@ -826,6 +875,17 @@
 
         <div class="mbti-grid" id="myMbtiGrid"></div>
 
+        <!-- 내 유형을 담아 친구에게 묻는 초대 카드 (바이럴 1단계) -->
+        <div class="invite-send" id="inviteSendBox">
+          <strong>💌 친구에게 내 MBTI로 물어보기</strong>
+          <p class="invite-msg" id="inviteSendMsg">나 ENFP인데, 너랑은 어떨까?</p>
+          <p class="invite-url" id="inviteSendUrl">https://notopened.com/fortune/?tab=mbti&amp;from=ENFP</p>
+          <div class="share-actions" style="margin-top:6px;">
+            <button type="button" class="btn btn-kakao" id="inviteFriendBtn">💌 카톡으로 초대 보내기</button>
+            <button type="button" class="btn btn-secondary" id="copyInviteBtn">🔗 링크 복사</button>
+          </div>
+        </div>
+
         <!-- 16유형 상세 특징 사전 (§93) -->
         <div id="myMbtiCard" style="background:var(--sub); padding:11px 12px; border-radius:10px; border:1px solid var(--border);">
           <strong id="myMbtiTitle" style="color:var(--accent); font-size:0.92rem;"></strong>
@@ -849,6 +909,7 @@
         <p class="sub-note">상대 유형을 바꿔 누르면 궁합 등급과 건넬 대화 한마디가 즉시 바뀝니다.</p>
         <div class="mbti-grid" id="friendMbtiGrid"></div>
         <div id="compatResultBox" style="background:var(--sub); padding:12px; border-radius:10px; border:1px solid var(--border);">
+          <p class="compat-pending" id="compatPending" hidden>👇 위에서 내 MBTI를 한 번만 누르면 친구와의 궁합과 대화 한마디가 바로 열려요.</p>
           <div class="emblem-row">
             <span class="emblem emblem-mbti"><img id="imgMbtiEmblem" src="data:image/webp;base64,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" alt="MBTI 궁합" width="88" height="44"></span>
             <span class="emblem-text">MBTI 궁합</span>
@@ -860,10 +921,21 @@
             <strong style="color:var(--gold); font-size:0.76rem; display:block; margin-bottom:2px;">💬 친구에게 건넬 한마디</strong>
             <span id="compatTalk"></span>
           </div>
+          <p class="talk-tip" id="compatTalkTip"></p>
           <div class="share-actions">
             <button type="button" class="btn btn-share" id="shareMbtiBtn">📤 궁합 결과 공유하기</button>
             <button type="button" class="btn btn-share btn-share-link" id="shareMbtiLinkBtn">링크 공유</button>
             <button type="button" class="btn btn-save-img" id="saveMbtiImgBtn">🖼️ 결과 이미지 저장</button>
+          </div>
+          <!-- 바이럴 역전송(3단계): 내 유형으로 다른 친구에게 묻기 -->
+          <div class="invite-loop">
+            <strong id="inviteLoopTitle">💌 내 유형(ENFP)으로 다른 친구에게 묻기</strong>
+            <p class="sub-note" id="inviteLoopDesc">친구가 보낸 방식 그대로, 내 유형이 담긴 링크를 보내면 친구도 1탭으로 궁합을 봐요.</p>
+            <p class="invite-url" id="inviteLoopUrl">https://notopened.com/fortune/?tab=mbti&amp;from=ENFP</p>
+            <div class="share-actions" style="margin-top:8px;">
+              <button type="button" class="btn btn-kakao" id="inviteLoopBtn">💌 내 유형으로 친구에게 보내기</button>
+              <button type="button" class="btn btn-secondary" id="copyLoopBtn">🔗 링크 복사</button>
+            </div>
           </div>
         </div>
 
@@ -1012,22 +1084,15 @@
       return { date: SHARE_DATE_RE.test(date) ? date : '', hour: Number.isInteger(hour) ? hour : -1 };
     }
 
-    /* 사주 공유 URL — 결과를 연 사람이 자기 브라우저에서 같은 사주를 바로 다시 계산해 볼 수 있게 입력값을 담는다 */
+    /* 사주 공유 URL — 개인정보 보호: 생년월일·생년시간은 URL에 절대 싣지 않고 탭만 담는다.
+       결과 화면을 보내고 싶을 땐 PNG 결과 이미지 공유를 사용한다. */
     function buildSajuShareUrl(data) {
-      if (!data || data.isExample) return buildShareUrl({ tab: 'saju' });
-      const b = readBirthInputs();
-      if (!b.date) return buildShareUrl({ tab: 'saju' });
-      return buildShareUrl({ tab: 'saju', bd: b.date, bh: b.hour });
+      return buildShareUrl({ tab: 'saju' });
     }
 
-    /* 배우자 카드 공유 URL — 사주 입력값과 내 MBTI를 함께 담아 다른 브라우저에서도 같은 카드가 열리게 한다 */
+    /* 배우자 카드 공유 URL — 생년월일·생년시간은 싣지 않고 내 MBTI만 담는다 */
     function buildSpouseShareUrl() {
-      const b = readBirthInputs();
-      const data = currentSajuData || {};
-      if (!b.date || data.isExample) {
-        return buildShareUrl({ tab: 'today', me: myMbti, view: 'spouse' });
-      }
-      return buildShareUrl({ tab: 'today', bd: b.date, bh: b.hour, me: myMbti, view: 'spouse' });
+      return buildShareUrl({ tab: 'today', me: myMbti, view: 'spouse' });
     }
 
     function showToast(msg) {
@@ -1621,13 +1686,36 @@
 
     let myMbti = 'ENFP';
     let friendMbti = 'INTJ';
+    let inviteFromType = '';   // 친구가 보낸 링크의 상대 유형 (?from=ISTJ)
+    let invitePending = false; // 친구 진입 후 내 유형을 아직 고르지 않은 상태
     let quizAnswers = new Array(QUICK_QUIZ.length).fill(null);
+
+    /* 친구에게 건넬 대화 한마디(아이스브레이킹) — 상대 유형(t2)별 맞춤 문장 */
+    const MBTI_ICE = {
+      INTJ: '지난번에 네가 큰 그림 설명해 준 거 계속 기억에 남아. 요즘 고민이 하나 있는데, 10분만 같이 뜯어봐 줄래?',
+      INTP: '요즘 궁금한 게 하나 생겼는데 너한테 물으면 원리부터 설명해 줄 것 같아서. 이번 주에 커피 한잔 어때?',
+      ENTJ: '너랑 목표 얘기하면 이상하게 의욕이 생겨. 다음 달 계획 하나 같이 세워볼래? 나는 실행 담당할게.',
+      ENTP: '내가 어제 엉뚱한 생각을 하나 했는데, 너한테 말하면 더 커질 것 같아. 한번 들어볼래?',
+      INFJ: '요즘 마음이 좀 복잡했는데 너한테는 말하면 정리가 될 것 같아서. 조용한 데서 차 한잔 어때?',
+      INFP: '네가 좋아하는 거 하나 추천해 줘. 나도 요즘 마음이 가는 걸 찾고 있거든.',
+      ENFJ: '너랑 있으면 내가 자꾸 좋은 쪽으로 바뀌는 느낌이야. 요즘 어떻게 지내는지 궁금해.',
+      ENFP: '너랑 얘기하면 아이디어가 막 터져서 좋아. 이번 주말에 그중 하나 진짜 해볼래?',
+      ISTJ: '지난번에 네가 정리해 준 일정표 진짜 편했어. 이번에도 하나만 같이 봐줄래? 내가 커피 살게.',
+      ISFJ: '너는 늘 챙겨 주기만 하니까 이번엔 내가 뭐 해줄까? 하고 싶은 거 하나 말해 줘.',
+      ESTJ: '너한테는 확실한 게 좋을 것 같아서. 다음 주에 이 일 같이 마무리할 수 있을까? 시간 맞춰볼게.',
+      ESFJ: '너랑 있으면 분위기가 확 좋아져. 이번 모임에 너 꼭 왔으면 좋겠어!',
+      ISTP: '너는 말보다 직접 해보는 게 빠를 것 같아서. 이번 주말에 그거 같이 해볼래?',
+      ISFP: '너랑 산책하면 마음이 편해져. 이번 주에 괜찮은 길 하나 찾아뒀는데 같이 걸을래?',
+      ESTP: '가만히 있으면 답답할 것 같아서. 이번 주에 바로 가볼 수 있는 데 하나 골라봤어. 갈래?',
+      ESFP: '너랑 놀면 진짜 시간이 순식간이야. 이번 주에 하나만 비워두면 어디 갈래?'
+    };
 
     function computeCompatibility(t1, t2) {
       let same = 0;
       for (let i = 0; i < 4; i++) if (t1[i] === t2[i]) same++;
       const oppEI = t1[0] !== t2[0];
       const sameNS = t1[1] === t2[1];
+      const oppNS = !sameNS;
       const oppTF = t1[2] !== t2[2];
       const oppJP = t1[3] !== t2[3];
 
@@ -1639,14 +1727,18 @@
       else tierIdx = 4;
 
       const base = COMPAT_GRADES[tierIdx];
-      const talkPrefix = t2[0] === 'I' ? `${t2} 친구에게 부담 없이 1:1로:` : `${t2} 친구에게 에너지 있게:`;
-      const focusAxis = oppTF
-        ? (t2[2] === 'T' ? '"네가 정리한 기준이 진짜 깔끔해서 믿음이 가!"' : '"네가 챙겨준 덕분에 분위기가 진짜 따뜻해졌어!"')
-        : (t2[1] === 'N' ? '"방금 떠오른 아이디어인데 너랑 얘기하면 대박일 듯!"' : '"지난번에 추천해 준 그곳, 진짜 딱 좋더라!"');
+      const talk = MBTI_ICE[t2] || '요즘 어떻게 지내? 한번 만나서 얘기하자.';
+      const tips = [];
+      if (oppTF) tips.push(t2[2] === 'T' ? '감정보다 결론부터 꺼내면 대화가 빨리 통합니다.' : '해결책보다 "많이 속상했겠다"를 먼저 말하면 마음이 열립니다.');
+      if (oppJP) tips.push('약속은 미리 정하고 남는 시간은 비워 두면 둘 다 편합니다.');
+      if (oppEI) tips.push('만남은 짧게 자주가 서로의 충전 방식을 지켜 줍니다.');
+      if (oppNS) tips.push('구체적인 얘기와 상상 얘기를 번갈아 꺼내면 대화가 넓어집니다.');
+      else tips.push('같은 화법이라 말이 잘 통합니다. 한 가지 주제를 깊게 파고들어 보세요.');
       return {
         ...base,
         tierIdx,
-        talk: `${talkPrefix} ${focusAxis} (${t1}×${t2} 맞춤 한마디)`
+        talk,
+        talkTip: tips.slice(0, 2).join(' ')
       };
     }
 
@@ -1704,10 +1796,10 @@
       MBTI_TYPES.forEach(t => {
         const b1 = document.createElement('button');
         b1.type = 'button';
-        b1.className = `mbti-btn${t === myMbti ? ' active' : ''}`;
+        b1.className = `mbti-btn${(!invitePending && t === myMbti) ? ' active' : ''}`;
         b1.textContent = t;
         b1.setAttribute('data-my-mbti', t);
-        b1.onclick = () => { myMbti = t; saveLocalMbti(); renderMbtiSection(); };
+        b1.onclick = () => setMyMbti(t);
         myGrid.appendChild(b1);
 
         const b2 = document.createElement('button');
@@ -1715,7 +1807,7 @@
         b2.className = `mbti-btn${t === friendMbti ? ' friend-active' : ''}`;
         b2.textContent = t;
         b2.setAttribute('data-friend-mbti', t);
-        b2.onclick = () => { friendMbti = t; saveLocalMbti(); renderMbtiSection(); };
+        b2.onclick = () => setFriendMbti(t);
         frGrid.appendChild(b2);
       });
 
@@ -1741,6 +1833,10 @@
       document.getElementById('compatPairTitle').textContent = `${myMbti} ❤️ ${friendMbti}`;
       document.getElementById('compatDesc').textContent = compat.desc;
       document.getElementById('compatTalk').textContent = compat.talk;
+      document.getElementById('compatTalkTip').textContent = `☝️ 이 조합 대화 팁: ${compat.talkTip}`;
+      setCompatDetailVisible(!invitePending);
+      updateMbtiInvitePreview();
+      if (inviteFromType) updateInviteBannerText();
     }
 
     function renderQuickQuiz() {
@@ -1790,6 +1886,7 @@
         counts[3] >= 2 ? 'J' : 'P'
       ];
       myMbti = letters.join('');
+      invitePending = false;
       document.getElementById('quickQuizBox').style.display = 'none';
       saveLocalMbti();
       renderMbtiSection();
@@ -1806,6 +1903,146 @@
       } catch (e) { /* ignore */ }
     }
 
+    /* ------------------------------------------------------------------
+       MBTI 친구 초대 바이럴 루프
+       ① 내 유형을 담은 초대 링크(?tab=mbti&from=ENFP)를 카톡으로 보낸다
+       ② 받은 친구는 링크에서 내 유형이 고정된 채 자기 유형 1탭 = 궁합·대화 한마디
+       ③ 결과에서 '내 유형으로 다른 친구에게 보내기'로 다시 루프
+       ※ MBTI 유형 코드만 담고 생년월일·출생시간 등 개인정보는 담지 않는다
+       ------------------------------------------------------------------ */
+    function buildMbtiInviteUrl(type) {
+      return buildShareUrl({ tab: 'mbti', from: type || myMbti });
+    }
+
+    function buildMbtiInviteText(type) {
+      const t = type || myMbti;
+      return `나 ${t}인데, 너랑은 어떨까? 링크 열고 네 MBTI만 한 번 누르면 바로 궁합 나와 👇`;
+    }
+
+    function updateMbtiInvitePreview() {
+      const url = buildMbtiInviteUrl(myMbti);
+      const msg = `나 ${myMbti}인데, 너랑은 어떨까?`;
+      const sendBox = document.getElementById('inviteSendBox');
+      if (sendBox) sendBox.style.display = invitePending ? 'none' : '';
+      const msgEl = document.getElementById('inviteSendMsg');
+      const urlEl = document.getElementById('inviteSendUrl');
+      if (msgEl) msgEl.textContent = msg;
+      if (urlEl) urlEl.textContent = url;
+      const loopTitle = document.getElementById('inviteLoopTitle');
+      const loopUrl = document.getElementById('inviteLoopUrl');
+      if (loopTitle) loopTitle.textContent = `💌 내 유형(${myMbti})으로 다른 친구에게 묻기`;
+      if (loopUrl) loopUrl.textContent = url;
+    }
+
+    function sendMbtiInvite(type) {
+      const t = type || myMbti;
+      triggerKakaoStyleShare(`notopened MBTI 궁합 초대 (${t})`, buildMbtiInviteText(t), buildMbtiInviteUrl(t), null);
+    }
+
+    function copyMbtiInvite(type) {
+      const t = type || myMbti;
+      const text = `${buildMbtiInviteText(t)}\n${buildMbtiInviteUrl(t)}`;
+      if (copyWithExecCommand(text)) {
+        showToast('초대 문구와 링크를 복사했어요. 카톡에 붙여넣기!');
+        return;
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(
+          () => showToast('초대 문구와 링크를 복사했어요. 카톡에 붙여넣기!'),
+          () => window.prompt('아래 문구를 복사해 공유하세요.', text)
+        );
+        return;
+      }
+      window.prompt('아래 문구를 복사해 공유하세요.', text);
+    }
+
+    function setMyMbti(t) {
+      if (!MBTI_INFO[t]) return;
+      myMbti = t;
+      invitePending = false;
+      saveLocalMbti();
+      renderMbtiSection();
+    }
+
+    function setFriendMbti(t) {
+      if (!MBTI_INFO[t]) return;
+      friendMbti = t;
+      if (inviteFromType && t !== inviteFromType) {
+        inviteFromType = '';
+        const banner = document.getElementById('inviteBanner');
+        if (banner) banner.classList.remove('show', 'is-done');
+      }
+      saveLocalMbti();
+      renderMbtiSection();
+    }
+
+    /* 초대받은 사람 화면: 친구 유형 고정 + 내 유형 1탭 */
+    function renderInviteBanner() {
+      const banner = document.getElementById('inviteBanner');
+      const grid = document.getElementById('inviteMbtiGrid');
+      if (!banner || !grid) return;
+      grid.innerHTML = '';
+      MBTI_TYPES.forEach(t => {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = `mbti-btn${(!invitePending && t === myMbti) ? ' active' : ''}`;
+        b.textContent = t;
+        b.setAttribute('data-invite-mbti', t);
+        b.onclick = () => chooseInviteMyType(t);
+        grid.appendChild(b);
+      });
+      banner.classList.add('show');
+      updateInviteBannerText();
+    }
+
+    function updateInviteBannerText() {
+      if (!inviteFromType) return;
+      const banner = document.getElementById('inviteBanner');
+      const title = document.getElementById('inviteBannerTitle');
+      const desc = document.getElementById('inviteBannerDesc');
+      const hint = document.getElementById('inviteBannerHint');
+      const jump = document.getElementById('inviteJumpBtn');
+      if (!banner || !title || !desc) return;
+      if (invitePending) {
+        title.textContent = `💌 친구가 ${inviteFromType}래요!`;
+        desc.textContent = `내 MBTI를 한 번만 누르면 ${inviteFromType} 친구와의 궁합과 대화 한마디가 바로 열립니다.`;
+        if (hint) hint.textContent = '👆 내 MBTI를 한 번만 누르세요';
+        banner.classList.remove('is-done');
+        if (jump) jump.hidden = true;
+      } else {
+        const c = computeCompatibility(myMbti, inviteFromType);
+        title.textContent = `💞 ${myMbti} × ${inviteFromType} — ${c.grade} ${c.score}점`;
+        desc.textContent = `친구가 보낸 ${inviteFromType}와 내 유형의 궁합이 열렸어요. 아래 결과에서 대화 한마디와 대화 팁을 확인하세요.`;
+        if (hint) hint.textContent = '내 유형을 다시 누르면 그 유형으로 바로 바뀝니다';
+        banner.classList.add('is-done');
+        if (jump) jump.hidden = false;
+      }
+      Array.from(document.querySelectorAll('#inviteMbtiGrid .mbti-btn')).forEach(b => {
+        b.classList.toggle('active', !invitePending && b.getAttribute('data-invite-mbti') === myMbti);
+      });
+    }
+
+    function chooseInviteMyType(t) {
+      if (!MBTI_INFO[t]) return;
+      myMbti = t;
+      invitePending = false;
+      saveLocalMbti();
+      renderMbtiSection();
+      const compat = computeCompatibility(myMbti, friendMbti);
+      showToast(`${myMbti} × ${friendMbti} 궁합 ${compat.score}점이 열렸어요!`);
+      const box = document.getElementById('compatResultBox');
+      if (box && box.scrollIntoView) box.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function setCompatDetailVisible(show) {
+      const box = document.getElementById('compatResultBox');
+      if (!box) return;
+      Array.from(box.children).forEach(el => {
+        if (el.id === 'compatPending') { el.hidden = show; return; }
+        el.style.display = show ? '' : 'none';
+      });
+    }
+
     function applyUrlDeepLink() {
       try {
         const params = new URLSearchParams(window.location.search);
@@ -1814,11 +2051,11 @@
         const dreamQ = (params.get('q') || '').trim();
 
         if (fromMbti && MBTI_INFO[fromMbti]) {
+          // 초대받은 사람: 친구 유형을 고정하고, 내 유형을 고를 때까지 결과는 비워 둔다
           friendMbti = fromMbti;
-          const banner = document.getElementById('inviteBanner');
-          document.getElementById('inviteBannerTitle').textContent = `💌 친구가 보낸 ${fromMbti}와 내 MBTI 궁합 바로 보기`;
-          document.getElementById('inviteBannerDesc').textContent = `아래에서 내 MBTI를 한 번만 누르면 ${fromMbti} 친구와의 오늘 궁합과 대화 한마디가 즉시 열립니다.`;
-          banner.classList.add('show');
+          inviteFromType = fromMbti;
+          invitePending = true;
+          renderInviteBanner();
           switchTab('mbti');
           return;
         }
@@ -1972,6 +2209,21 @@
       };
       document.getElementById('shareMbtiBtn').addEventListener('click', () => shareMbtiResult(true));
       document.getElementById('shareMbtiLinkBtn').addEventListener('click', () => shareMbtiResult(false));
+
+      // MBTI 친구 초대 (내 유형 보내기 · 복사 · 역전송 루프)
+      const inviteFriendBtn = document.getElementById('inviteFriendBtn');
+      if (inviteFriendBtn) inviteFriendBtn.addEventListener('click', () => sendMbtiInvite(myMbti));
+      const copyInviteBtn = document.getElementById('copyInviteBtn');
+      if (copyInviteBtn) copyInviteBtn.addEventListener('click', () => copyMbtiInvite(myMbti));
+      const inviteLoopBtn = document.getElementById('inviteLoopBtn');
+      if (inviteLoopBtn) inviteLoopBtn.addEventListener('click', () => sendMbtiInvite(myMbti));
+      const copyLoopBtn = document.getElementById('copyLoopBtn');
+      if (copyLoopBtn) copyLoopBtn.addEventListener('click', () => copyMbtiInvite(myMbti));
+      const inviteJumpBtn = document.getElementById('inviteJumpBtn');
+      if (inviteJumpBtn) inviteJumpBtn.addEventListener('click', () => {
+        const box = document.getElementById('compatResultBox');
+        if (box && box.scrollIntoView) box.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
     });
 
     /* =====================================================================
@@ -2983,7 +3235,8 @@
           score: `${compat.grade} · ${compat.score}점`,
           lines: [
             { label: '궁합', text: privateCardText(compat.desc) },
-            { label: '건넬 한마디', text: privateCardText(compat.talk) }
+            { label: '건넬 한마디', text: privateCardText(compat.talk) },
+            { label: '대화 팁', text: privateCardText(compat.talkTip) }
           ].filter(item => item.text)
         };
       }
