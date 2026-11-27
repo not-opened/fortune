@@ -959,10 +959,28 @@
       return ok;
     }
 
-    async function triggerKakaoStyleShare(title, nativeTextWithoutUrl, targetUrl) {
+    async function triggerKakaoStyleShare(title, nativeTextWithoutUrl, targetUrl, imageSpec) {
       const clipboardText = `${nativeTextWithoutUrl}\n${targetUrl}`;
       lastSharePayload = { title, nativeTextWithoutUrl, targetUrl, clipboardText };
       window._lastSharePayload = lastSharePayload;
+
+      if (imageSpec) {
+        let file = null;
+        try { file = buildResultImageFile(imageSpec); } catch (e) { file = null; }
+        let canFileShare = false;
+        if (file) {
+          try { canFileShare = !!(navigator.canShare && navigator.canShare({ files: [file] })); } catch (e) { canFileShare = false; }
+        }
+        if (canFileShare) {
+          try {
+            await navigator.share({ files: [file], title, text: nativeTextWithoutUrl, url: targetUrl });
+            showToast('공유가 완료되었습니다.');
+            return;
+          } catch (err) {
+            if (err && err.name === 'AbortError') return;
+          }
+        }
+      }
 
       if (navigator.share) {
         try {
@@ -1519,7 +1537,7 @@
         const text = pillars
           ? `사주 결과 ${pillars}. 부족한 기운은 ${weak}. ${(data.advice || '').slice(0, 90)}`
           : `사주 오행을 브라우저에서 계산해 보세요. 부족한 기운은 ${weak}.`;
-        triggerKakaoStyleShare('notopened 사주 결과', text, url);
+        triggerKakaoStyleShare('notopened 사주 결과', text, url, fortuneCardSpec('saju'));
       });
 
       // Dream
@@ -1555,7 +1573,7 @@
         const text = selectedDream
           ? `${selectedDream.keyword} 꿈풀이 (${selectedDream.mood}): ${selectedDream.summary}`
           : '꿈에 나온 키워드로 꿈풀이를 찾아 보세요.';
-        triggerKakaoStyleShare('notopened 꿈풀이', text, url);
+        triggerKakaoStyleShare('notopened 꿈풀이', text, url, fortuneCardSpec('dream'));
       });
 
       // MBTI & Deep-link
@@ -1571,7 +1589,7 @@
         const compat = computeCompatibility(myMbti, friendMbti);
         const url = `${BASE_SHARE_URL}?tab=mbti&from=${encodeURIComponent(myMbti)}`;
         const text = `${myMbti} × ${friendMbti} 궁합 ${compat.grade} ${compat.score}점. ${compat.talk}`;
-        triggerKakaoStyleShare('notopened MBTI 궁합', text, url);
+        triggerKakaoStyleShare('notopened MBTI 궁합', text, url, fortuneCardSpec('mbti'));
       });
     });
 
@@ -2340,10 +2358,14 @@
       return new Blob([arr], { type: mime });
     }
 
-    async function saveResultImage(spec) {
+    function buildResultImageFile(spec) {
       const canvas = drawResultCard(spec);
       const blob = dataUrlToBlob(canvas.toDataURL('image/png'));
-      const file = new File([blob], spec.filename || 'notopened-fortune.png', { type: 'image/png' });
+      return new File([blob], spec.filename || 'notopened-fortune.png', { type: 'image/png' });
+    }
+
+    async function saveResultImage(spec) {
+      const file = buildResultImageFile(spec);
       const payload = { files: [file], title: spec.title || 'notopened' };
       let canFileShare = false;
       try { canFileShare = !!(navigator.canShare && navigator.canShare({ files: [file] })); } catch (e) { canFileShare = false; }
@@ -2356,7 +2378,7 @@
           if (err && err.name === 'AbortError') return;
         }
       }
-      const url = URL.createObjectURL(blob);
+      const url = URL.createObjectURL(file);
       const a = document.createElement('a');
       a.href = url;
       a.download = file.name;
@@ -2579,7 +2601,7 @@
           const src = (document.getElementById('spouseSourceNote') || {}).textContent || '';
           const first = (document.querySelector('#spouseStages .spouse-stage p') || {}).textContent || '';
           const text = `미래 배우자 카드. ${src} ${first}`.replace(/\s+/g, ' ').trim();
-          triggerKakaoStyleShare('notopened 미래 배우자 카드', text, buildSpouseShareUrl());
+          triggerKakaoStyleShare('notopened 미래 배우자 카드', text, buildSpouseShareUrl(), fortuneCardSpec('spouse'));
         });
 
         const shareToday = document.getElementById('shareTodayBtn');
@@ -2591,7 +2613,7 @@
             ? `오늘의 ${z.animal}띠 · ${s.name}자리. ${lines.join(' / ')}`
             : `오늘의 ${z.animal}띠 · ${s.name}자리 운세`;
           const url = buildShareUrl({ tab: 'today', z: v3ZodiacIdx, sg: v3SignIdx });
-          triggerKakaoStyleShare('notopened 오늘 운세', text, url);
+          triggerKakaoStyleShare('notopened 오늘 운세', text, url, fortuneCardSpec('today'));
         });
 
         const shareC3 = document.getElementById('shareCompat3Btn');
@@ -2600,7 +2622,7 @@
           const text = strong
             ? `${myMbti} × ${friendMbti} ${strong.textContent}`
             : `${myMbti} × ${friendMbti} 궁합`;
-          triggerKakaoStyleShare('notopened 궁합 3종', text, `${BASE_SHARE_URL}?tab=mbti&from=${encodeURIComponent(myMbti)}`);
+          triggerKakaoStyleShare('notopened 궁합 3종', text, `${BASE_SHARE_URL}?tab=mbti&from=${encodeURIComponent(myMbti)}`, fortuneCardSpec('compat3'));
         });
 
         try {
