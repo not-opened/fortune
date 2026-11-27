@@ -520,6 +520,16 @@
       text-align: center;
     }
     .toast.show { opacity: 1; }
+    .toast.toast-long {
+      border-radius: 14px;
+      line-height: 1.5;
+      padding: 12px 16px;
+      font-weight: 600;
+      white-space: normal;
+      word-break: keep-all;
+      width: max-content;
+      max-width: min(92vw, 460px);
+    }
     .footer {
       text-align: center;
       font-size: 0.72rem;
@@ -1095,13 +1105,29 @@
       return buildShareUrl({ tab: 'today', me: myMbti, view: 'spouse' });
     }
 
-    function showToast(msg) {
+    function showToast(msg, duration) {
       const t = document.getElementById('toast');
       if (!t) return;
+      const long = String(msg || '').length > 30;
       t.textContent = msg;
+      t.classList.toggle('toast-long', long);
       t.classList.add('show');
       clearTimeout(window._mvp3Toast);
-      window._mvp3Toast = setTimeout(() => t.classList.remove('show'), 2200);
+      const ms = duration || (long ? 4200 : 2200);
+      window._mvp3Toast = setTimeout(() => t.classList.remove('show'), ms);
+    }
+
+    /* 카톡 인앱 브라우저 감지 — 카톡 WebView는 공유 창(navigator.share)을 열어 주지 않는다 */
+    function isKakaoInAppBrowser() {
+      const ua = (navigator.userAgent || '');
+      return /KAKAOTALK/i.test(ua) || /KAKAO/i.test(ua);
+    }
+
+    /* 공유 창을 못 열어 클립보드 복사로 넘어갔을 때, 왜 복사만 됐는지 알려 주는 문구 */
+    function shareCopyFallbackMessage() {
+      return isKakaoInAppBrowser()
+        ? '카톡 내에선 공유 창이 막혀 문구·링크를 복사했어요. 채팅방에 바로 붙여넣기 하거나 다른 브라우저로 열어 주세요.'
+        : '공유 창을 지원하지 않아 문구·링크를 복사했어요. 원하는 곳에 붙여넣기 해 주세요.';
     }
 
     function copyWithExecCommand(text) {
@@ -1162,7 +1188,7 @@
         }
       }
       if (copyWithExecCommand(clipboardText)) {
-        showToast('결과 링크를 복사했습니다. 원하는 곳에 붙여 넣으세요.');
+        showToast(shareCopyFallbackMessage());
         return;
       }
       if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -1172,7 +1198,7 @@
             new Promise(resolve => setTimeout(() => resolve('timeout'), 700))
           ]);
           if (timed === 'ok') {
-            showToast('결과 링크를 복사했습니다. 원하는 곳에 붙여 넣으세요.');
+            showToast(shareCopyFallbackMessage());
             return;
           }
         } catch (e) { /* prompt fallback */ }
