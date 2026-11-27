@@ -3,12 +3,13 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>무료운세 상담 신청 | notopened</title>
-<meta name="description" content="직장, 연애, 가족 등 궁금한 한 가지를 적어 이메일로 보내는 낫오픈드 무료운세 상담 신청 페이지.">
+<meta name="description" content="메일 앱 없이 웹에서 신청하고 확인한 이메일로 답변을 받는 낫오픈드 무료운세 상담.">
 <link rel="canonical" href="https://notopened.com/fortune/consult/">
 <meta name="theme-color" content="#101928">
 <link rel="stylesheet" href="../monthly/monthly.css?v=1">
 <link rel="stylesheet" href="./consult.css?v=1">
 <script defer src="./consult.js?v=1"></script>
+<style>.web-application{padding:clamp(.65rem,2vw,1.15rem)}.web-application .actions{display:flex;flex-wrap:wrap;align-items:center;margin:.75rem 0}.web-application iframe{display:block;width:100%;height:850px;border:0;border-radius:12px;background:#fff;color-scheme:light}.manual-application{margin:1rem 0}.manual-application>summary{font-weight:700;cursor:pointer;padding:.4rem 0}@media(max-width:520px){.web-application iframe{height:1010px}}</style>
 </head>
 <body>
 <header><a href="../?tab=saju&amp;year=2027#yearFortuneCard">← 사주·운세</a><strong>notopened</strong></header>
@@ -16,6 +17,15 @@
 <p class="eyebrow">NOTOPENED · 이메일로 한 가지 질문</p>
 <h1>무료운세 상담 신청</h1>
 <p class="intro">요즘 마음에 걸리는 일을 한 가지 적어 주세요. 질문을 바탕으로 상황을 돌아볼 관점과 생각해 볼 질문을 AI가 정리해 드리는 형식이에요.</p>
+<section class="reading web-application" aria-labelledby="web-application-title">
+  <h2 id="web-application-title">메일 앱 없이 여기서 신청</h2>
+  <p>아래에 <strong>답변 받을 이메일</strong>과 <strong>궁금한 점 한 가지(500자 이내)</strong>를 적고 제출해 주세요. 네이버·다음·핫메일 등 평소 쓰는 이메일을 그대로 쓸 수 있고, 구글 로그인이나 휴대폰 번호는 필요 없어요.</p>
+  <p class="hint">제출 뒤 확인 메일을 받아 주소를 확인하면 답변이 진행돼요. 바로 메일이 안 보이면 잠시 기다렸다가 스팸함도 확인해 주세요. 답변까지 시간이 걸릴 수 있어요.</p>
+  <div class="actions"><a href="https://docs.google.com/forms/d/e/1FAIpQLSfYGp4fer4MfNVwglR6U1l9LuCfDng6cvHTYV2OD0I5p558pw/viewform">양식이 잘 안 보이면 별도 화면에서 신청 →</a></div>
+  <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSfYGp4fer4MfNVwglR6U1l9LuCfDng6cvHTYV2OD0I5p558pw/viewform?embedded=true" title="낫오픈드 무료운세 상담 신청 양식" loading="lazy" width="640" height="850"></iframe>
+</section>
+<details class="reading manual-application">
+<summary>직접 이메일로 보내는 방법 (선택)</summary>
 <form id="consult" class="reading" hidden>
   <label class="field" for="topic"><strong>어떤 주제인가요?</strong>
   <select id="topic" required>
@@ -48,11 +58,12 @@
   <p class="hint">메일 앱이 열리지 않으면 쓰는 메일 서비스에서 새 메일을 열고, 위 주소·제목·본문을 옮겨 보내면 돼요.</p>
   <p id="status" class="hint" role="status"></p>
 </section>
-<noscript><p class="reading">신청 양식을 쓰려면 자바스크립트가 필요해요. 또는 <a href="mailto:fortune@notopened.com?subject=%EB%AC%B4%EB%A3%8C%EC%9A%B4%EC%84%B8%20%EC%83%81%EB%8B%B4%20%EC%8B%A0%EC%B2%AD">fortune@notopened.com</a>으로 질문 하나를 보내 주세요.</p></noscript>
+</details>
+<noscript><p class="reading">직접 이메일을 작성해 보내려면  <a href="mailto:fortune@notopened.com?subject=%EB%AC%B4%EB%A3%8C%EC%9A%B4%EC%84%B8%20%EC%83%81%EB%8B%B4%20%EC%8B%A0%EC%B2%AD">fortune@notopened.com</a>으로 질문 하나를 보내 주세요.</p></noscript>
 </main>
 <footer>
   <p><strong>메일과 개인정보 안내</strong></p>
-  <p>이 페이지는 입력 내용을 사이트에 저장하거나 전송하지 않습니다. 메일 앱에서 직접 발송하면 내용과 보낸 주소가 낫오픈드 상담 메일함에 전달되며, 문의 확인과 답변에 쓰입니다. 답변은 연락에 사용한 주소로 보내는 방식이고, 즉시 답변이나 답변 시간을 보장하지 않습니다.</p>
+  <p>웹 양식에 작성한 이메일, 질문, 선택 입력한 생년월일·시간은 Google Forms와 낫오픈드 운영자만 볼 수 있는 응답 기록에 저장돼요. 신청 확인과 답변에만 사용하고, 확인한 이메일로 답변을 보내요. 실명, 전화번호, 다른 사람의 개인정보는 입력하지 마세요. 직접 이메일로 보내면 내용과 보낸 주소가 상담 메일함에 전달돼요. 일정한 답변 시간은 보장하지 않아요.</p>
   <p>운세는 오락과 자기 성찰을 위한 참고용이며, 의료·법률·재정 판단을 대신하지 않습니다.</p>
 </footer>
 </body>
