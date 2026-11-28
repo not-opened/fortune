@@ -20,9 +20,10 @@
 <fieldset id="consult-kind" class="consult-kind" hidden>
   <legend>어떤 상담을 받고 싶나요?</legend>
   <div class="consult-kind-row">
-    <label><input type="radio" name="consult-kind" value="fortune"> 운세</label>
+    <label><input type="radio" name="consult-kind" value="fortune" aria-describedby="fortune-kind-hint"> 운세·고민 상담</label>
     <label><input type="radio" name="consult-kind" value="dream"> 꿈풀이</label>
   </div>
+  <p class="hint" id="fortune-kind-hint">운세가 궁금하거나 함께 생각해 보고 싶은 고민이 있을 때 골라 주세요. 생년월일 없이 고민만 적어도 돼요.</p>
 </fieldset>
 <div id="consult-choices" class="consult-choices" role="group" aria-label="신청 방법 선택" hidden>
   <button type="button" id="choose-web" class="consult-choice consult-choice--recommended" aria-expanded="false" aria-controls="web-panel"><span><span class="consult-choice__label">웹에서 바로 신청 (추천)</span><span class="consult-choice__hint">메일 앱 없이 작성하고, 이메일 확인 후 답변 받기</span></span><span class="consult-choice__arrow" aria-hidden="true">⌄</span></button>
