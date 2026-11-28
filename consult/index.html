@@ -2,45 +2,53 @@
 <html lang="ko">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>무료운세 상담 신청 | notopened</title>
-<meta name="description" content="메일 앱 없이 웹에서 신청하고 확인한 이메일로 답변을 받는 낫오픈드 무료운세 상담.">
+<title>무료 운세·꿈풀이 상담 신청 | notopened</title>
+<meta name="description" content="메일 앱 없이 웹에서 신청하고 확인한 이메일로 답변을 받는 낫오픈드 무료 운세·꿈해몽 상담.">
 <link rel="canonical" href="https://notopened.com/fortune/consult/">
 <meta name="theme-color" content="#101928">
 <link rel="stylesheet" href="../monthly/monthly.css?v=1">
 <link rel="stylesheet" href="./consult.css?v=1">
-<script defer src="./consult.js?v=1"></script>
-<style>.web-application{padding:clamp(.65rem,2vw,1.15rem)}.web-application .actions{display:flex;flex-wrap:wrap;align-items:center;margin:.75rem 0}.web-application iframe{display:block;width:100%;height:850px;border:0;border-radius:12px;background:#fff;color-scheme:light}.manual-application{margin:1rem 0}.manual-application>summary{font-weight:700;cursor:pointer;padding:.4rem 0}@media(max-width:520px){.web-application iframe{height:1010px}}.consult-choices{display:grid;gap:.65rem;margin:1.15rem 0}.consult-choices[hidden],.consult-panel[hidden]{display:none!important}.consult-choice{width:100%;min-height:68px;text-align:left;cursor:pointer;display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:.6rem;padding:.72rem .85rem;border:1px solid var(--stroke);background:var(--bg);color:var(--ink);border-radius:12px;font:inherit}.consult-choice--recommended,.consult-choice[aria-expanded=true]{border-color:var(--accent)}.consult-choice:focus-visible{outline:2px solid var(--accent);outline-offset:3px}.consult-choice__label{font-weight:750;font-size:1.03rem}.consult-choice__hint{display:block;color:var(--muted);font-size:.88rem;line-height:1.4}.consult-choice__arrow{font-size:1.15rem;color:var(--accent)}.consult-choice[aria-expanded=true] .consult-choice__arrow{transform:rotate(180deg)}.consult-panel h2{margin-top:.05rem}.consult-panel{margin:1rem 0}</style>
+<script defer src="./consult.js?v=2"></script>
+<style>.web-application{padding:clamp(.65rem,2vw,1.15rem)}.web-application .actions{display:flex;flex-wrap:wrap;align-items:center;margin:.75rem 0}.web-application iframe{display:block;width:100%;height:850px;border:0;border-radius:12px;background:#fff;color-scheme:light}.manual-application{margin:1rem 0}.manual-application>summary{font-weight:700;cursor:pointer;padding:.4rem 0}@media(max-width:520px){.web-application iframe{height:1010px}}.consult-choices{display:grid;gap:.65rem;margin:1.15rem 0}.consult-choices[hidden],.consult-panel[hidden]{display:none!important}.consult-choice{width:100%;min-height:68px;text-align:left;cursor:pointer;display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:.6rem;padding:.72rem .85rem;border:1px solid var(--stroke);background:var(--bg);color:var(--ink);border-radius:12px;font:inherit}.consult-choice--recommended,.consult-choice[aria-expanded=true]{border-color:var(--accent)}.consult-choice:focus-visible{outline:2px solid var(--accent);outline-offset:3px}.consult-choice__label{font-weight:750;font-size:1.03rem}.consult-choice__hint{display:block;color:var(--muted);font-size:.88rem;line-height:1.4}.consult-choice__arrow{font-size:1.15rem;color:var(--accent)}.consult-choice[aria-expanded=true] .consult-choice__arrow{transform:rotate(180deg)}.consult-panel h2{margin-top:.05rem}.consult-panel{margin:1rem 0}.consult-kind{border:0;padding:0;margin:.9rem 0}.consult-kind[hidden]{display:none}.consult-kind legend{font-weight:750;margin-bottom:.5rem}.consult-kind-row{display:grid;grid-template-columns:1fr 1fr;gap:.55rem}.consult-kind-row label{display:flex;align-items:center;gap:.45rem;min-height:44px;padding:.4rem .75rem;border:1px solid var(--stroke);border-radius:10px;cursor:pointer}.consult-kind-row label:has(:checked){border-color:var(--accent)}.consult-kind-row input{width:auto;accent-color:var(--accent)}#fortune-topic-row[hidden],#fortune-birth-row[hidden],#web-dream-note[hidden],#web-fortune-note[hidden]{display:none!important}</style>
 </head>
 <body>
 <header><a href="../?tab=saju&amp;year=2027#yearFortuneCard">← 사주·운세</a><strong>notopened</strong></header>
 <main>
 <p class="eyebrow">NOTOPENED · 이메일로 한 가지 질문</p>
-<h1>무료운세 상담 신청</h1>
-<p class="intro">요즘 마음에 걸리는 일을 한 가지 적어 주세요. 질문을 바탕으로 상황을 돌아볼 관점과 생각해 볼 질문을 AI가 정리해 드리는 형식이에요.</p>
+<h1>무료 운세·꿈풀이 상담 신청</h1>
+<p class="intro">마음에 걸리는 질문이나 기억에 남는 꿈을 하나 보내 주세요. AI가 운세나 꿈해몽을 참고용으로 풀어 이메일로 답해 드려요.</p>
+<fieldset id="consult-kind" class="consult-kind" hidden>
+  <legend>어떤 상담을 받고 싶나요?</legend>
+  <div class="consult-kind-row">
+    <label><input type="radio" name="consult-kind" value="fortune"> 운세</label>
+    <label><input type="radio" name="consult-kind" value="dream"> 꿈풀이</label>
+  </div>
+</fieldset>
 <div id="consult-choices" class="consult-choices" role="group" aria-label="신청 방법 선택" hidden>
   <button type="button" id="choose-web" class="consult-choice consult-choice--recommended" aria-expanded="false" aria-controls="web-panel"><span><span class="consult-choice__label">웹에서 바로 신청 (추천)</span><span class="consult-choice__hint">메일 앱 없이 작성하고, 이메일 확인 후 답변 받기</span></span><span class="consult-choice__arrow" aria-hidden="true">⌄</span></button>
   <button type="button" id="choose-mail" class="consult-choice" aria-expanded="false" aria-controls="mail-panel"><span><span class="consult-choice__label">메일 앱으로 신청</span><span class="consult-choice__hint">평소 쓰는 메일 앱에서 직접 보내기</span></span><span class="consult-choice__arrow" aria-hidden="true">⌄</span></button>
 </div>
 <section id="web-panel" class="reading web-application consult-panel" aria-labelledby="web-application-title" hidden>
   <h2 id="web-application-title">메일 앱 없이 여기서 신청</h2>
-  <p>아래에 <strong>답변 받을 이메일</strong>과 <strong>궁금한 점 한 가지(500자 이내)</strong>를 적고 제출해 주세요. 네이버·다음·핫메일 등 평소 쓰는 이메일을 그대로 쓸 수 있고, 구글 로그인이나 휴대폰 번호는 필요 없어요.</p>
+  <p id="web-fortune-note">아래에 <strong>답변 받을 이메일</strong>과 <strong>궁금한 점 한 가지(500자 이내)</strong>를 적고 제출해 주세요. 네이버·다음·핫메일 등 평소 쓰는 이메일을 그대로 쓸 수 있고, 구글 로그인이나 휴대폰 번호는 필요 없어요.</p>
+  <p class="hint" id="web-dream-note" hidden>답변 받을 이메일을 적고, 구글 양식의 ‘궁금한 점 한 가지’에 미리 적힌 <strong>[꿈풀이]</strong> 뒤에 기억나는 장면을 적어 주세요. <strong>생년월일과 태어난 시간은 비워 두면 돼요.</strong></p>
   <p class="hint">제출 뒤 확인 메일을 받아 주소를 확인하면 답변이 진행돼요. 바로 메일이 안 보이면 잠시 기다렸다가 스팸함도 확인해 주세요. 답변까지 시간이 걸릴 수 있어요.</p>
   <p class="hint">사연에 어울리면 상담 답장에 위로가 될 만한 노래 한 곡을 함께 건넬 수 있어요.</p>
-  <div class="actions"><a href="https://docs.google.com/forms/d/e/1FAIpQLSfYGp4fer4MfNVwglR6U1l9LuCfDng6cvHTYV2OD0I5p558pw/viewform">양식이 잘 안 보이면 별도 화면에서 신청 →</a></div>
+  <div class="actions"><a id="fallback-web-form" href="https://docs.google.com/forms/d/e/1FAIpQLSfYGp4fer4MfNVwglR6U1l9LuCfDng6cvHTYV2OD0I5p558pw/viewform">양식이 잘 안 보이면 별도 화면에서 신청 →</a></div>
   <iframe id="web-form-frame" data-src="https://docs.google.com/forms/d/e/1FAIpQLSfYGp4fer4MfNVwglR6U1l9LuCfDng6cvHTYV2OD0I5p558pw/viewform?embedded=true" title="낫오픈드 무료운세 상담 신청 양식" loading="lazy" width="640" height="850"></iframe>
 </section>
 <section id="mail-panel" class="consult-panel" aria-labelledby="mail-panel-title" hidden>
 <h2 id="mail-panel-title">메일 앱으로 신청하기</h2>
 <form id="consult" class="reading" hidden>
-  <label class="field" for="topic"><strong>어떤 주제인가요?</strong>
+  <label class="field" id="fortune-topic-row" for="topic"><strong>어떤 주제인가요?</strong>
   <select id="topic" required>
     <option value="">주제 선택</option><option value="직장·진로">직장·진로</option><option value="연애·관계">연애·관계</option><option value="가족·일상">가족·일상</option><option value="새해·계획">새해·계획</option><option value="기타">기타</option>
   </select></label>
-  <label class="field" for="question"><strong>질문 한 가지</strong>
+  <label class="field" for="question"><strong id="question-label">질문 한 가지</strong>
   <textarea id="question" required maxlength="500" rows="4" aria-describedby="question-note" placeholder="예: 이직을 고민하고 있어요. 결정을 앞두고 무엇부터 점검하면 좋을까요?"></textarea></label>
   <p class="hint" id="question-note">최대 500자. 실명, 전화번호, 주소, 계좌번호나 다른 사람의 개인정보는 적지 마세요.</p>
   <p class="hint">사연에 어울리면 상담 답장에 위로가 될 만한 노래 한 곡을 함께 건넬 수 있어요.</p>
-  <details class="optional">
+  <details class="optional" id="fortune-birth-row">
     <summary>생년월일과 태어난 시간 추가하기 (선택)</summary>
     <div class="birth-fields">
       <label class="field" for="birth">생년월일<input id="birth" type="date" min="1900-01-01" aria-describedby="birth-note"></label>
@@ -77,6 +85,26 @@
   const group = document.getElementById('consult-choices');
   const buttons = [...group.querySelectorAll('button[aria-controls]')];
   const frame = document.getElementById('web-form-frame');
+  const kind = document.getElementById('consult-kind');
+  const baseForm = new URL(frame.dataset.src);
+  const baseLink = new URL(document.getElementById('fallback-web-form').href);
+  const fortune = () => kind.querySelector('input:checked')?.value !== 'dream';
+  const formUrl = base => {
+    const u = new URL(base);
+    if (!fortune()) {
+      u.searchParams.set('usp', 'pp_url');
+      u.searchParams.set('entry.1331930154', '[꿈풀이] ');
+    }
+    return u.href;
+  };
+  kind.addEventListener('change', () => {
+    document.getElementById('web-dream-note').hidden = fortune();
+    document.getElementById('web-fortune-note').hidden = !fortune();
+    document.getElementById('fallback-web-form').href = formUrl(baseLink);
+    if (buttons[0].getAttribute('aria-expanded') === 'true') frame.src = formUrl(baseForm);
+    else frame.removeAttribute('src');
+    group.hidden = false;
+  });
   for (const button of buttons) {
     button.addEventListener('click', () => {
       const open = button.getAttribute('aria-expanded') !== 'true';
@@ -85,10 +113,11 @@
         choice.setAttribute('aria-expanded', String(expanded));
         document.getElementById(choice.getAttribute('aria-controls')).hidden = !expanded;
       }
-      if (open && button.id === 'choose-web' && !frame.hasAttribute('src')) frame.src = frame.dataset.src;
+      if (open && button.id === 'choose-web' && !frame.hasAttribute('src')) frame.src = formUrl(baseForm);
     });
   }
-  group.hidden = false;
+  kind.hidden = false;
+  if (kind.querySelector('input:checked')) kind.dispatchEvent(new Event('change'));
 })();
 </script>
 </body>
