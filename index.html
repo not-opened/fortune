@@ -739,6 +739,28 @@
     .dream-related-chips .chip { background: var(--accent-soft); color: var(--accent); border-color: rgba(56, 189, 248, 0.45); }
     .dream-related-chips .chip:active { transform: scale(0.98); }
   </style>
+<style id="notopened-responsive-ui">/* Service navigation stays readable without squeezing four labels into a phone row. */
+.container{max-width:780px}
+.container>.nav-tabs{gap:8px}
+.container>.nav-tabs>.nav-tab{font-size:.92rem;padding:8px 6px;line-height:1.3}
+.nav-tab.saju-view-tab{font-size:.91rem;min-height:44px}
+.header h1{font-size:clamp(1.35rem,3.2vw,1.8rem);line-height:1.3;word-break:keep-all}
+.header p,.sub-note,.card label,.dream-sentence-help{font-size:.875rem;line-height:1.55}
+.container>.yt-banner{font-size:.875rem;line-height:1.35;margin-bottom:8px}
+.card h2{font-size:1.12rem;line-height:1.35}
+.card input:not([type=checkbox]):not([type=radio]),.card select,.card textarea{font-size:1rem;min-width:0}
+.card .btn{font-size:.92rem}
+.dream-detail-text,.dream-scene-body,.ya-body,.today-line,.spouse-stage p{font-size:.94rem;line-height:1.6}
+.dream-detail-text,.ya-body,.today-line{max-width:65ch}
+@media(max-width:440px){
+  .container>.nav-tabs{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .card{padding:12px}
+  .nav-tab.saju-view-tab{padding:6px 3px}
+  .saju-actions{gap:6px}
+  .saju-visit{max-height:calc(100dvh - 24px);overflow:auto}
+}
+@media(min-width:680px){.card{padding:20px}.header p{font-size:.95rem}}
+</style>
 </head>
 <body>
   <main class="container">

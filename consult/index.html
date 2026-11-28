@@ -10,6 +10,25 @@
 <link rel="stylesheet" href="./consult.css?v=1">
 <script defer src="./consult.js?v=2"></script>
 <style>.web-application{padding:clamp(.65rem,2vw,1.15rem)}.web-application .actions{display:flex;flex-wrap:wrap;align-items:center;margin:.75rem 0}.web-application iframe{display:block;width:100%;height:850px;border:0;border-radius:12px;background:#fff;color-scheme:light}.manual-application{margin:1rem 0}.manual-application>summary{font-weight:700;cursor:pointer;padding:.4rem 0}@media(max-width:520px){.web-application iframe{height:1010px}}.consult-choices{display:grid;gap:.65rem;margin:1.15rem 0}.consult-choices[hidden],.consult-panel[hidden]{display:none!important}.consult-choice{width:100%;min-height:68px;text-align:left;cursor:pointer;display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:.6rem;padding:.72rem .85rem;border:1px solid var(--stroke);background:var(--bg);color:var(--ink);border-radius:12px;font:inherit}.consult-choice--recommended,.consult-choice[aria-expanded=true]{border-color:var(--accent)}.consult-choice:focus-visible{outline:2px solid var(--accent);outline-offset:3px}.consult-choice__label{font-weight:750;font-size:1.03rem}.consult-choice__hint{display:block;color:var(--muted);font-size:.88rem;line-height:1.4}.consult-choice__arrow{font-size:1.15rem;color:var(--accent)}.consult-choice[aria-expanded=true] .consult-choice__arrow{transform:rotate(180deg)}.consult-panel h2{margin-top:.05rem}.consult-panel{margin:1rem 0}.consult-kind{border:0;padding:0;margin:.9rem 0}.consult-kind[hidden]{display:none}.consult-kind legend{font-weight:750;margin-bottom:.5rem}.consult-kind-row{display:grid;grid-template-columns:1fr 1fr;gap:.55rem}.consult-kind-row label{display:flex;align-items:center;gap:.45rem;min-height:44px;padding:.4rem .75rem;border:1px solid var(--stroke);border-radius:10px;cursor:pointer}.consult-kind-row label:has(:checked){border-color:var(--accent)}.consult-kind-row input{width:auto;accent-color:var(--accent)}#fortune-topic-row[hidden],#fortune-birth-row[hidden],#web-dream-note[hidden],#web-fortune-note[hidden]{display:none!important}</style>
+<style id="notopened-responsive-ui">/* Keep the question and application choices ahead of secondary instructions. */
+header>a{display:inline-flex;align-items:center;min-height:44px}
+h1{font-size:clamp(1.65rem,5.5vw,2.65rem);line-height:1.18}
+main>.intro{max-width:58ch;line-height:1.55}
+.consult-kind-row{gap:8px}
+.consult-kind-row label{min-height:48px;line-height:1.3}
+.consult-choice{min-width:0;min-height:52px}
+.consult-choice__label{font-size:1rem}
+.consult-choice__hint{font-size:.875rem;line-height:1.45}
+.web-application .actions a{display:inline-flex;align-items:center;min-height:44px}
+@media(max-width:420px){
+  header,main,footer{padding-inline:14px}
+  header,main{padding-block:8px}
+  .eyebrow{font-size:.83rem}
+  .consult-panel .reading{padding:12px}
+  .consult-panel .primary{width:100%;justify-content:center}
+}
+@media(max-width:420px){.consult-kind-row label{padding-inline:8px;gap:5px}}
+</style>
 </head>
 <body>
 <header><a href="../?tab=saju&amp;year=2027#yearFortuneCard">← 사주·운세</a><strong>notopened</strong></header>
