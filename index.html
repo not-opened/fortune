@@ -165,6 +165,24 @@
     .nav-tab.saju-view-tab { font-size: 0.88rem; }
     .saju-view-tab:focus-visible, .saju-edit-birth:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
     .saju-edit-birth { display: inline-flex; align-items: center; min-height: 44px; color: var(--accent); font-weight: 700; }
+    .saju-visit {
+      position: fixed; inset: 0; box-sizing: border-box; width: min(420px, calc(100vw - 28px));
+      max-width: none; max-height: calc(100vh - 28px); max-height: calc(100dvh - 28px);
+      margin: auto; padding: 18px; overflow: auto; overscroll-behavior: contain;
+      background: var(--card); color: var(--text); border: 1px solid var(--accent);
+      border-radius: 16px; box-shadow: 0 12px 48px #020617a6;
+    }
+    .saju-visit:not([open]) { display: none; }
+    .saju-visit::backdrop { background: #02061799; }
+    .saju-visit-tag { color: var(--accent); font-size: .78rem; font-weight: 800; margin: 0 0 5px; }
+    .saju-visit h2 { font-size: 1.2rem; margin: 0 0 8px; line-height: 1.35; }
+    .saju-visit-copy { color: var(--muted); line-height: 1.55; margin: 0; font-size: .92rem; }
+    .saju-visit-actions { display: flex; gap: 8px; margin-top: 14px; }
+    .saju-visit-actions .btn { min-height: 44px; flex: 1; white-space: normal; }
+    .saju-visit-actions .btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+    @media (max-width: 600px) {
+      .saju-visit { margin-bottom: max(14px, env(safe-area-inset-bottom)); }
+    }
     .panel { display: none; }
     .panel.active { display: block; }
     .card {
@@ -836,7 +854,7 @@
       <!-- 오늘의 행운 리포트 (날짜 + 일간 조합) -->
       <div class="card" id="luckyCard">
         <div class="section-head">
-          <h2>🍀 오늘의 행운 리포트</h2>
+          <h2 id="sajuLuckyHeading" tabindex="-1">🍀 오늘의 행운 리포트</h2>
           <span class="pill pill-good" id="luckyDateBadge">오늘</span>
         </div>
         <p class="sub-note" id="luckyBasis">내 사주와 오늘 날짜의 기운을 겹쳐 뽑은 오늘 하루의 행운입니다.</p>
@@ -1166,6 +1184,16 @@
     </footer>
   </main>
 
+  <dialog class="saju-visit" id="sajuVisitDialog" aria-labelledby="sajuVisitTitle" aria-describedby="sajuVisitCopy">
+    <p class="saju-visit-tag" id="sajuVisitTag"></p>
+    <h2 id="sajuVisitTitle"></h2>
+    <p class="saju-visit-copy" id="sajuVisitCopy"></p>
+    <form method="dialog" class="saju-visit-actions">
+      <button type="submit" class="btn btn-primary" id="sajuVisitAction" value="go"></button>
+      <button type="submit" class="btn btn-secondary" id="sajuVisitDismiss" value="dismiss" autofocus></button>
+    </form>
+  </dialog>
+
   <div class="toast" id="toast" role="alert" aria-live="assertive"></div>
 
   <script>
@@ -1320,6 +1348,45 @@
       document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
       const target = document.getElementById('panel' + key.charAt(0).toUpperCase() + key.slice(1));
       if (target) target.classList.add('active');
+    }
+
+    function showSajuVisitDialog(savedInput) {
+      const dialog = document.getElementById('sajuVisitDialog');
+      if (!dialog || typeof dialog.showModal !== 'function') return;
+      const params = new URLSearchParams(window.location.search);
+      const deepLinks = ['tab', 'year', 'from', 'bd', 'bh', 'view', 'me', 'z', 'sg', 'dream', 'd', 'q'];
+      if (window.location.hash || deepLinks.some(key => params.has(key))) return;
+      if (!document.getElementById('panelSaju').classList.contains('active')) return;
+
+      const welcomeKey = 'notopened_saju_welcome_v1';
+      const dailyKey = 'notopened_saju_lucky_popup_day_v1';
+      const daily = Boolean(savedInput && currentSajuData && !currentSajuData.isExample && currentLucky);
+      const today = daily ? luckyToday(0).key : null;
+      try {
+        if (daily ? localStorage.getItem(dailyKey) === today : localStorage.getItem(welcomeKey)) return;
+      } catch (e) { return; }
+
+      const action = document.getElementById('sajuVisitAction');
+      const dismiss = document.getElementById('sajuVisitDismiss');
+      document.getElementById('sajuVisitTag').textContent = daily ? currentLucky.dateLabel : '낫오픈드 사주·운세';
+      document.getElementById('sajuVisitTitle').textContent = daily ? '🍀 오늘의 행운 ' + currentLucky.score + '점' : '처음 오셨군요!';
+      document.getElementById('sajuVisitCopy').textContent = daily ? currentLucky.tip : '생년월일을 입력하면 내 사주, 오늘의 행운, 신년운세를 볼 수 있어요. 태어난 시간은 몰라도 괜찮아요.';
+      action.textContent = daily ? '자세히 보기' : '내 사주 입력하기';
+      dismiss.textContent = daily ? '닫기' : '나중에';
+      dialog.showModal();
+      try {
+        localStorage.setItem(welcomeKey, '1');
+        if (daily) localStorage.setItem(dailyKey, today);
+      } catch (e) { /* 새 방문에서 팝업 표시 여부를 저장할 수 없음 */ }
+      dialog.addEventListener('close', () => {
+        if (dialog.returnValue !== 'go') return;
+        const tab = document.getElementById(daily ? 'sajuTabLucky' : 'sajuTabBirth');
+        tab.click();
+        const target = document.getElementById(daily ? 'sajuLuckyHeading' : 'birthDate');
+        if (!daily) document.getElementById('birthHour').value = '-1';
+        target.focus({ preventScroll: true });
+        target.scrollIntoView({ block: 'nearest' });
+      }, { once: true });
     }
 
     function initSajuViews() {
@@ -3806,7 +3873,7 @@
     document.addEventListener('DOMContentLoaded', () => {
       try {
         bindFortuneImageButtons();
-        restoreSajuInput();
+        const savedSajuInput = restoreSajuInput();
         updateSajuInputNote();
         renderLuckyReport();
         hydrateMyBirth();
@@ -3971,6 +4038,7 @@
         } catch (e) { /* ignore */ }
 
         restoreSharedResult();
+        showSajuVisitDialog(savedSajuInput);
 
         fitCoupangBanner();
         [400, 1200, 2600, 4200].forEach(t => window.setTimeout(fitCoupangBanner, t));
